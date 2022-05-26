@@ -8,6 +8,9 @@ import android.app.Activity;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.tonyocallimoutou.realestatemanager.ui.MainActivity;
+import com.tonyocallimoutou.realestatemanager.util.Utils;
+
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Rule;

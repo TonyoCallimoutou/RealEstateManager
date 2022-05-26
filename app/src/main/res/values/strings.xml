@@ -1,3 +1,23 @@
 <resources>
+
+    <!--Firestore -->
+    <string name="COLLECTION_NAME_USER"> users </string>
+
+    <!--Main Activity -->
     <string name="app_name">RealEstateManager</string>
+    <string name="side_view_setting">SETTINGS</string>
+    <string name="side_view_LOGOUT">LOGOUT</string>
+
+    <string name="title_alertDialog_google_play_service"> ERROR !!</string>
+    <string name="message_alertDialog_google_play_service_download"> Please download the google play service</string>
+    <string name="message_alertDialog_google_play_service_update"> Please update your google play service</string>
+    <string name="positive_button_alertDialog_permission"> OK</string>
+    
+    <!-- Action bar -->
+    <string name="actionbar_add"> Add </string>
+    <string name="actionbar_edit"> Edit </string>
+    <string name="actionbar_search"> Search </string>
+
+    <!-- Preferences -->
+    <string name="shared_preference_username"> USERNAME </string>
 </resources>

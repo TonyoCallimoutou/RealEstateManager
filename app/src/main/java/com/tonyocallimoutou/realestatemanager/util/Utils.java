@@ -1,4 +1,4 @@
-package com.tonyocallimoutou.realestatemanager;
+package com.tonyocallimoutou.realestatemanager.util;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

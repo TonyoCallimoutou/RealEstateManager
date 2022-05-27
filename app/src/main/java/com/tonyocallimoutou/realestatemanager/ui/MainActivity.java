@@ -1,16 +1,20 @@
 package com.tonyocallimoutou.realestatemanager.ui;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,6 +30,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.material.navigation.NavigationView;
 import com.tonyocallimoutou.realestatemanager.R;
+import com.tonyocallimoutou.realestatemanager.util.UtilsPictureManager;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelFactory;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelUser;
 import com.tonyocallimoutou.realestatemanager.model.User;
@@ -35,6 +40,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -69,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int status = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
         if(status == ConnectionResult.SUCCESS) {
             if (viewModelUser.isCurrentLogged()) {
-                viewModelUser.createUser();
                 initData();
             } else {
                 startSignInActivity();
@@ -122,6 +127,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         );
     }
 
+    // Picture Manager
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UtilsPictureManager.getImagePicture(requestCode, resultCode, data);
+    }
+
+
     // INIT ACTION BAR
 
     private void initActionBar() {
@@ -169,18 +183,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sideView = nav.getHeaderView(0);
 
         setCurrentUserInformation(currentUser);
+
+        ImageView profilePicture = sideView.findViewById(R.id.profile_picture_header_side_view);
+
+        profilePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UtilsPictureManager.createAlertDialog(MainActivity.this, viewModelUser);
+            }
+        });
     }
 
     private void setCurrentUserInformation(User currentUser) {
         ImageView profilePicture = sideView.findViewById(R.id.profile_picture_header_side_view);
 
-        if (currentUser.getUrlPicture() != null) {
-
-            Glide.with(this)
-                    .load(currentUser.getUrlPicture())
-                    .apply(RequestOptions.circleCropTransform())
-                    .into(profilePicture);
-        }
+        Glide.with(this)
+                .load(currentUser.getPicture())
+                .apply(RequestOptions.circleCropTransform())
+                .into(profilePicture);
 
 
         TextView email = sideView.findViewById(R.id.user_email);
@@ -217,6 +237,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // InitData
 
     public void initData() {
+
+        viewModelUser.createUser(this,viewModelUser);
         viewModelUser.setCurrentUserLiveData();
 
         viewModelUser.getCurrentUserLiveData().observe(this, currentUserResults -> {

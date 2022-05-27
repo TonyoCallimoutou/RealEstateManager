@@ -1,5 +1,8 @@
 package com.tonyocallimoutou.realestatemanager.model;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
+
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
@@ -9,14 +12,13 @@ public class User {
 
     private String uid;
     private String username;
-    @Nullable
     private String urlPicture;
     private String email;
 
 
     public User() {}
 
-    public User(String uid, String username, @Nullable String urlPicture, String email) {
+    public User(String uid, String username, String urlPicture, String email) {
         this.uid = uid;
         this.username = username;
         this.urlPicture = urlPicture;
@@ -39,12 +41,11 @@ public class User {
         this.username = username;
     }
 
-    @Nullable
-    public String getUrlPicture() {
+    public String getPicture() {
         return urlPicture;
     }
 
-    public void setUrlPicture(@Nullable String urlPicture) {
+    public void setPicture(String urlPicture) {
         this.urlPicture = urlPicture;
     }
 

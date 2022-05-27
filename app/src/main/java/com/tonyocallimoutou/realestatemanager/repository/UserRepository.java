@@ -1,12 +1,21 @@
 package com.tonyocallimoutou.realestatemanager.repository;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,8 +26,14 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.User;
+import com.tonyocallimoutou.realestatemanager.util.Utils;
+import com.tonyocallimoutou.realestatemanager.util.UtilsPictureManager;
+import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelUser;
 
 import java.util.List;
 
@@ -46,8 +61,14 @@ public class UserRepository {
 
     // My Firestore Collection
 
-    public CollectionReference getUsersCollection() {
+    private CollectionReference getUsersCollection() {
         return FirebaseFirestore.getInstance().collection(COLLECTION_NAME);
+    }
+
+    // Storage
+
+    private StorageReference getFirebaseStorageReference() {
+        return FirebaseStorage.getInstance().getReference();
     }
 
     private FirebaseUser getCurrentFirebaseUser() {
@@ -58,7 +79,7 @@ public class UserRepository {
         return this.getCurrentFirebaseUser() != null;
     }
 
-    public void createUser() {
+    public void createUser(Activity activity, ViewModelUser viewModelUser) {
         FirebaseUser user = getCurrentFirebaseUser();
 
         getUsersCollection().get()
@@ -72,23 +93,55 @@ public class UserRepository {
                                 User workmate = document.toObject(User.class);
                                 if (workmate.getUid().equals(user.getUid())) {
                                     isAlreadyExisting = true;
+                                    currentUser = workmate;
                                 }
                             }
                         }
                         if ( ! isAlreadyExisting) {
 
-                            String urlPicture = (user.getPhotoUrl() != null) ?
-                                    user.getPhotoUrl().toString()
-                                    : null;
+                            String picture = Utils.convertDrawableResourcesToUri(activity.getApplicationContext(), R.drawable.ic_no_image_available).toString();
+
                             String username = user.getDisplayName();
                             String uid = user.getUid();
                             String email = user.getEmail();
 
-                            currentUser = new User(uid, username, urlPicture,email);
+                            currentUser = new User(uid, username, picture,email);
                             getUsersCollection().document(currentUser.getUid()).set(currentUser);
+
+                            UtilsPictureManager.createAlertDialog(activity, viewModelUser);
                         }
                     }
                 });
+    }
+
+    public void setCurrentUserPicture(String picture) {
+
+        Uri pictureUri = Uri.parse(picture);
+
+        StorageReference ref = getFirebaseStorageReference().child(currentUser.getUid() + pictureUri.getLastPathSegment());
+        UploadTask uploadTask = ref.putFile(pictureUri);
+
+        uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+
+                // Continue with the task to get the download URL
+                return ref.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                    currentUser.setPicture(downloadUri.toString());
+                    getUsersCollection().document(currentUser.getUid()).set(currentUser);
+                }
+            }
+        });
+
     }
 
     public Task<Void> signOut(Context context) {
@@ -128,6 +181,10 @@ public class UserRepository {
                 }
             }
         });
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
     }
 
 }

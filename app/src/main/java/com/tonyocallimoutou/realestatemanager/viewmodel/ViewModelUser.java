@@ -1,6 +1,9 @@
 package com.tonyocallimoutou.realestatemanager.viewmodel;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -28,8 +31,12 @@ public class ViewModelUser extends ViewModel {
         return userRepository.signOut(context);
     }
 
-    public void createUser() {
-        userRepository.createUser();
+    public void createUser(Activity activity, ViewModelUser viewModelUser) {
+        userRepository.createUser(activity, viewModelUser);
+    }
+
+    public void setCurrentUserPicture(String picture) {
+        userRepository.setCurrentUserPicture(picture);
     }
 
     public Task<Void> deleteUser(Context context){
@@ -46,6 +53,14 @@ public class ViewModelUser extends ViewModel {
 
     public LiveData<User> getCurrentUserLiveData() {
         return currentUserLiveData;
+    }
+
+    public User getCurrentUser() {
+        return userRepository.getCurrentUser();
+    }
+
+    public void savePicture() {
+
     }
 
 }

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:id="@+id/alert_dialog_actual_picture_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true">
+
+
+        <ImageView
+            android:id="@+id/alert_dialog_actual_picture"
+            android:layout_width="@dimen/alert_dialog_current_picture"
+            android:layout_height="@dimen/alert_dialog_current_picture"
+            android:layout_marginStart="@dimen/alert_dialog_margin_current_picture"
+            android:layout_marginTop="@dimen/alert_dialog_margin_current_picture"
+            android:layout_marginEnd="@dimen/alert_dialog_margin_current_picture"
+            android:layout_marginBottom="@dimen/alert_dialog_margin_current_picture" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/alert_dialog_remove_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/alert_dialog_actual_picture"
+            android:layout_alignEnd="@+id/alert_dialog_actual_picture"
+            app:borderWidth="0dp"
+            app:fabSize="mini"
+            android:src="@drawable/ic_close_black_24dp"/>
+
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linear_layout_choice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/alert_dialog_actual_picture_layout"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:id="@+id/alert_dialog_files_choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/alert_dialog_margin_between_choice"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/alert_dialog_icon_choice"
+                android:layout_height="@dimen/alert_dialog_icon_choice"
+                android:src="@drawable/ic_folder_black_24dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/alert_dialog_choice_files" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/alert_dialog_camera_choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/alert_dialog_icon_choice"
+                android:layout_height="@dimen/alert_dialog_icon_choice"
+                android:src="@drawable/ic_camera_alt_black_24dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/alert_dialog_choice_camera" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/alert_dialog_save_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/alert_dialog_margin_button_save"
+        android:layout_below="@+id/linear_layout_choice"
+        android:layout_centerHorizontal="true"
+        android:text="@string/alert_dialog_button_save" />
+
+</RelativeLayout>

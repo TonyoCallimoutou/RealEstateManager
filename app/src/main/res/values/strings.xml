@@ -20,4 +20,10 @@
 
     <!-- Preferences -->
     <string name="shared_preference_username"> USERNAME </string>
+
+
+    <!-- Alert dialog profile picture -->
+    <string name="alert_dialog_choice_files"> Files</string>
+    <string name="alert_dialog_choice_camera"> Camera</string>
+    <string name="alert_dialog_button_save"> Save</string>
 </resources>

@@ -11,4 +11,15 @@
     <!--Calculation = 100 + 60 + 16 -->
     <dimen name="side_view_header_height">176dp</dimen>
 
+    <!-- Alert Dialog Profile Picture -->
+    <dimen name="alert_dialog_current_picture"> 160dp</dimen>
+    <dimen name="alert_dialog_margin_current_picture"> 20dp</dimen>
+    <dimen name="alert_dialog_fab_remove_picture"> 28dp </dimen>
+    <dimen name="alert_dialog_margin_between_choice"> 28dp </dimen>
+    <dimen name="alert_dialog_icon_choice"> 52dp</dimen>
+    <dimen name="alert_dialog_margin_button_save"> 24dp </dimen>
+
+
+
+
 </resources>

@@ -2,11 +2,8 @@ package com.tonyocallimoutou.realestatemanager.repository;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,7 +12,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,6 +26,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.tonyocallimoutou.realestatemanager.R;
+import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.model.User;
 import com.tonyocallimoutou.realestatemanager.util.Utils;
 import com.tonyocallimoutou.realestatemanager.util.UtilsPictureManager;
@@ -67,8 +64,8 @@ public class UserRepository {
 
     // Storage
 
-    private StorageReference getFirebaseStorageReference() {
-        return FirebaseStorage.getInstance().getReference();
+    private FirebaseStorage getFirebaseStorage() {
+        return FirebaseStorage.getInstance();
     }
 
     private FirebaseUser getCurrentFirebaseUser() {
@@ -118,7 +115,7 @@ public class UserRepository {
 
         Uri pictureUri = Uri.parse(picture);
 
-        StorageReference ref = getFirebaseStorageReference().child(currentUser.getUid() + pictureUri.getLastPathSegment());
+        StorageReference ref = getFirebaseStorage().getReference(currentUser.getUid()).child(pictureUri.getLastPathSegment());
         UploadTask uploadTask = ref.putFile(pictureUri);
 
         uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
@@ -185,6 +182,14 @@ public class UserRepository {
 
     public User getCurrentUser() {
         return currentUser;
+    }
+
+
+    // Real Estate
+
+    public void createRealEstate(RealEstate realEstate) {
+        currentUser.addRealEstateToMyList(realEstate);
+        getUsersCollection().document(currentUser.getUid()).set(currentUser);
     }
 
 }

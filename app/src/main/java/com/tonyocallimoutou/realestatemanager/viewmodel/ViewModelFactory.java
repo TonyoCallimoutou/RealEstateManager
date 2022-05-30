@@ -6,11 +6,14 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.tonyocallimoutou.realestatemanager.repository.RealEstateRepository;
 import com.tonyocallimoutou.realestatemanager.repository.UserRepository;
 
 public class ViewModelFactory implements ViewModelProvider.Factory {
 
     private final UserRepository userRepository;
+    private final RealEstateRepository realEstateRepository;
+
     private static ViewModelFactory factory;
 
     public static ViewModelFactory getInstance(Context context) {
@@ -26,6 +29,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
 
     private ViewModelFactory(Context context) {
         userRepository = UserRepository.getInstance(context);
+        realEstateRepository = RealEstateRepository.getInstance(context);
     }
 
 
@@ -34,6 +38,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(ViewModelUser.class)) {
             return (T) new ViewModelUser(userRepository);
+        }
+        if (modelClass.isAssignableFrom(ViewModelRealEstate.class)) {
+            return (T) new ViewModelRealEstate(realEstateRepository,userRepository);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }

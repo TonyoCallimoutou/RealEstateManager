@@ -14,6 +14,7 @@ public class User {
     private String username;
     private String urlPicture;
     private String email;
+    private List<RealEstate> myRealEstate = new ArrayList<>();
 
 
     public User() {}
@@ -23,6 +24,7 @@ public class User {
         this.username = username;
         this.urlPicture = urlPicture;
         this.email = email;
+        this.myRealEstate = new ArrayList<>();
     }
 
     public String getUid() {
@@ -55,6 +57,18 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<RealEstate> getMyRealEstate() {
+        return myRealEstate;
+    }
+
+    public void setMyRealEstate(List<RealEstate> myRealEstate) {
+        this.myRealEstate = myRealEstate;
+    }
+
+    public void addRealEstateToMyList(RealEstate realEstate) {
+        myRealEstate.add(realEstate);
     }
 
 }

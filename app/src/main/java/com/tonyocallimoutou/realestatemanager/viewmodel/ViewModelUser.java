@@ -31,8 +31,8 @@ public class ViewModelUser extends ViewModel {
         return userRepository.signOut(context);
     }
 
-    public void createUser(Activity activity, ViewModelUser viewModelUser) {
-        userRepository.createUser(activity, viewModelUser);
+    public void createUser(Activity activity) {
+        userRepository.createUser(activity, this);
     }
 
     public void setCurrentUserPicture(String picture) {

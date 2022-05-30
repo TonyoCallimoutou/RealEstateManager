@@ -2,6 +2,7 @@
 
     <!--Firestore -->
     <string name="COLLECTION_NAME_USER"> users </string>
+    <string name="COLLECTION_NAME_REAL_ESTATE"> real_estates </string>
 
     <!--Main Activity -->
     <string name="app_name">RealEstateManager</string>
@@ -12,7 +13,7 @@
     <string name="message_alertDialog_google_play_service_download"> Please download the google play service</string>
     <string name="message_alertDialog_google_play_service_update"> Please update your google play service</string>
     <string name="positive_button_alertDialog_permission"> OK</string>
-    
+
     <!-- Action bar -->
     <string name="actionbar_add"> Add </string>
     <string name="actionbar_edit"> Edit </string>
@@ -26,4 +27,7 @@
     <string name="alert_dialog_choice_files"> Files</string>
     <string name="alert_dialog_choice_camera"> Camera</string>
     <string name="alert_dialog_button_save"> Save</string>
+
+    <!-- List View -->
+    <string name="list_view_no_real_estate">No Real Estate</string>
 </resources>

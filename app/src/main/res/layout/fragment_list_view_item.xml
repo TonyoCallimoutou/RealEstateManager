@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/list_view_image_real_estate"
+        android:layout_width="@dimen/list_view_image_real_estate_size"
+        android:layout_height="@dimen/list_view_image_real_estate_size"
+        android:layout_marginEnd="@dimen/list_view_margin_image_text"
+        android:src="@drawable/ic_no_image_available" />
+
+    <TextView
+        android:id="@+id/list_view_type_real_estate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_toEndOf="@+id/list_view_image_real_estate" />
+
+    <TextView
+        android:id="@+id/list_view_location_real_estate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimary"
+        android:layout_below="@+id/list_view_type_real_estate"
+        android:layout_toEndOf="@+id/list_view_image_real_estate" />
+
+    <TextView
+        android:id="@+id/list_view_price_real_estate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textColor="@color/pink"
+        android:layout_below="@+id/list_view_location_real_estate"
+        android:layout_toEndOf="@+id/list_view_image_real_estate" />
+
+
+</RelativeLayout>

@@ -29,9 +29,12 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.material.navigation.NavigationView;
+import com.tonyocallimoutou.realestatemanager.FAKE.FakeData;
 import com.tonyocallimoutou.realestatemanager.R;
+import com.tonyocallimoutou.realestatemanager.ui.listView.ListViewFragment;
 import com.tonyocallimoutou.realestatemanager.util.UtilsPictureManager;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelFactory;
+import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelRealEstate;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelUser;
 import com.tonyocallimoutou.realestatemanager.model.User;
 
@@ -50,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private View sideView;
 
     private ViewModelUser viewModelUser;
+    private ViewModelRealEstate viewModelRealEstate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +63,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int status = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
         if (status == ConnectionResult.SUCCESS) {
             viewModelUser = new ViewModelProvider(this, ViewModelFactory.getInstance(this)).get(ViewModelUser.class);
+            viewModelRealEstate = new ViewModelProvider(this, ViewModelFactory.getInstance(this)).get(ViewModelRealEstate.class);
 
             setContentView(R.layout.activity_main);
             ButterKnife.bind(this);
 
+            initFragment();
             initActionBar();
         } else {
             errorGooglePlayService(status);
@@ -133,6 +139,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         UtilsPictureManager.getImagePicture(requestCode, resultCode, data);
+    }
+
+    // INIT FRAGMENT
+
+    private void initFragment() {
+        ListViewFragment listViewFragment = ListViewFragment.newInstance();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.host_fragment, listViewFragment)
+                .commit();
     }
 
 
@@ -238,8 +254,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void initData() {
 
-        viewModelUser.createUser(this,viewModelUser);
+        viewModelUser.createUser(this);
         viewModelUser.setCurrentUserLiveData();
+        viewModelRealEstate.setListRealEstate();
 
         viewModelUser.getCurrentUserLiveData().observe(this, currentUserResults -> {
             if (currentUserResults != null) {
@@ -252,6 +269,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 initSideView(currentUserResults);
             }
+        });
+
+        viewModelRealEstate.getALlRealEstateLiveData().observe(this, listRealEstate -> {
+            ListViewFragment.initResidenceList(listRealEstate);
         });
 
     }

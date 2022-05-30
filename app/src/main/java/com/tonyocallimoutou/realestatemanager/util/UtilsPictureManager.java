@@ -90,7 +90,7 @@ public class UtilsPictureManager {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setView(view);
-        builder.setCancelable(false);
+        builder.setCancelable(true);
 
         AlertDialog alert = builder.create();
         alert.show();

@@ -30,4 +30,34 @@
 
     <!-- List View -->
     <string name="list_view_no_real_estate">No Real Estate</string>
+
+    <!--Detail Fragment -->
+    <string name="detail_media_category"> Media </string>
+    <string name="detail_description_category"> Description </string>
+    <string name="detail_type_category"> Type </string>
+    <string name="detail_price"> Price </string>
+    <string name="detail_surface"> Surface </string>
+    <string name="detail_rooms"> Number of rooms </string>
+    <string name="detail_bathrooms"> Number of bathrooms </string>
+    <string name="detail_bedrooms"> Number of bedrooms </string>
+    <string name="detail_location"> Location </string>
+    <string name="detail_manager_category"> Manager </string>
+    <string name="detail_no_information"> No Information</string>
+
+    <!-- Add new Real Estate -->
+    <string-array name="SpinnerTypeOfResidence">
+        <item>House</item>
+        <item>Flat</item>
+        <item>Duplex</item>
+        <item>Penthouse</item>
+    </string-array>
+    <string name="button_save"> Save </string>
+    <string name="button_add_picture"> Add Picture </string>
+
+    <string name="new_title_alert_dialog"> Warning !!</string>
+    <string name="new_message_alert_dialog"> Do you really want to abandon the creation of real estate ?</string>
+    <string name="new_button_alert_dialog"> YES </string>
+    <string name="new_toast_unable_to_save"> Unable to save </string>
+    <string name="new_error_enter_data"> Enter Data</string>
+
 </resources>

@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
@@ -14,7 +13,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,10 +27,11 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.material.navigation.NavigationView;
-import com.tonyocallimoutou.realestatemanager.FAKE.FakeData;
 import com.tonyocallimoutou.realestatemanager.R;
+import com.tonyocallimoutou.realestatemanager.ui.create.AddNewRealEstateActivity;
+import com.tonyocallimoutou.realestatemanager.ui.detail.DetailFragment;
 import com.tonyocallimoutou.realestatemanager.ui.listView.ListViewFragment;
-import com.tonyocallimoutou.realestatemanager.util.UtilsPictureManager;
+import com.tonyocallimoutou.realestatemanager.util.UtilsProfilePictureManager;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelFactory;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelRealEstate;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelUser;
@@ -43,7 +42,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -138,16 +136,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        UtilsPictureManager.getImagePicture(requestCode, resultCode, data);
+        UtilsProfilePictureManager.getImagePicture(requestCode, resultCode, data);
     }
 
     // INIT FRAGMENT
 
     private void initFragment() {
-        ListViewFragment listViewFragment = ListViewFragment.newInstance();
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.host_fragment, listViewFragment)
+                .replace(R.id.host_fragment, ListViewFragment.newInstance())
+                .commit();
+
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.host_fragment_2, DetailFragment.newInstance())
                 .commit();
     }
 
@@ -178,7 +181,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 return true;
             case R.id.add_menu:
-                Toast.makeText(this, getString(R.string.actionbar_add), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, AddNewRealEstateActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.edit_menu:
                 Toast.makeText(this, getString(R.string.actionbar_edit), Toast.LENGTH_SHORT).show();
@@ -205,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         profilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UtilsPictureManager.createAlertDialog(MainActivity.this, viewModelUser);
+                UtilsProfilePictureManager.createAlertDialog(MainActivity.this, viewModelUser);
             }
         });
     }
@@ -256,6 +260,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         viewModelUser.createUser(this);
         viewModelUser.setCurrentUserLiveData();
+        viewModelUser.setListUser();
         viewModelRealEstate.setListRealEstate();
 
         viewModelUser.getCurrentUserLiveData().observe(this, currentUserResults -> {
@@ -269,6 +274,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 initSideView(currentUserResults);
             }
+        });
+
+        viewModelUser.getAllUser().observe(this, list -> {
+            DetailFragment.setListUser(list);
         });
 
         viewModelRealEstate.getALlRealEstateLiveData().observe(this, listRealEstate -> {

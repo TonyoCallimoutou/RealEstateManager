@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
+import com.tonyocallimoutou.realestatemanager.ui.detail.DetailFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,12 +57,12 @@ public class ListViewFragment extends Fragment {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        adapter = new ListViewRecyclerViewAdapter(mRealEstate, new ListViewRecyclerViewAdapter.ListItemClickListener() {
+        adapter = new ListViewRecyclerViewAdapter(getContext(), mRealEstate, new ListViewRecyclerViewAdapter.ListItemClickListener() {
             @Override
             public void onListItemClick(int position) {
                 RealEstate realEstate = mRealEstate.get(position);
 
-                Log.d("TAG", "onListItemClick: Go to detail");
+                DetailFragment.getDetailOf(realEstate);
             }
         });
 

@@ -55,7 +55,49 @@ public class RealEstateRepository {
         return FirebaseFirestore.getInstance().collection(COLLECTION_NAME);
     }
 
+    // Storage
+
+    private FirebaseStorage getFirebaseStorage() {
+        return FirebaseStorage.getInstance();
+    }
+
+
     public void createRealEstate(RealEstate realEstate) {
+        List<Photo> newList = new ArrayList<>();
+        for (Photo photo : realEstate.getPhotos()) {
+
+            Uri pictureUri = Uri.parse(photo.getReference());
+
+            StorageReference ref = getFirebaseStorage().getReference(realEstate.getId()).child(pictureUri.getLastPathSegment());
+            UploadTask uploadTask = ref.putFile(pictureUri);
+
+            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+
+                    // Continue with the task to get the download URL
+                    return ref.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        Uri downloadUri = task.getResult();
+                        Photo newPhoto = new Photo(downloadUri.toString(),photo.getDescription());
+
+                        newList.add(newPhoto);
+
+                        if (newList.size() == realEstate.getPhotos().size()) {
+                            realEstate.setPhotos(newList);
+                            getRealEstateCollection().document(realEstate.getId()).set(realEstate);
+                        }
+                    }
+                }
+            });
+        }
         getRealEstateCollection().document(realEstate.getId()).set(realEstate);
     }
 
@@ -76,8 +118,6 @@ public class RealEstateRepository {
                 }
 
                 liveData.setValue(realEstates);
-
-                liveData.setValue(FakeData.getFakeList());
             }
         });
     }

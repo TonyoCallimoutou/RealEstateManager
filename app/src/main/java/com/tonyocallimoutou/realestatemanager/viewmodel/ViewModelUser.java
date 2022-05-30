@@ -13,11 +13,15 @@ import com.google.android.gms.tasks.Task;
 import com.tonyocallimoutou.realestatemanager.model.User;
 import com.tonyocallimoutou.realestatemanager.repository.UserRepository;
 
+import java.util.List;
+
 public class ViewModelUser extends ViewModel {
 
     private final UserRepository userRepository;
 
     private final MutableLiveData<User> currentUserLiveData = new MutableLiveData<>();
+
+    private final MutableLiveData<List<User>> listUserLiveData = new MutableLiveData<>();
 
     public ViewModelUser(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -59,8 +63,12 @@ public class ViewModelUser extends ViewModel {
         return userRepository.getCurrentUser();
     }
 
-    public void savePicture() {
+    public void setListUser() {
+        userRepository.getAllUser(listUserLiveData);
+    }
 
+    public LiveData<List<User>> getAllUser() {
+        return listUserLiveData;
     }
 
 }

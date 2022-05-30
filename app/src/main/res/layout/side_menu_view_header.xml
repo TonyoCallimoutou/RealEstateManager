@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/logo_header_side_view"
-        android:layout_width="@dimen/logo_header_side_view_width"
-        android:layout_height="@dimen/logo_header_side_view_height"
+        android:layout_width="@dimen/logo_header_side_view_size"
+        android:layout_height="@dimen/logo_header_side_view_size"
         android:layout_gravity="center"
         app:srcCompat="@drawable/ic_no_image_available" />
 

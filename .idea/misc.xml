@@ -6,18 +6,37 @@
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable-v24/ic_camera_alt_black_24dp.xml" value="0.174" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable-v24/ic_close_black_24dp.xml" value="0.1" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable-v24/ic_folder_black_24dp.xml" value="0.174" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable-v24/ic_info_black_24dp.xml" value="0.174" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/border.xml" value="0.174" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_add_black_24dp.xml" value="0.174" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_bathroom.xml" value="0.174" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_bedroom.xml" value="0.174" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_edit_black_24dp.xml" value="0.174" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_location.xml" value="0.174" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_menu_black_24dp.xml" value="0.174" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_power_settings_new_black_24dp.xml" value="0.174" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_price.xml" value="0.174" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_real_estate.xml" value="0.1" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_room.xml" value="0.174" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_search_black_24dp.xml" value="0.174" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_settings_black_24dp.xml" value="0.174" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_surface.xml" value="0.1" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/activity_add_new_real_estate.xml" value="0.16041666666666668" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/activity_main.xml" value="0.3120471014492754" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/add_new_real_estate_add_picture_item.xml" value="0.3120471014492754" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/alert_dialog_picture.xml" value="0.6666666666666666" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/alert_dialog_profile_picture.xml" value="0.3120471014492754" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/alert_real_estate_picture.xml" value="0.3120471014492754" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/fragment_detail.xml" value="0.16041666666666668" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/fragment_list.xml" value="0.3120471014492754" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/fragment_list_view.xml" value="0.3120471014492754" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/fragment_list_view_item.xml" value="0.3120471014492754" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/include_information_side_view.xml" value="0.3120471014492754" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/include_no_information.xml" value="0.3120471014492754" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/include_no_real_estate.xml" value="0.3120471014492754" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/include_real_estate_add_picture_item.xml" value="0.3120471014492754" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/include_real_estate_manager_choose_picture.xml" value="0.3120471014492754" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/include_real_estate_picture.xml" value="0.3120471014492754" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/infromation_side_view.xml" value="0.3120471014492754" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/no_residence.xml" value="0.3120471014492754" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/side_menu_view_header.xml" value="0.3120471014492754" />

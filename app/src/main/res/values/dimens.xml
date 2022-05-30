@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Side View -->
-    <dimen name="logo_header_side_view_height">100dp</dimen>
-    <dimen name="logo_header_side_view_width">176dp</dimen>
-    <dimen name="profile_picture_header_side_view_height">60dp</dimen>
-    <dimen name="profile_picture_header_side_view_width">60dp</dimen>
+    <dimen name="logo_header_side_view_size">100dp</dimen>
+    <dimen name="profile_picture_header_side_view_size">60dp</dimen>
     <dimen name="margin_information_header">16dp</dimen>
     <dimen name="margin_text_information_start">16dp</dimen>
     <dimen name="margin_text_information_top">8dp</dimen>
@@ -23,6 +21,12 @@
     <dimen name="list_view_image_real_estate_size"> 100dp </dimen>
     <dimen name="list_view_margin_image_text"> 12dp </dimen>
     <dimen name="list_view_no_real_estate_text_size"> 22sp</dimen>
+
+    <!-- Detail Fragment + Add New Real Estate-->
+    <dimen name="detail_margin_category"> 12dp </dimen>
+    <dimen name="detail_margin_information"> 24dp </dimen>
+    <dimen name="detail_picture_size"> 100dp</dimen>
+    <dimen name="detail_margin_add_picture_button"> 24dp </dimen>
 
 
 

@@ -2,35 +2,22 @@ package com.tonyocallimoutou.realestatemanager.util;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.tonyocallimoutou.realestatemanager.BuildConfig;
 import com.tonyocallimoutou.realestatemanager.R;
-import com.tonyocallimoutou.realestatemanager.model.User;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelUser;
 
 import java.io.File;
@@ -39,10 +26,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class UtilsPictureManager {
+public class UtilsProfilePictureManager {
 
-    public static final int REQUEST_IMAGE_CAMERA = 123;
-    public static final int REQUEST_IMAGE_FOLDER = 456;
+    private static final int REQUEST_IMAGE_CAMERA = 123;
+    private static final int REQUEST_IMAGE_FOLDER = 456;
 
     private static ImageView actualPicture;
 
@@ -76,7 +63,7 @@ public class UtilsPictureManager {
 
         mActivity = activity;
 
-        View view = activity.getLayoutInflater().inflate(R.layout.alert_dialog_picture, null);
+        View view = activity.getLayoutInflater().inflate(R.layout.alert_dialog_profile_picture, null);
 
         actualPicture = view.findViewById(R.id.alert_dialog_actual_picture);
 

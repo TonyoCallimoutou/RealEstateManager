@@ -29,9 +29,10 @@ import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.model.User;
 import com.tonyocallimoutou.realestatemanager.util.Utils;
-import com.tonyocallimoutou.realestatemanager.util.UtilsPictureManager;
+import com.tonyocallimoutou.realestatemanager.util.UtilsProfilePictureManager;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserRepository {
@@ -105,7 +106,7 @@ public class UserRepository {
                             currentUser = new User(uid, username, picture,email);
                             getUsersCollection().document(currentUser.getUid()).set(currentUser);
 
-                            UtilsPictureManager.createAlertDialog(activity, viewModelUser);
+                            UtilsProfilePictureManager.createAlertDialog(activity, viewModelUser);
                         }
                     }
                 });
@@ -182,6 +183,28 @@ public class UserRepository {
 
     public User getCurrentUser() {
         return currentUser;
+    }
+
+    public void getAllUser(MutableLiveData<List<User>> liveData) {
+
+        getUsersCollection().addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+
+                if (error != null) {
+                    Log.w("TAG", "Listen failed.", error);
+                    return;
+                }
+
+                List<User> workmatesList = new ArrayList<>();
+                for (DocumentSnapshot document : value) {
+                    User user = document.toObject(User.class);
+                    workmatesList.add(user);
+                }
+
+                liveData.setValue(workmatesList);
+            }
+        });
     }
 
 

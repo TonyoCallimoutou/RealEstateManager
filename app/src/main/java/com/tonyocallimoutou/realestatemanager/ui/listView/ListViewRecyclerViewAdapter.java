@@ -1,5 +1,6 @@
 package com.tonyocallimoutou.realestatemanager.ui.listView;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 
@@ -21,10 +24,12 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRe
 
     private List<RealEstate> mRealEstate;
     private final ListItemClickListener mListItemClickListener;
+    private final Context mContext;
 
-    public ListViewRecyclerViewAdapter(List<RealEstate> residences,
+    public ListViewRecyclerViewAdapter(Context context, List<RealEstate> realEstate,
                                        ListItemClickListener listItemClickListener) {
-        mRealEstate = residences;
+        mContext = context;
+        mRealEstate = realEstate;
         mListItemClickListener = listItemClickListener;
     }
 
@@ -39,6 +44,11 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRe
     @Override
     public void onBindViewHolder(@NonNull ListViewRecyclerViewAdapter.ViewHolder holder, int position) {
         RealEstate realEstate = mRealEstate.get(position);
+
+        Glide.with(mContext)
+                .load(realEstate.getPhotos().get(0).getReference())
+                .apply(RequestOptions.circleCropTransform())
+                .into(holder.realEstateImage);
 
         holder.realEstateType.setText(realEstate.getType());
         holder.realEstatePrice.setText(realEstate.getStringPriceUSD());

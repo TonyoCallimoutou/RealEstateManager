@@ -8,10 +8,9 @@ public class RealEstate {
 
 
     private String id;
-    private User user;
+    private String userId;
     private int priceUSD;
     private String type;
-    @Nullable
     private List<Photo> photos;
     private String description;
     private int surface;
@@ -24,15 +23,15 @@ public class RealEstate {
     public RealEstate(int priceUSD,
                      User user,
                      String type,
-                     @Nullable List<Photo> photos,
+                     List<Photo> photos,
                      String description,
                      int surface,
                      int numberOfRooms,
                      int numberOfBathrooms,
                      int numberOfBedrooms) {
-        this.id = user.getUid()+" : "+ user.getMyRealEstate().size();
+        this.id = user.getUid()+"_"+ user.getMyRealEstate().size();
         this.priceUSD = priceUSD;
-        this.user = user;
+        this.userId = user.getUid();
         this.type = type;
         this.photos = photos;
         this.description = description;
@@ -62,12 +61,12 @@ public class RealEstate {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getType() {
@@ -78,12 +77,11 @@ public class RealEstate {
         this.type = type;
     }
 
-    @Nullable
     public List<Photo> getPhotos() {
         return photos;
     }
 
-    public void setPhotos(@Nullable List<Photo> photos) {
+    public void setPhotos(List<Photo> photos) {
         this.photos = photos;
     }
 

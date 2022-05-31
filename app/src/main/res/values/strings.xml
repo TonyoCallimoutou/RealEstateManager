@@ -61,6 +61,13 @@
     <string name="new_toast_unable_to_save"> Unable to save </string>
     <string name="new_error_enter_data"> Enter Data</string>
 
+    <!-- MapView -->
+    <string name="title_message_map_view"> We are Sorry </string>
+    <string name="message_map_view"> We need to acces to your location to show you the map.\nDo you want to grant us this permission</string>
+    <string name="button_message_map_view"> OK</string>
+
+    <string name="title_alertDialog_error_location"> We are Sorry </string>
+    <string name="message_alertDialog_error_location"> We were unable to locate you</string>
 
 
 </resources>

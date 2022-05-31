@@ -6,19 +6,27 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.Photo;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
@@ -29,6 +37,7 @@ import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelRealEstate;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelUser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -53,15 +62,20 @@ public class AddNewRealEstateActivity extends AppCompatActivity implements ListP
     EditText realEstateBedroom;
     @BindView(R.id.input_bathroom)
     EditText realEstateBathroom;
+    @BindView(R.id.textview_result_location)
+    TextView realEstateLocation;
     @BindView(R.id.add_picture)
     Button addPicture;
+
+    private static int AUTOCOMPLETE_REQUEST_CODE = 1;
 
     private ViewModelRealEstate viewModelRealEstate;
     private ViewModelUser viewModelUser;
 
     private ListPictureRecyclerViewAdapter adapter;
-    private List<Photo> photos = new ArrayList<>();
+    private final List<Photo> photos = new ArrayList<>();
     private int mainPicturePosition = 0;
+    private Place place;
 
     private User currentUser;
 
@@ -102,8 +116,18 @@ public class AddNewRealEstateActivity extends AppCompatActivity implements ListP
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        photos.addAll(UtilsRealEstatePictureManager.getImagePicture(requestCode, resultCode, data));
-        adapter.initAdapter(photos);
+        if (requestCode == UtilsRealEstatePictureManager.REQUEST_IMAGE_CAMERA || requestCode == UtilsRealEstatePictureManager.REQUEST_IMAGE_FOLDER) {
+            photos.addAll(UtilsRealEstatePictureManager.getImagePicture(requestCode, resultCode, data));
+            adapter.initAdapter(photos);
+        }
+
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE && resultCode == RESULT_OK) {
+            Log.d("TAG", "onActivityResult: ");
+            place = Autocomplete.getPlaceFromIntent(data);
+            Log.i("TAG", "Place: " + place.getName() + ", " + place.getId());
+
+            realEstateLocation.setText(place.getName());
+        }
     }
 
     // Add Description to picture
@@ -147,6 +171,17 @@ public class AddNewRealEstateActivity extends AppCompatActivity implements ListP
         });
     }
 
+    @OnClick(R.id.button_location)
+    public void chooseAddress() {
+
+        Log.d("TAG", "chooseAddress: ");
+        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
+
+        Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                .build(AddNewRealEstateActivity.this);
+        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+    }
+
 
     @OnClick(R.id.new_element_save_button)
     public void save() {
@@ -168,6 +203,11 @@ public class AddNewRealEstateActivity extends AppCompatActivity implements ListP
             }
         }
 
+        if (realEstateLocation.getText() == "") {
+            canSave = false;
+            realEstateLocation.setError(getString(R.string.new_error_enter_data));
+        }
+
         if (! canSave) {
             Toast.makeText(this, getString(R.string.new_toast_unable_to_save), Toast.LENGTH_SHORT).show();
         }
@@ -185,7 +225,7 @@ public class AddNewRealEstateActivity extends AppCompatActivity implements ListP
             int bedroom = Integer.parseInt(realEstateBedroom.getText().toString());
             int bathroom = Integer.parseInt(realEstateBathroom.getText().toString());
 
-            RealEstate realEstateToCreate = new RealEstate(price,currentUser, type,photos,mainPicturePosition,description,surface,room,bathroom,bedroom);
+            RealEstate realEstateToCreate = new RealEstate(price,currentUser, type,photos,mainPicturePosition,description,surface,room,bathroom,bedroom,place);
             viewModelRealEstate.createRealEstate(realEstateToCreate);
 
             finish();

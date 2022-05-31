@@ -47,6 +47,8 @@ public class UtilsRealEstatePictureManager {
     public static List<Photo> getImagePicture(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAMERA && resultCode == Activity.RESULT_OK) {
             newPicture.add("file://" + imagePath);
+            alert.cancel();
+            return getPhotoFromList();
         }
         if (requestCode == REQUEST_IMAGE_FOLDER && resultCode == Activity.RESULT_OK) {
             if (data.getClipData() != null) {
@@ -59,10 +61,12 @@ public class UtilsRealEstatePictureManager {
                 Uri uri = data.getData();
                 newPicture.add(uri.toString());
             }
+
+            alert.cancel();
+            return getPhotoFromList();
         }
 
-        alert.cancel();
-        return getPhotoFromList();
+        return new ArrayList<>();
 
     }
 

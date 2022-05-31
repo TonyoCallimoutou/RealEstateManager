@@ -31,6 +31,13 @@
     <dimen name="detail_margin_alert_dialog"> 48dp </dimen>
     <dimen name="detail_margin_bottom_alert_dialog"> 72dp </dimen>
 
+    <!-- MapView -->
+    <dimen name="margin_message_title_map_view"> 16dp </dimen>
+    <dimen name="margin_message_text_map_view"> 16dp </dimen>
+    <dimen name="margin_message_button_map_view"> 16dp </dimen>
+    <dimen name="margin_end_fab_map"> 24dp </dimen>
+    <dimen name="margin_bottom_fab_map"> 40dp </dimen>
+
 
 
 

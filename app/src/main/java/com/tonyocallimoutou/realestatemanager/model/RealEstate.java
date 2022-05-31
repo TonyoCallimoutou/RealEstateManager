@@ -2,6 +2,8 @@ package com.tonyocallimoutou.realestatemanager.model;
 
 import androidx.annotation.Nullable;
 
+import com.google.android.libraries.places.api.model.Place;
+
 import java.util.List;
 
 public class RealEstate {
@@ -18,6 +20,7 @@ public class RealEstate {
     private int numberOfRooms;
     private int numberOfBathrooms;
     private int numberOfBedrooms;
+    private Place place;
 
     public RealEstate(){}
 
@@ -30,7 +33,8 @@ public class RealEstate {
                      int surface,
                      int numberOfRooms,
                      int numberOfBathrooms,
-                     int numberOfBedrooms) {
+                     int numberOfBedrooms,
+                     Place place) {
         this.id = user.getUid()+"_"+ user.getMyRealEstate().size();
         this.priceUSD = priceUSD;
         this.userId = user.getUid();
@@ -42,6 +46,7 @@ public class RealEstate {
         this.numberOfRooms = numberOfRooms;
         this.numberOfBathrooms = numberOfBathrooms;
         this.numberOfBedrooms = numberOfBedrooms;
+        this.place = place;
     }
 
     public int getPriceUSD() {
@@ -150,5 +155,13 @@ public class RealEstate {
 
     public void setNumberOfBedrooms(int numberOfBedrooms) {
         this.numberOfBedrooms = numberOfBedrooms;
+    }
+
+    public Place getPlace() {
+        return place;
+    }
+
+    public void setPlace(Place place) {
+        this.place = place;
     }
 }

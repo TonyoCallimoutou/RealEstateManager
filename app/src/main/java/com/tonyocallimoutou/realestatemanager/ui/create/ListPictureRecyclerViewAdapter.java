@@ -34,7 +34,6 @@ public class ListPictureRecyclerViewAdapter extends RecyclerView.Adapter<ListPic
     private final ListPictureClickListener mPictureListener;
 
     public ListPictureRecyclerViewAdapter(Context context, List<Photo> pictures, ListPictureClickListener pictureListener, @Nullable ListRemoveClickListener listener) {
-        Log.d("TAG", "ListPictureRecyclerViewAdapter: " + pictures);
         mContext = context;
         mPictures = pictures;
         mPictureListener = pictureListener;

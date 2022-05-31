@@ -26,11 +26,14 @@ import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.libraries.places.api.Places;
 import com.google.android.material.navigation.NavigationView;
+import com.tonyocallimoutou.realestatemanager.BuildConfig;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.ui.create.AddNewRealEstateActivity;
 import com.tonyocallimoutou.realestatemanager.ui.detail.DetailFragment;
 import com.tonyocallimoutou.realestatemanager.ui.listView.ListViewFragment;
+import com.tonyocallimoutou.realestatemanager.ui.mapview.MapFragment;
 import com.tonyocallimoutou.realestatemanager.util.UtilsProfilePictureManager;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelFactory;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelRealEstate;
@@ -56,6 +59,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Initialize the SDK
+        Places.initialize(getApplicationContext(), BuildConfig.MAPS_API_KEY);
 
         // Check Google play service
         int status = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
@@ -292,6 +298,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         viewModelRealEstate.getALlRealEstateLiveData().observe(this, listRealEstate -> {
             ListViewFragment.initResidenceList(listRealEstate);
+            MapFragment.setRealEstateList(listRealEstate);
         });
 
     }

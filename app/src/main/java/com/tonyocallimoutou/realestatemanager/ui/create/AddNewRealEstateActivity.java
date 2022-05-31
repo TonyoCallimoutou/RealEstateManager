@@ -3,7 +3,6 @@ package com.tonyocallimoutou.realestatemanager.ui.create;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,15 +12,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.Photo;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.model.User;
-import com.tonyocallimoutou.realestatemanager.util.UtilsProfilePictureManager;
 import com.tonyocallimoutou.realestatemanager.util.UtilsRealEstatePictureManager;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelFactory;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelRealEstate;
@@ -34,7 +35,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AddNewRealEstateActivity extends AppCompatActivity {
+public class AddNewRealEstateActivity extends AppCompatActivity implements ListPictureRecyclerViewAdapter.ListPictureClickListener {
 
     @BindView(R.id.recycler_view_add_picture_real_estate)
     RecyclerView recyclerView;
@@ -60,6 +61,7 @@ public class AddNewRealEstateActivity extends AppCompatActivity {
 
     private ListPictureRecyclerViewAdapter adapter;
     private List<Photo> photos = new ArrayList<>();
+    private int mainPicturePosition = 0;
 
     private User currentUser;
 
@@ -75,7 +77,7 @@ public class AddNewRealEstateActivity extends AppCompatActivity {
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         recyclerView.setLayoutManager(horizontalLayoutManager);
-        adapter = new ListPictureRecyclerViewAdapter(this, photos, new ListPictureRecyclerViewAdapter.ListRemoveClickListener() {
+        adapter = new ListPictureRecyclerViewAdapter(this, photos, this, new ListPictureRecyclerViewAdapter.ListRemoveClickListener() {
             @Override
             public void onClick(int position) {
                 photos.remove(position);
@@ -102,6 +104,47 @@ public class AddNewRealEstateActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         photos.addAll(UtilsRealEstatePictureManager.getImagePicture(requestCode, resultCode, data));
         adapter.initAdapter(photos);
+    }
+
+    // Add Description to picture
+
+    @Override
+    public void onClick(int position) {
+        View view = getLayoutInflater().inflate(R.layout.alert_real_estate_add_picture_description, null);
+
+        ImageView picture = view.findViewById(R.id.alert_dialog_picture_to_modify);
+        CheckBox checkBox = view.findViewById(R.id.checkbox_main_picture);
+        EditText newDescription = view.findViewById(R.id.picture_input_description);
+        Button saveButtonPicture = view.findViewById(R.id.alert_dialog_save_button);
+
+        Glide.with(this)
+                .load(photos.get(position).getReference())
+                .into(picture);
+
+        if (position == mainPicturePosition) {
+            checkBox.setChecked(true);
+        }
+
+        newDescription.setText(photos.get(position).getDescription());
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(view);
+        builder.setCancelable(true);
+
+        AlertDialog alert = builder.create();
+        alert.show();
+
+        saveButtonPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                photos.get(position).setDescription(newDescription.getText().toString());
+                if (checkBox.isChecked()) {
+                    mainPicturePosition = position;
+                }
+                adapter.initAdapter(photos);
+                alert.cancel();
+            }
+        });
     }
 
 
@@ -142,7 +185,7 @@ public class AddNewRealEstateActivity extends AppCompatActivity {
             int bedroom = Integer.parseInt(realEstateBedroom.getText().toString());
             int bathroom = Integer.parseInt(realEstateBathroom.getText().toString());
 
-            RealEstate realEstateToCreate = new RealEstate(price,currentUser, type,photos,description,surface,room,bathroom,bedroom);
+            RealEstate realEstateToCreate = new RealEstate(price,currentUser, type,photos,mainPicturePosition,description,surface,room,bathroom,bedroom);
             viewModelRealEstate.createRealEstate(realEstateToCreate);
 
             finish();

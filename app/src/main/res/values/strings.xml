@@ -53,11 +53,14 @@
     </string-array>
     <string name="button_save"> Save </string>
     <string name="button_add_picture"> Add Picture </string>
+    <string name="checkbox_main_picture"> Main Picture</string>
 
     <string name="new_title_alert_dialog"> Warning !!</string>
     <string name="new_message_alert_dialog"> Do you really want to abandon the creation of real estate ?</string>
     <string name="new_button_alert_dialog"> YES </string>
     <string name="new_toast_unable_to_save"> Unable to save </string>
     <string name="new_error_enter_data"> Enter Data</string>
+
+
 
 </resources>

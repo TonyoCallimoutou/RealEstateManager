@@ -45,8 +45,10 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRe
     public void onBindViewHolder(@NonNull ListViewRecyclerViewAdapter.ViewHolder holder, int position) {
         RealEstate realEstate = mRealEstate.get(position);
 
+
+        int mainPicturePosition = realEstate.getMainPicturePosition();
         Glide.with(mContext)
-                .load(realEstate.getPhotos().get(0).getReference())
+                .load(realEstate.getPhotos().get(mainPicturePosition).getReference())
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.realEstateImage);
 

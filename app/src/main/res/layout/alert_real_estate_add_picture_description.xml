@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/detail_margin_alert_dialog"
+    android:layout_gravity="center"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <ImageView
+        android:id="@+id/alert_dialog_picture_to_modify"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/checkbox_main_picture"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="@dimen/alert_dialog_margin_current_picture" />
+
+    <CheckBox
+        android:id="@+id/checkbox_main_picture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/detail_margin_picture_description"
+        android:layout_above="@id/picture_input_description"
+        android:text="@string/checkbox_main_picture" />
+
+    <EditText
+        android:id="@+id/picture_input_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/detail_margin_picture_description"
+        android:layout_above="@id/alert_dialog_save_button"
+        android:hint="@string/detail_description_category" />
+
+
+    <Button
+        android:id="@+id/alert_dialog_save_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/alert_dialog_margin_button_save"
+        android:text="@string/alert_dialog_button_save" />
+
+</RelativeLayout>

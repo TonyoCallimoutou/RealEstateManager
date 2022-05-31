@@ -126,6 +126,17 @@ public class ViewModelTest {
                 return null;
             }
         }).when(userRepository).createRealEstate(any(RealEstate.class));
+
+        doAnswer(new Answer() {
+            @Override
+            public Void answer(InvocationOnMock invocation) throws Throwable {
+                Object[] args = invocation.getArguments();
+                MutableLiveData<List<User>> liveData = (MutableLiveData<List<User>>) args[0];
+                liveData.setValue(fakeWorkmates);
+                return null;
+            }
+        }).when(userRepository).getAllUser(any(MutableLiveData.class));
+
     }
 
     private void initAnswerRealEstate() {
@@ -218,9 +229,19 @@ public class ViewModelTest {
     }
 
     @Test
+    public void getAllUser() {
+
+        viewModelUser.setListUser();
+
+        List<User> users = viewModelUser.getAllUser().getValue();
+
+        assertEquals(fakeWorkmates, users);
+    }
+
+    @Test
     public void createRealEstate() {
 
-        RealEstate newRealEstate = new RealEstate(100000,currentUser,"Fake Type",null,"Fake Description",120,1,1,1);
+        RealEstate newRealEstate = new RealEstate(100000,currentUser,"Fake Type",null,0,"Fake Description",120,1,1,1);
 
         viewModelRealEstate.createRealEstate(newRealEstate);
 

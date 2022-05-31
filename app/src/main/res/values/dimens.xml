@@ -27,6 +27,9 @@
     <dimen name="detail_margin_information"> 24dp </dimen>
     <dimen name="detail_picture_size"> 100dp</dimen>
     <dimen name="detail_margin_add_picture_button"> 24dp </dimen>
+    <dimen name="detail_margin_picture_description"> 12dp </dimen>
+    <dimen name="detail_margin_alert_dialog"> 48dp </dimen>
+    <dimen name="detail_margin_bottom_alert_dialog"> 72dp </dimen>
 
 
 

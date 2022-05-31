@@ -30,13 +30,15 @@ public class ListPictureRecyclerViewAdapter extends RecyclerView.Adapter<ListPic
 
     private List<Photo> mPictures;
     private final Context mContext;
-    private final ListRemoveClickListener mListener;
+    private final ListRemoveClickListener mRemoveListener;
+    private final ListPictureClickListener mPictureListener;
 
-    public ListPictureRecyclerViewAdapter(Context context, List<Photo> pictures, @Nullable ListRemoveClickListener listener) {
+    public ListPictureRecyclerViewAdapter(Context context, List<Photo> pictures, ListPictureClickListener pictureListener, @Nullable ListRemoveClickListener listener) {
         Log.d("TAG", "ListPictureRecyclerViewAdapter: " + pictures);
         mContext = context;
         mPictures = pictures;
-        mListener = listener;
+        mPictureListener = pictureListener;
+        mRemoveListener = listener;
     }
 
     @NonNull
@@ -55,7 +57,7 @@ public class ListPictureRecyclerViewAdapter extends RecyclerView.Adapter<ListPic
                 .load(picture.getReference())
                 .into(holder.addPicture);
 
-        if (mListener == null) {
+        if (mRemoveListener == null) {
             holder.removePicture.setVisibility(View.GONE);
         }
 
@@ -67,6 +69,10 @@ public class ListPictureRecyclerViewAdapter extends RecyclerView.Adapter<ListPic
     }
 
     public interface ListRemoveClickListener{
+        void onClick(int position);
+    }
+
+    public interface ListPictureClickListener {
         void onClick(int position);
     }
 
@@ -89,7 +95,14 @@ public class ListPictureRecyclerViewAdapter extends RecyclerView.Adapter<ListPic
             removePicture.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mListener.onClick(getAdapterPosition());
+                    mRemoveListener.onClick(getAdapterPosition());
+                }
+            });
+
+            addPicture.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mPictureListener.onClick(getAdapterPosition());
                 }
             });
         }

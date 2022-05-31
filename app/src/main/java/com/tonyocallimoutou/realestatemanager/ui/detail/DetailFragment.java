@@ -1,18 +1,17 @@
 package com.tonyocallimoutou.realestatemanager.ui.detail;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -37,7 +36,7 @@ import butterknife.OnClick;
  * Use the {@link DetailFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DetailFragment extends Fragment {
+public class DetailFragment extends Fragment implements ListPictureRecyclerViewAdapter.ListPictureClickListener {
 
     private static RelativeLayout relativeLayoutFragment;
     private static TextView lblNoInformation;
@@ -53,6 +52,8 @@ public class DetailFragment extends Fragment {
     private static TextView userEmail;
     private static ImageView userProfilePicture;
 
+    private static View view;
+
     private static Context context;
 
     @BindView(R.id.recycler_view_add_picture_real_estate)
@@ -60,7 +61,7 @@ public class DetailFragment extends Fragment {
 
     private static ListPictureRecyclerViewAdapter adapter;
 
-    private List<Photo> photos = new ArrayList<>();
+    private static List<Photo> photos = new ArrayList<>();
     private static List<User> users = new ArrayList<>();
 
     private static RealEstate mRealEstate;
@@ -82,7 +83,7 @@ public class DetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_detail, container, false);
+        view = inflater.inflate(R.layout.fragment_detail, container, false);
         ButterKnife.bind(this,view);
 
         relativeLayoutFragment = view.findViewById(R.id.detail_fragment);
@@ -105,7 +106,7 @@ public class DetailFragment extends Fragment {
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, true);
         recyclerViewPicture.setLayoutManager(horizontalLayoutManager);
-        adapter = new ListPictureRecyclerViewAdapter(context, photos,null);
+        adapter = new ListPictureRecyclerViewAdapter(context, photos,this, null);
 
         recyclerViewPicture.setAdapter(adapter);
 
@@ -122,6 +123,7 @@ public class DetailFragment extends Fragment {
             lblNoInformation.setVisibility(View.GONE);
             relativeLayoutInformation.setVisibility(View.VISIBLE);
 
+            photos = mRealEstate.getPhotos();
             adapter.initAdapter(mRealEstate.getPhotos());
 
             textDescription.setText(mRealEstate.getDescription());
@@ -154,8 +156,39 @@ public class DetailFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onClick(int position) {
+        View view = getLayoutInflater().inflate(R.layout.alert_real_estate_picture_description, null);
+
+        ImageView picture = view.findViewById(R.id.alert_dialog_picture_image_description);
+        TextView pictureDescription = view.findViewById(R.id.picture_description);
+
+        Glide.with(this)
+                .load(photos.get(position).getReference())
+                .into(picture);
+
+        pictureDescription.setText(photos.get(position).getDescription());
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setView(view);
+        builder.setCancelable(true);
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+
+
     @OnClick(R.id.detail_close_button)
     public void closeDetailFragment() {
+        relativeLayoutFragment.setVisibility(View.GONE);
+    }
+
+    public static boolean canCloseFragment() {
+        return (view.findViewById(R.id.detail_close_button) != null && relativeLayoutFragment.getVisibility() == View.VISIBLE);
+    }
+
+    public static void closeFragment() {
         relativeLayoutFragment.setVisibility(View.GONE);
     }
 

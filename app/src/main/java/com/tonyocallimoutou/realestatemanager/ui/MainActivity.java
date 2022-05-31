@@ -86,6 +86,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (DetailFragment.canCloseFragment()) {
+            DetailFragment.closeFragment();
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+
     // error Google PLay Service
 
     private void errorGooglePlayService(int status) {

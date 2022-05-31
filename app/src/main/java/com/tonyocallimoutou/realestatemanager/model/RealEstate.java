@@ -12,6 +12,7 @@ public class RealEstate {
     private int priceUSD;
     private String type;
     private List<Photo> photos;
+    private int mainPicturePosition;
     private String description;
     private int surface;
     private int numberOfRooms;
@@ -24,6 +25,7 @@ public class RealEstate {
                      User user,
                      String type,
                      List<Photo> photos,
+                     int mainPicturePosition,
                      String description,
                      int surface,
                      int numberOfRooms,
@@ -34,6 +36,7 @@ public class RealEstate {
         this.userId = user.getUid();
         this.type = type;
         this.photos = photos;
+        this.mainPicturePosition = mainPicturePosition;
         this.description = description;
         this.surface = surface;
         this.numberOfRooms = numberOfRooms;
@@ -83,6 +86,14 @@ public class RealEstate {
 
     public void setPhotos(List<Photo> photos) {
         this.photos = photos;
+    }
+
+    public int getMainPicturePosition() {
+        return mainPicturePosition;
+    }
+
+    public void setMainPicturePosition(int mainPicturePosition) {
+        this.mainPicturePosition = mainPicturePosition;
     }
 
     public String getDescription() {

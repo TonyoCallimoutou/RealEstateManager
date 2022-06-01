@@ -53,6 +53,7 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRe
                 .into(holder.realEstateImage);
 
         holder.realEstateType.setText(realEstate.getType());
+        holder.realEstateLocation.setText(realEstate.getPlace().getName());
         holder.realEstatePrice.setText(realEstate.getStringPriceUSD());
     }
 

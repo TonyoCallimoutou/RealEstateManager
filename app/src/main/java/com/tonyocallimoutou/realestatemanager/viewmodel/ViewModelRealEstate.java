@@ -31,6 +31,10 @@ public class ViewModelRealEstate extends ViewModel {
         realEstateRepository.getAllRealEstates(listRealEstateLiveData);
     }
 
+    public void editRealEstate(RealEstate actual, RealEstate modify) {
+        realEstateRepository.editRealEstate(actual,modify);
+    }
+
     public LiveData<List<RealEstate>> getALlRealEstateLiveData() {
         return listRealEstateLiveData;
     }

@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.tonyocallimoutou.realestatemanager.ui.MainActivity;
 import com.tonyocallimoutou.realestatemanager.ui.mapview.MiniMapFragment;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.Photo;
@@ -71,12 +72,13 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
     private static View view;
 
     private static final String BUNDLE_REAL_ESTATE = "BUNDLE_REAL_ESTATE";
-    private RealEstate mRealEstate;
+    private static RealEstate mRealEstate;
 
     private ListPictureRecyclerViewAdapter adapter;
 
     private List<Photo> photos = new ArrayList<>();
     private static List<User> users = new ArrayList<>();
+    private static User currentUser;
 
     public DetailFragment() {
     }
@@ -153,6 +155,11 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
                 }
             }
 
+            if (mRealEstate.getUserId().equals(currentUser.getUid())) {
+                MainActivity.setVisibilityEditMenuItem(true);
+            }
+
+
         }
         else {
             lblNoInformation.setVisibility(View.VISIBLE);
@@ -186,7 +193,7 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
 
     @OnClick(R.id.detail_close_button)
     public void closeDetailFragment() {
-        relativeLayoutFragment.setVisibility(View.GONE);
+        closeFragment();
     }
 
     public static boolean canCloseFragment() {
@@ -195,9 +202,19 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
 
     public static void closeFragment() {
         relativeLayoutFragment.setVisibility(View.GONE);
+        MainActivity.setVisibilityEditMenuItem(false);
     }
 
     public static void setListUser(List<User> data) {
         users = data;
+    }
+
+    public static void setCurrentUser(User user) {
+        currentUser = user;
+    }
+
+
+    public static RealEstate getActualRealEstate() {
+        return mRealEstate;
     }
 }

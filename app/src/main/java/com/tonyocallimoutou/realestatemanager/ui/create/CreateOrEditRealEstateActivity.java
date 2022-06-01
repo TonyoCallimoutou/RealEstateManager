@@ -1,17 +1,21 @@
 package com.tonyocallimoutou.realestatemanager.ui.create;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -22,16 +26,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
-import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.Photo;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.model.RealEstateLocation;
 import com.tonyocallimoutou.realestatemanager.model.User;
+import com.tonyocallimoutou.realestatemanager.ui.detail.DetailFragment;
 import com.tonyocallimoutou.realestatemanager.ui.mapview.MiniMapFragment;
 import com.tonyocallimoutou.realestatemanager.util.UtilsRealEstatePictureManager;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelFactory;
@@ -46,7 +49,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AddNewRealEstateActivity extends AppCompatActivity implements ListPictureRecyclerViewAdapter.ListPictureClickListener {
+public class CreateOrEditRealEstateActivity extends AppCompatActivity implements ListPictureRecyclerViewAdapter.ListPictureClickListener {
 
     @BindView(R.id.recycler_view_add_picture_real_estate)
     RecyclerView recyclerView;
@@ -79,16 +82,34 @@ public class AddNewRealEstateActivity extends AppCompatActivity implements ListP
     private int mainPicturePosition = 0;
     private RealEstateLocation place;
 
+    public static final String BUNDLE_REAL_ESTATE = "BUNDLE_REAL_ESTATE";
+    private RealEstate realEstate;
+
     private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_new_real_estate);
+        setContentView(R.layout.activity_create_or_edit_real_estate);
         ButterKnife.bind(this);
 
         viewModelRealEstate = new ViewModelProvider(this, ViewModelFactory.getInstance(this)).get(ViewModelRealEstate.class);
         viewModelUser = new ViewModelProvider(this, ViewModelFactory.getInstance(this)).get(ViewModelUser.class);
+
+        initPhotoManager();
+
+
+        // Edit Real Estate
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            realEstate = (RealEstate) extras.getSerializable(BUNDLE_REAL_ESTATE);
+            initInformation();
+        }
+    }
+
+    // Picture Manager
+
+    private void initPhotoManager() {
 
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
@@ -106,14 +127,13 @@ public class AddNewRealEstateActivity extends AppCompatActivity implements ListP
         addPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UtilsRealEstatePictureManager.createAlertDialog(AddNewRealEstateActivity.this);
+                UtilsRealEstatePictureManager.createAlertDialog(CreateOrEditRealEstateActivity.this);
             }
         });
 
         initData();
     }
 
-    // Picture Manager
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -126,9 +146,8 @@ public class AddNewRealEstateActivity extends AppCompatActivity implements ListP
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE && resultCode == RESULT_OK) {
             Log.d("TAG", "onActivityResult: ");
             place = new RealEstateLocation(Autocomplete.getPlaceFromIntent(data));
-            realEstateLocation.setText(place.getName());
 
-            MiniMapFragment.initMiniMap(this,place);
+            initPlaceInformation();
         }
     }
 
@@ -173,6 +192,43 @@ public class AddNewRealEstateActivity extends AppCompatActivity implements ListP
         });
     }
 
+    // EDIT INIT INFORMATION
+
+    private void initInformation() {
+        photos.addAll(realEstate.getPhotos());
+        adapter.initAdapter(photos);
+
+        realEstateDescription.setText(realEstate.getDescription());
+        realEstatePrice.setText(String.valueOf(realEstate.getPriceUSD()));
+        realEstateSurface.setText(String.valueOf(realEstate.getSurface()));
+        realEstateRoom.setText(String.valueOf(realEstate.getNumberOfRooms()));
+        realEstateBedroom.setText(String.valueOf(realEstate.getNumberOfBedrooms()));
+        realEstateBathroom.setText(String.valueOf(realEstate.getNumberOfBathrooms()));
+        place = realEstate.getPlace();
+        initPlaceInformation();
+    }
+
+    // SOLD BUTTON
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (realEstate != null) {
+            MenuInflater inflate = this.getMenuInflater();
+            inflate.inflate(R.menu.action_bar_edit_menu, menu);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.sold_menu) {
+            Log.d("TAG", "onOptionsItemSelected: ");
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @OnClick(R.id.button_location)
     public void chooseAddress() {
 
@@ -185,8 +241,13 @@ public class AddNewRealEstateActivity extends AppCompatActivity implements ListP
         );
 
         Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
-                .build(AddNewRealEstateActivity.this);
+                .build(CreateOrEditRealEstateActivity.this);
         startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+    }
+
+    private void initPlaceInformation() {
+        realEstateLocation.setText(place.getName());
+        MiniMapFragment.initMiniMap(this,place);
     }
 
 
@@ -232,8 +293,14 @@ public class AddNewRealEstateActivity extends AppCompatActivity implements ListP
             int bedroom = Integer.parseInt(realEstateBedroom.getText().toString());
             int bathroom = Integer.parseInt(realEstateBathroom.getText().toString());
 
-            RealEstate realEstateToCreate = new RealEstate(price,currentUser, type,photos,mainPicturePosition,description,surface,room,bathroom,bedroom,place);
-            viewModelRealEstate.createRealEstate(realEstateToCreate);
+
+            RealEstate realEstateToCreate = new RealEstate(price, currentUser, type, photos, mainPicturePosition, description, surface, room, bathroom, bedroom, place);
+            if (realEstate == null) {
+                viewModelRealEstate.createRealEstate(realEstateToCreate);
+            }
+            else {
+                viewModelRealEstate.editRealEstate(realEstate, realEstateToCreate);
+            }
 
             finish();
         }

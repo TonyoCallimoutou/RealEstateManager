@@ -10,19 +10,20 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +37,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.tonyocallimoutou.realestatemanager.BuildConfig;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
-import com.tonyocallimoutou.realestatemanager.ui.create.AddNewRealEstateActivity;
+import com.tonyocallimoutou.realestatemanager.ui.create.CreateOrEditRealEstateActivity;
 import com.tonyocallimoutou.realestatemanager.ui.detail.DetailFragment;
 import com.tonyocallimoutou.realestatemanager.ui.listView.ListViewFragment;
 import com.tonyocallimoutou.realestatemanager.ui.mapview.MapViewFragment;
@@ -63,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private ViewModelUser viewModelUser;
     private ViewModelRealEstate viewModelRealEstate;
+
+    private static MenuItem editMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -216,6 +219,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.actionbar_menu, menu);
+        editMenu = menu.findItem(R.id.edit_menu);
+        setVisibilityEditMenuItem(false);
         return true;
     }
 
@@ -230,17 +235,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 return true;
             case R.id.add_menu:
-                Intent intent = new Intent(this, AddNewRealEstateActivity.class);
-                startActivity(intent);
+                Intent intentNewRealEstate = new Intent(this, CreateOrEditRealEstateActivity.class);
+                startActivity(intentNewRealEstate);
                 return true;
             case R.id.edit_menu:
-                Toast.makeText(this, getString(R.string.actionbar_edit), Toast.LENGTH_SHORT).show();
+
+                Intent intentEditRealEstate = new Intent(this, CreateOrEditRealEstateActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(CreateOrEditRealEstateActivity.BUNDLE_REAL_ESTATE,DetailFragment.getActualRealEstate());
+                intentEditRealEstate.putExtras(bundle);
+                startActivity(intentEditRealEstate);
+
                 return true;
             case R.id.search_menu:
                 Toast.makeText(this, getString(R.string.actionbar_search), Toast.LENGTH_SHORT).show();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public static void setVisibilityEditMenuItem(boolean isVisible) {
+        if (editMenu != null) {
+            editMenu.setVisible(isVisible);
+        }
     }
 
     //INIT SIDE VIEW
@@ -322,6 +339,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .apply();
 
                 initSideView(currentUserResults);
+                DetailFragment.setCurrentUser(currentUserResults);
             }
         });
 

@@ -18,7 +18,7 @@
     <string name="actionbar_add"> Add </string>
     <string name="actionbar_edit"> Edit </string>
     <string name="actionbar_search"> Search </string>
-
+    <string name="actionbar_sold"> Sold </string>
     <!-- Preferences -->
     <string name="shared_preference_username"> USERNAME </string>
 

@@ -101,6 +101,21 @@ public class RealEstateRepository {
         getRealEstateCollection().document(realEstate.getId()).set(realEstate);
     }
 
+    public void editRealEstate(RealEstate actual, RealEstate modify) {
+        actual.setPhotos(modify.getPhotos());
+        actual.setPriceUSD(modify.getPriceUSD());
+        actual.setMainPicturePosition(modify.getMainPicturePosition());
+        actual.setNumberOfBathrooms(modify.getNumberOfBathrooms());
+        actual.setNumberOfRooms(modify.getNumberOfRooms());
+        actual.setNumberOfBedrooms(modify.getNumberOfBedrooms());
+        actual.setSurface(modify.getSurface());
+        actual.setDescription(modify.getDescription());
+        actual.setPlace(modify.getPlace());
+        actual.setType(modify.getType());
+
+        getRealEstateCollection().document(actual.getId()).set(actual);
+    }
+
     public void getAllRealEstates(MutableLiveData<List<RealEstate>> liveData) {
         getRealEstateCollection().addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override

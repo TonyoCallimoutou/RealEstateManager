@@ -5,12 +5,14 @@ import androidx.annotation.Nullable;
 import com.google.android.libraries.places.api.model.Place;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 public class RealEstate implements Serializable {
 
 
     private String id;
+    private Date creationDate;
     private String userId;
     private int priceUSD;
     private String type;
@@ -22,6 +24,8 @@ public class RealEstate implements Serializable {
     private int numberOfBathrooms;
     private int numberOfBedrooms;
     private RealEstateLocation place;
+    private boolean isSold;
+    private Date soldDate;
 
     public RealEstate(){}
 
@@ -37,6 +41,7 @@ public class RealEstate implements Serializable {
                      int numberOfBedrooms,
                       RealEstateLocation place) {
         this.id = user.getUid()+"_"+ user.getMyRealEstateId().size();
+        this.creationDate = new Date();
         this.priceUSD = priceUSD;
         this.userId = user.getUid();
         this.type = type;
@@ -50,6 +55,30 @@ public class RealEstate implements Serializable {
         this.place = place;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public int getPriceUSD() {
         return priceUSD;
     }
@@ -60,22 +89,6 @@ public class RealEstate implements Serializable {
 
     public void setPriceUSD(int priceUSD) {
         this.priceUSD = priceUSD;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getType() {
@@ -164,5 +177,21 @@ public class RealEstate implements Serializable {
 
     public void setPlace(RealEstateLocation place) {
         this.place = place;
+    }
+
+    public boolean isSold() {
+        return isSold;
+    }
+
+    public void setSold(boolean sold) {
+        isSold = sold;
+    }
+
+    public Date getSoldDate() {
+        return soldDate;
+    }
+
+    public void setSoldDate(Date soldDate) {
+        this.soldDate = soldDate;
     }
 }

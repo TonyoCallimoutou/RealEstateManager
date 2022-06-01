@@ -134,7 +134,7 @@ public class UserRepository {
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()) {
                     Uri downloadUri = task.getResult();
-                    currentUser.setPicture(downloadUri.toString());
+                    currentUser.setUrlPicture(downloadUri.toString());
                     getUsersCollection().document(currentUser.getUid()).set(currentUser);
                 }
             }
@@ -169,7 +169,7 @@ public class UserRepository {
                 }
 
                 for (DocumentSnapshot document : value) {
-                    User user = document.toObject(User.class);
+                    User user = document.   toObject(User.class);
                     if (getCurrentFirebaseUser()!=null) {
                         if (user.getUid().equals(getCurrentFirebaseUser().getUid())) {
                             liveData.setValue(user);

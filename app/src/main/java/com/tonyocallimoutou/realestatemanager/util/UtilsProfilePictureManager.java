@@ -72,7 +72,7 @@ public class UtilsProfilePictureManager {
         FloatingActionButton removePicture = view.findViewById(R.id.alert_dialog_remove_picture);
         Button saveButton = view.findViewById(R.id.alert_dialog_save_button);
 
-        newProfilePicture = viewModelUser.getCurrentUser().getPicture();
+        newProfilePicture = viewModelUser.getCurrentUser().getUrlPicture();
         updatePictureInImageView();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);

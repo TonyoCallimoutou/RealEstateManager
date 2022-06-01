@@ -14,7 +14,7 @@ public class User {
     private String username;
     private String urlPicture;
     private String email;
-    private List<RealEstate> myRealEstate = new ArrayList<>();
+    private List<String> myRealEstateId = new ArrayList<>();
 
 
     public User() {}
@@ -24,7 +24,7 @@ public class User {
         this.username = username;
         this.urlPicture = urlPicture;
         this.email = email;
-        this.myRealEstate = new ArrayList<>();
+        this.myRealEstateId = new ArrayList<>();
     }
 
     public String getUid() {
@@ -43,11 +43,11 @@ public class User {
         this.username = username;
     }
 
-    public String getPicture() {
+    public String getUrlPicture() {
         return urlPicture;
     }
 
-    public void setPicture(String urlPicture) {
+    public void setUrlPicture(String urlPicture) {
         this.urlPicture = urlPicture;
     }
 
@@ -59,16 +59,16 @@ public class User {
         this.email = email;
     }
 
-    public List<RealEstate> getMyRealEstate() {
-        return myRealEstate;
+    public List<String> getMyRealEstateId() {
+        return myRealEstateId;
     }
 
-    public void setMyRealEstate(List<RealEstate> myRealEstate) {
-        this.myRealEstate = myRealEstate;
+    public void setMyRealEstateId(List<String> myRealEstateId) {
+        this.myRealEstateId = myRealEstateId;
     }
 
     public void addRealEstateToMyList(RealEstate realEstate) {
-        myRealEstate.add(realEstate);
+        myRealEstateId.add(realEstate.getId());
     }
 
 }

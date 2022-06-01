@@ -42,6 +42,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.ui.detail.DetailFragment;
+import com.tonyocallimoutou.realestatemanager.ui.listView.ListViewFragment;
 import com.tonyocallimoutou.realestatemanager.util.CompareRealEstate;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelRealEstate;
 
@@ -78,6 +79,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     // Bundle
     private final String KEY_LOCATION = "KEY_LOCATION";
     private final String KEY_CAMERA_POSITION = "KEY_CAMERA_POSITION";
+
+    public MapFragment() {
+    }
+
+    public static MapFragment newInstance() {
+        return new MapFragment();
+    }
 
 
     @Nullable
@@ -280,7 +288,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         for (RealEstate result : realEstatesList) {
             String placeName = result.getPlace().getName();
             String address = result.getPlace().getAddress();
-            LatLng latLng = result.getPlace().getLatLng();
+            double lat = result.getPlace().getLat();
+            double lng = result.getPlace().getLng();
+            LatLng latLng = new LatLng(lat,lng);
 
             MarkerOptions markerOptions = new MarkerOptions()
                     .position(latLng)
@@ -310,7 +320,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         RealEstate markRealEstate = (RealEstate) marker.getTag();
 
         // CAMERA
-        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
+        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(),cameraZoomDefault));
         DetailFragment.getDetailOf(markRealEstate);
 
         return true;

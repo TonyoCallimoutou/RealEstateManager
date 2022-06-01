@@ -20,7 +20,7 @@ public class RealEstate {
     private int numberOfRooms;
     private int numberOfBathrooms;
     private int numberOfBedrooms;
-    private Place place;
+    private RealEstateLocation place;
 
     public RealEstate(){}
 
@@ -34,8 +34,8 @@ public class RealEstate {
                      int numberOfRooms,
                      int numberOfBathrooms,
                      int numberOfBedrooms,
-                     Place place) {
-        this.id = user.getUid()+"_"+ user.getMyRealEstate().size();
+                      RealEstateLocation place) {
+        this.id = user.getUid()+"_"+ user.getMyRealEstateId().size();
         this.priceUSD = priceUSD;
         this.userId = user.getUid();
         this.type = type;
@@ -157,11 +157,11 @@ public class RealEstate {
         this.numberOfBedrooms = numberOfBedrooms;
     }
 
-    public Place getPlace() {
+    public RealEstateLocation getPlace() {
         return place;
     }
 
-    public void setPlace(Place place) {
+    public void setPlace(RealEstateLocation place) {
         this.place = place;
     }
 }

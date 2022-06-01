@@ -137,7 +137,7 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
             for (User user : users) {
                 if (user.getUid().equals(mRealEstate.getUserId())) {
                     Glide.with(context)
-                            .load(user.getPicture())
+                            .load(user.getUrlPicture())
                             .apply(RequestOptions.circleCropTransform())
                             .into(userProfilePicture);
 
@@ -194,6 +194,7 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
 
     public static void getDetailOf(RealEstate realEstate) {
         mRealEstate = realEstate;
+
         relativeLayoutFragment.setVisibility(View.VISIBLE);
         initInformation();
     }

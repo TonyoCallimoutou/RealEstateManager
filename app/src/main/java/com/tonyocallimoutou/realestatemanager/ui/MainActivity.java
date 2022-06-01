@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
@@ -17,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawer;
+    @BindView(R.id.switch_map_list)
+    SwitchCompat switchMapList;
 
     private View sideView;
 
@@ -72,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             setContentView(R.layout.activity_main);
             ButterKnife.bind(this);
 
-            initFragment();
+            initSwitchAndFragment();
             initActionBar();
         } else {
             errorGooglePlayService(status);
@@ -157,11 +161,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // INIT FRAGMENT
 
-    private void initFragment() {
+    private void initSwitchAndFragment() {
+
+        ListViewFragment listViewFragment = ListViewFragment.newInstance();
+        MapFragment mapViewFragment = MapFragment.newInstance();
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.host_fragment, ListViewFragment.newInstance())
+                .replace(R.id.host_fragment, listViewFragment)
                 .commit();
+
+        switchMapList.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked) {
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.host_fragment, mapViewFragment)
+                            .commit();
+                }
+                else {
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.host_fragment, listViewFragment)
+                            .commit();
+                }
+            }
+        });
 
 
         getSupportFragmentManager()
@@ -234,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ImageView profilePicture = sideView.findViewById(R.id.profile_picture_header_side_view);
 
         Glide.with(this)
-                .load(currentUser.getPicture())
+                .load(currentUser.getUrlPicture())
                 .apply(RequestOptions.circleCropTransform())
                 .into(profilePicture);
 

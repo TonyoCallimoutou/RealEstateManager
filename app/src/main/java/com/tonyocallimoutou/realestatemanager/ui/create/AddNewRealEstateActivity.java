@@ -30,6 +30,7 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.Photo;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
+import com.tonyocallimoutou.realestatemanager.model.RealEstateLocation;
 import com.tonyocallimoutou.realestatemanager.model.User;
 import com.tonyocallimoutou.realestatemanager.util.UtilsRealEstatePictureManager;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelFactory;
@@ -67,7 +68,7 @@ public class AddNewRealEstateActivity extends AppCompatActivity implements ListP
     @BindView(R.id.add_picture)
     Button addPicture;
 
-    private static int AUTOCOMPLETE_REQUEST_CODE = 1;
+    private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
 
     private ViewModelRealEstate viewModelRealEstate;
     private ViewModelUser viewModelUser;
@@ -75,7 +76,7 @@ public class AddNewRealEstateActivity extends AppCompatActivity implements ListP
     private ListPictureRecyclerViewAdapter adapter;
     private final List<Photo> photos = new ArrayList<>();
     private int mainPicturePosition = 0;
-    private Place place;
+    private RealEstateLocation place;
 
     private User currentUser;
 
@@ -123,9 +124,7 @@ public class AddNewRealEstateActivity extends AppCompatActivity implements ListP
 
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE && resultCode == RESULT_OK) {
             Log.d("TAG", "onActivityResult: ");
-            place = Autocomplete.getPlaceFromIntent(data);
-            Log.i("TAG", "Place: " + place.getName() + ", " + place.getId());
-
+            place = new RealEstateLocation(Autocomplete.getPlaceFromIntent(data));
             realEstateLocation.setText(place.getName());
         }
     }
@@ -175,7 +174,12 @@ public class AddNewRealEstateActivity extends AppCompatActivity implements ListP
     public void chooseAddress() {
 
         Log.d("TAG", "chooseAddress: ");
-        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
+        List<Place.Field> fields = Arrays.asList(
+                Place.Field.ID,
+                Place.Field.NAME,
+                Place.Field.ADDRESS,
+                Place.Field.LAT_LNG
+        );
 
         Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
                 .build(AddNewRealEstateActivity.this);

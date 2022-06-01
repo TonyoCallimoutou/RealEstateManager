@@ -2,7 +2,9 @@ package com.tonyocallimoutou.realestatemanager.model;
 
 import androidx.annotation.Nullable;
 
-public class Photo {
+import java.io.Serializable;
+
+public class Photo implements Serializable {
 
     private String reference;
     @Nullable

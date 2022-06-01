@@ -18,6 +18,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.tonyocallimoutou.realestatemanager.FAKE.FakeData;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
+import com.tonyocallimoutou.realestatemanager.model.RealEstateLocation;
 import com.tonyocallimoutou.realestatemanager.model.User;
 import com.tonyocallimoutou.realestatemanager.repository.RealEstateRepository;
 import com.tonyocallimoutou.realestatemanager.repository.UserRepository;
@@ -102,7 +103,7 @@ public class ViewModelTest {
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 Object[] args = invocation.getArguments();
                 String picture = (String) args[0];
-                currentUser.setPicture(picture);
+                currentUser.setUrlPicture(picture);
                 return null;
             }
         }).when(userRepository).setCurrentUserPicture(any(String.class));
@@ -169,7 +170,7 @@ public class ViewModelTest {
 
         assertEquals(currentUser.getUid(), user.getUid());
         assertEquals(currentUser.getUsername(), user.getUsername());
-        assertEquals(currentUser.getPicture(), user.getPicture());
+        assertEquals(currentUser.getUrlPicture(), user.getUrlPicture());
         assertEquals(currentUser.getEmail(), user.getEmail());
     }
 
@@ -212,20 +213,20 @@ public class ViewModelTest {
 
         assertEquals(currentUser.getUid(), user.getUid());
         assertEquals(currentUser.getUsername(), user.getUsername());
-        assertEquals(currentUser.getPicture(), user.getPicture());
+        assertEquals(currentUser.getUrlPicture(), user.getUrlPicture());
         assertEquals(currentUser.getEmail(), user.getEmail());
     }
 
     @Test
     public void setCurrentUserPicture() {
-        String currentPicture = viewModelUser.getCurrentUser().getPicture();
+        String currentPicture = viewModelUser.getCurrentUser().getUrlPicture();
 
-        assertEquals(currentPicture, currentUser.getPicture());
+        assertEquals(currentPicture, currentUser.getUrlPicture());
 
         String newPicture = "New Picture";
         viewModelUser.setCurrentUserPicture(newPicture);
 
-        assertEquals(newPicture, viewModelUser.getCurrentUser().getPicture());
+        assertEquals(newPicture, viewModelUser.getCurrentUser().getUrlPicture());
     }
 
     @Test
@@ -241,13 +242,15 @@ public class ViewModelTest {
     @Test
     public void createRealEstate() {
 
-        RealEstate newRealEstate = new RealEstate(100000,currentUser,"Fake Type",null,0,"Fake Description",120,1,1,1);
+        RealEstateLocation location = new RealEstateLocation("test","name",1.0,2.0,"test");
+
+        RealEstate newRealEstate = new RealEstate(100000,currentUser,"Fake Type",null,0,"Fake Description",120,1,1,1,location);
 
         viewModelRealEstate.createRealEstate(newRealEstate);
 
-        List<RealEstate> listRealEstateOfUser = viewModelUser.getCurrentUser().getMyRealEstate();
+        List<String> listRealEstateOfUser = viewModelUser.getCurrentUser().getMyRealEstateId();
 
-        assertTrue(listRealEstateOfUser.contains(newRealEstate));
+        assertTrue(listRealEstateOfUser.contains(newRealEstate.getId()));
         assertTrue(fakeRealEstates.contains(newRealEstate));
     }
 

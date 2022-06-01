@@ -3,7 +3,9 @@ package com.tonyocallimoutou.realestatemanager.model;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.Place;
 
-public class RealEstateLocation {
+import java.io.Serializable;
+
+public class RealEstateLocation implements Serializable {
 
     private String placeId;
     private String name;
@@ -20,6 +22,14 @@ public class RealEstateLocation {
         this.lat = place.getLatLng().latitude;
         this.lng = place.getLatLng().longitude;
         this.address = place.getAddress();
+    }
+
+    public RealEstateLocation(String placeId, String name, double lat, double lng, String address) {
+        this.placeId = placeId;
+        this.name = name;
+        this.lat = lat;
+        this.lng = lng;
+        this.address = address;
     }
 
     public String getPlaceId() {

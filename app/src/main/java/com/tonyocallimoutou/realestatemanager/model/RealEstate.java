@@ -4,9 +4,10 @@ import androidx.annotation.Nullable;
 
 import com.google.android.libraries.places.api.model.Place;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class RealEstate {
+public class RealEstate implements Serializable {
 
 
     private String id;

@@ -51,6 +51,7 @@
         <item>Duplex</item>
         <item>Penthouse</item>
     </string-array>
+    <string name="detail_set_location_button"> Set Location</string>
     <string name="button_save"> Save </string>
     <string name="button_add_picture"> Add Picture </string>
     <string name="checkbox_main_picture"> Main Picture</string>
@@ -63,7 +64,7 @@
 
     <!-- MapView -->
     <string name="title_message_map_view"> We are Sorry </string>
-    <string name="message_map_view"> We need to acces to your location to show you the map.\nDo you want to grant us this permission</string>
+    <string name="message_map_view"> We need to access to your location to show you the map.\nDo you want to grant us this permission</string>
     <string name="button_message_map_view"> OK</string>
 
     <string name="title_alertDialog_error_location"> We are Sorry </string>

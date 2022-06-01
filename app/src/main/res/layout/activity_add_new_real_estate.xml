@@ -214,20 +214,27 @@
                 android:layout_row="7"
                 android:layout_column="1"/>
 
-            <Button
-                android:id="@+id/button_location"
-                android:layout_column="5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
         </GridLayout>
+
+        <FrameLayout
+            android:id="@+id/host_mini_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/button_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/detail_margin_set_location_button"
+            android:text="@string/detail_set_location_button"/>
 
         <Button
             android:id="@+id/new_element_save_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginTop="@dimen/detail_margin_save_button"
+            android:layout_marginBottom="@dimen/detail_margin_save_button"
             android:text="@string/button_save" />
     </LinearLayout>
 

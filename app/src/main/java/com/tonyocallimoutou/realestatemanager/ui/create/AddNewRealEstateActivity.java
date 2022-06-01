@@ -32,6 +32,7 @@ import com.tonyocallimoutou.realestatemanager.model.Photo;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.model.RealEstateLocation;
 import com.tonyocallimoutou.realestatemanager.model.User;
+import com.tonyocallimoutou.realestatemanager.ui.mapview.MiniMapFragment;
 import com.tonyocallimoutou.realestatemanager.util.UtilsRealEstatePictureManager;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelFactory;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelRealEstate;
@@ -126,6 +127,8 @@ public class AddNewRealEstateActivity extends AppCompatActivity implements ListP
             Log.d("TAG", "onActivityResult: ");
             place = new RealEstateLocation(Autocomplete.getPlaceFromIntent(data));
             realEstateLocation.setText(place.getName());
+
+            MiniMapFragment.initMiniMap(this,place);
         }
     }
 

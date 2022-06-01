@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--Drawable border -->
+    <dimen name="border_width"> 2dp</dimen>
+
     <!--Side View -->
     <dimen name="logo_header_side_view_size">100dp</dimen>
     <dimen name="profile_picture_header_side_view_size">60dp</dimen>
@@ -30,6 +33,8 @@
     <dimen name="detail_margin_picture_description"> 12dp </dimen>
     <dimen name="detail_margin_alert_dialog"> 48dp </dimen>
     <dimen name="detail_margin_bottom_alert_dialog"> 72dp </dimen>
+    <dimen name="detail_margin_save_button"> 24dp </dimen>
+    <dimen name="detail_margin_set_location_button"> 24dp </dimen>
 
     <!-- MapView -->
     <dimen name="margin_message_title_map_view"> 16dp </dimen>
@@ -37,6 +42,8 @@
     <dimen name="margin_message_button_map_view"> 16dp </dimen>
     <dimen name="margin_end_fab_map"> 24dp </dimen>
     <dimen name="margin_bottom_fab_map"> 40dp </dimen>
+    <dimen name="mini_map_height"> 200dp </dimen>
+    <dimen name="mini_map_margin"> 12dp</dimen>
 
 
 

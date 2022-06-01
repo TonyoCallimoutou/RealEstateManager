@@ -6,14 +6,17 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,10 +35,11 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.material.navigation.NavigationView;
 import com.tonyocallimoutou.realestatemanager.BuildConfig;
 import com.tonyocallimoutou.realestatemanager.R;
+import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.ui.create.AddNewRealEstateActivity;
 import com.tonyocallimoutou.realestatemanager.ui.detail.DetailFragment;
 import com.tonyocallimoutou.realestatemanager.ui.listView.ListViewFragment;
-import com.tonyocallimoutou.realestatemanager.ui.mapview.MapFragment;
+import com.tonyocallimoutou.realestatemanager.ui.mapview.MapViewFragment;
 import com.tonyocallimoutou.realestatemanager.util.UtilsProfilePictureManager;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelFactory;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelRealEstate;
@@ -164,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void initSwitchAndFragment() {
 
         ListViewFragment listViewFragment = ListViewFragment.newInstance();
-        MapFragment mapViewFragment = MapFragment.newInstance();
+        MapViewFragment mapViewFragment = MapViewFragment.newInstance();
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.host_fragment, listViewFragment)
@@ -189,9 +193,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
 
-        getSupportFragmentManager()
+        initDetailFragment(this, null);
+    }
+
+    public static void initDetailFragment(FragmentActivity activity, @Nullable RealEstate realEstate) {
+        activity.getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.host_fragment_2, DetailFragment.newInstance())
+                .replace(R.id.host_fragment_2, DetailFragment.newInstance(realEstate))
                 .commit();
     }
 
@@ -323,7 +331,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         viewModelRealEstate.getALlRealEstateLiveData().observe(this, listRealEstate -> {
             ListViewFragment.initResidenceList(listRealEstate);
-            MapFragment.setRealEstateList(listRealEstate);
+            MapViewFragment.setRealEstateList(listRealEstate);
         });
 
     }

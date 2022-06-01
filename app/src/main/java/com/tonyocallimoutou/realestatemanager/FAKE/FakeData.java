@@ -1,6 +1,7 @@
 package com.tonyocallimoutou.realestatemanager.FAKE;
 
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
+import com.tonyocallimoutou.realestatemanager.model.RealEstateLocation;
 import com.tonyocallimoutou.realestatemanager.model.User;
 
 import java.util.Arrays;
@@ -27,8 +28,14 @@ public class FakeData {
             user6
     );
 
+    private static final List<RealEstateLocation> FAKE_LOCATION = Arrays.asList(
+            new RealEstateLocation("1","Name Location 1",1.0,2.0,"address location 1"),
+            new RealEstateLocation("2","Name Location 2",2.0,3.0,"address location 2")
+    );
 
     private static final List<RealEstate> FAKE_REAL_ESTATE_LIST = Arrays.asList(
+            new RealEstate(100000,FAKE_USER,"Fake Type",null,0,"Fake Description",120,1,1,1,FAKE_LOCATION.get(0)),
+            new RealEstate(250000,FAKE_USER,"Fake Type 2",null,0,"Fake Description 2",360,5,2,3,FAKE_LOCATION.get(1))
     );
 
     public static User getFakeCurrentUser() {

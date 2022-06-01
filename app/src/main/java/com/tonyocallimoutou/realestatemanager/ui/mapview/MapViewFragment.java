@@ -41,8 +41,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
+import com.tonyocallimoutou.realestatemanager.ui.MainActivity;
 import com.tonyocallimoutou.realestatemanager.ui.detail.DetailFragment;
-import com.tonyocallimoutou.realestatemanager.ui.listView.ListViewFragment;
 import com.tonyocallimoutou.realestatemanager.util.CompareRealEstate;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelRealEstate;
 
@@ -54,7 +54,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, ViewTreeObserver.OnGlobalLayoutListener {
+public class MapViewFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, ViewTreeObserver.OnGlobalLayoutListener {
 
     @BindView(R.id.message_map_view)
     LinearLayout message_map_view;
@@ -80,11 +80,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private final String KEY_LOCATION = "KEY_LOCATION";
     private final String KEY_CAMERA_POSITION = "KEY_CAMERA_POSITION";
 
-    public MapFragment() {
+    public MapViewFragment() {
     }
 
-    public static MapFragment newInstance() {
-        return new MapFragment();
+    public static MapViewFragment newInstance() {
+        return new MapViewFragment();
     }
 
 
@@ -94,7 +94,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_map, container, false);
+        View view = inflater.inflate(R.layout.fragment_map_view, container, false);
         ButterKnife.bind(this, view);
 
         viewModelRealEstate = new ViewModelProvider(requireActivity()).get(ViewModelRealEstate.class);
@@ -199,7 +199,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                     userLocation = location;
 
                     if (mGoogleMap == null) {
-                        mapFragment.getMapAsync(MapFragment.this);
+                        mapFragment.getMapAsync(MapViewFragment.this);
                     }
                 } else {
                     showAlertDialogErrorLocation();
@@ -294,7 +294,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
             MarkerOptions markerOptions = new MarkerOptions()
                     .position(latLng)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_real_estate_map))
                     .title(placeName + " : " + address);
 
             builder.include(markerOptions.getPosition());
@@ -321,7 +320,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         // CAMERA
         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(),cameraZoomDefault));
-        DetailFragment.getDetailOf(markRealEstate);
+        MainActivity.initDetailFragment(getActivity(),markRealEstate);
 
         return true;
     }

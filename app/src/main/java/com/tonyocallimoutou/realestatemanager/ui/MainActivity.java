@@ -11,9 +11,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -60,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @BindView(R.id.switch_map_list)
     SwitchCompat switchMapList;
 
+    public static Context context;
+
     private View sideView;
 
     private ViewModelUser viewModelUser;
@@ -81,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             viewModelRealEstate = new ViewModelProvider(this, ViewModelFactory.getInstance(this)).get(ViewModelRealEstate.class);
 
             setContentView(R.layout.activity_main);
+
+            context = this;
             ButterKnife.bind(this);
 
             initSwitchAndFragment();

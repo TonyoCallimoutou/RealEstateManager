@@ -12,6 +12,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,11 +38,13 @@ import com.tonyocallimoutou.realestatemanager.model.RealEstateLocation;
 import com.tonyocallimoutou.realestatemanager.model.User;
 import com.tonyocallimoutou.realestatemanager.ui.detail.DetailFragment;
 import com.tonyocallimoutou.realestatemanager.ui.mapview.MiniMapFragment;
+import com.tonyocallimoutou.realestatemanager.util.Utils;
 import com.tonyocallimoutou.realestatemanager.util.UtilsRealEstatePictureManager;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelFactory;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelRealEstate;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelUser;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -97,6 +101,33 @@ public class CreateOrEditRealEstateActivity extends AppCompatActivity implements
         viewModelUser = new ViewModelProvider(this, ViewModelFactory.getInstance(this)).get(ViewModelUser.class);
 
         initPhotoManager();
+
+        realEstatePrice.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (! editable.toString().isEmpty()) {
+                    int actualPrice = Utils.getIntOfStringPrice(editable.toString());
+                    String str = Utils.getStringOfPrice(actualPrice);
+
+
+                    if (! str.equals(realEstatePrice.getText().toString())) {
+                        realEstatePrice.setText(str);
+                        realEstatePrice.setSelection(realEstatePrice.getText().length());
+                    }
+                }
+
+            }
+        });
 
 
         // Edit Real Estate
@@ -276,6 +307,14 @@ public class CreateOrEditRealEstateActivity extends AppCompatActivity implements
             realEstateLocation.setError(getString(R.string.new_error_enter_data));
         }
 
+        try {
+            int price = Utils.getIntOfStringPrice(realEstatePrice.getText().toString());
+        }
+        catch (NumberFormatException e) {
+            canSave = false;
+            realEstatePrice.setError(getString(R.string.new_error_price_format));
+        }
+
         if (! canSave) {
             Toast.makeText(this, getString(R.string.new_toast_unable_to_save), Toast.LENGTH_SHORT).show();
         }
@@ -286,7 +325,7 @@ public class CreateOrEditRealEstateActivity extends AppCompatActivity implements
                 photos.add(new Photo("android.resource://com.tonyocallimoutou.realestatemanager/drawable/ic_no_image_available",null));
             }
 
-            int price = Integer.parseInt(realEstatePrice.getText().toString());
+            int price = Utils.getIntOfStringPrice(realEstatePrice.getText().toString());
             String description = realEstateDescription.getText().toString();
             int surface = Integer.parseInt(realEstateSurface.getText().toString());
             int room = Integer.parseInt(realEstateRoom.getText().toString());

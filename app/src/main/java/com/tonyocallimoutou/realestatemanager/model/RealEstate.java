@@ -3,8 +3,10 @@ package com.tonyocallimoutou.realestatemanager.model;
 import androidx.annotation.Nullable;
 
 import com.google.android.libraries.places.api.model.Place;
+import com.tonyocallimoutou.realestatemanager.util.Utils;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -84,7 +86,7 @@ public class RealEstate implements Serializable {
     }
 
     public String getStringPriceUSD() {
-        return priceUSD+" USD";
+        return Utils.getStringOfPriceWithActualMoney(priceUSD);
     }
 
     public void setPriceUSD(int priceUSD) {

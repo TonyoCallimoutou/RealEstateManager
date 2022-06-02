@@ -2,12 +2,17 @@ package com.tonyocallimoutou.realestatemanager.util;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 
+import com.tonyocallimoutou.realestatemanager.R;
+import com.tonyocallimoutou.realestatemanager.ui.MainActivity;
+
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -55,5 +60,19 @@ public class Utils {
                 + "://" + context.getResources().getResourcePackageName(drawableId)
                 + '/' + context.getResources().getResourceTypeName(drawableId)
                 + '/' + context.getResources().getResourceEntryName(drawableId) );
+    }
+
+    public static String getStringOfPrice(int price) {
+        DecimalFormat formatter = new DecimalFormat("###,###,###,###");
+        return formatter.format(price);
+    }
+
+    public static String getStringOfPriceWithActualMoney(int price) {
+        return getStringOfPrice(price)+" " + MainActivity.context.getString(R.string.USD);
+    }
+
+    public static int getIntOfStringPrice(String price) {
+        return Integer.parseInt(price.replace(",",""));
+
     }
 }

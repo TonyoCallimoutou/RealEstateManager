@@ -14,6 +14,10 @@
     <string name="message_alertDialog_google_play_service_update"> Please update your google play service</string>
     <string name="positive_button_alertDialog_permission"> OK</string>
 
+    <!-- Money -->
+    <string name="USD"> USD</string>
+    <string name="EURO"> EUR</string>
+
     <!-- Action bar -->
     <string name="actionbar_add"> Add </string>
     <string name="actionbar_edit"> Edit </string>
@@ -61,6 +65,7 @@
     <string name="new_button_alert_dialog"> YES </string>
     <string name="new_toast_unable_to_save"> Unable to save </string>
     <string name="new_error_enter_data"> Enter Data</string>
+    <string name="new_error_price_format"> Incorrect Format </string>
 
     <!-- MapView -->
     <string name="title_message_map_view"> We are Sorry </string>

@@ -63,7 +63,7 @@ public class ListViewFragment extends Fragment {
             public void onListItemClick(int position) {
                 RealEstate realEstate = mRealEstate.get(position);
 
-                MainActivity.initDetailFragment(getActivity(),realEstate);
+                MainActivity.initDetailFragment(realEstate);
             }
         });
 

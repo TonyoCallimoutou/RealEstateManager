@@ -34,7 +34,8 @@
     <dimen name="detail_margin_alert_dialog"> 48dp </dimen>
     <dimen name="detail_margin_bottom_alert_dialog"> 72dp </dimen>
     <dimen name="detail_margin_save_button"> 24dp </dimen>
-    <dimen name="detail_margin_set_location_button"> 24dp </dimen>
+    <dimen name="detail_margin_set_location_button"> 24dp</dimen>
+    <dimen name="detail_sold_banner_size"> 200dp</dimen>
 
     <!-- MapView -->
     <dimen name="margin_message_title_map_view"> 16dp </dimen>

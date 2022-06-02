@@ -1,10 +1,12 @@
 package com.tonyocallimoutou.realestatemanager.ui.detail;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,6 +27,8 @@ import com.tonyocallimoutou.realestatemanager.model.Photo;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.model.User;
 import com.tonyocallimoutou.realestatemanager.ui.create.ListPictureRecyclerViewAdapter;
+import com.tonyocallimoutou.realestatemanager.util.Utils;
+import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelRealEstate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,18 +65,28 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
     TextView textNumberOfBedroom;
     @BindView(R.id.detail_number_rooms)
     TextView textNumberOfRoom;
+    @BindView(R.id.detail_location)
+    TextView textLocation;
     @BindView(R.id.user_name)
     TextView userName;
     @BindView(R.id.user_email)
     TextView userEmail;
     @BindView(R.id.profile_picture_header_side_view)
     ImageView userProfilePicture;
+    @BindView(R.id.detail_creation_date)
+    TextView creationDate;
+    @BindView(R.id.detail_sold_date)
+    TextView soldDate;
+    @BindView(R.id.detail_image_sold_banner)
+    ImageView soldBanner;
 
     private static RelativeLayout relativeLayoutFragment;
     private static View view;
 
     private static final String BUNDLE_REAL_ESTATE = "BUNDLE_REAL_ESTATE";
     private static RealEstate mRealEstate;
+
+    private static ViewModelRealEstate viewModelRealEstate;
 
     private ListPictureRecyclerViewAdapter adapter;
 
@@ -107,6 +121,8 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
         view = inflater.inflate(R.layout.fragment_detail, container, false);
         ButterKnife.bind(this,view);
 
+        viewModelRealEstate = new ViewModelProvider(requireActivity()).get(ViewModelRealEstate.class);
+
         relativeLayoutFragment = view.findViewById(R.id.detail_fragment);
 
 
@@ -123,6 +139,10 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
     }
 
     private void initInformation() {
+        if (canCloseFragment()) {
+            MainActivity.setVisibilityAddAndSearchMenuItem(false);
+        }
+
         if (mRealEstate != null) {
             lblNoInformation.setVisibility(View.GONE);
             relativeLayoutInformation.setVisibility(View.VISIBLE);
@@ -138,7 +158,19 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
             textNumberOfRoom.setText(mRealEstate.getStringNumberOfRooms());
             textNumberOfBathroom.setText(mRealEstate.getStringNumberOfBathrooms());
             textNumberOfBedroom.setText(mRealEstate.getStringNumberOfBedrooms());
+            textLocation.setText(mRealEstate.getPlace().getName());
             textPrice.setText(mRealEstate.getStringPriceUSD());
+            String strCreationDate = getString(R.string.detail_date_creation) + " " + mRealEstate.getCreationDate();
+            creationDate.setText(strCreationDate);
+
+            if (mRealEstate.isSold()) {
+                soldBanner.setVisibility(View.VISIBLE);
+                String strSoldDate = getString(R.string.detail_date_sold) + " " + mRealEstate.getSoldDate();
+                soldDate.setText(strSoldDate);
+            }
+            else {
+                soldBanner.setVisibility(View.GONE);
+            }
 
             for (User user : users) {
                 if (user.getUid().equals(mRealEstate.getUserId())) {
@@ -157,6 +189,13 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
 
             if (mRealEstate.getUserId().equals(currentUser.getUid())) {
                 MainActivity.setVisibilityEditMenuItem(true);
+            }
+
+            if (mRealEstate.isSold()){
+                MainActivity.setVisibilityGoToEditMenuItem(false);
+            }
+            else {
+                MainActivity.setVisibilityGoToEditMenuItem(true);
             }
 
 
@@ -203,6 +242,7 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
     public static void closeFragment() {
         relativeLayoutFragment.setVisibility(View.GONE);
         MainActivity.setVisibilityEditMenuItem(false);
+        MainActivity.setVisibilityAddAndSearchMenuItem(true);
     }
 
     public static void setListUser(List<User> data) {
@@ -212,7 +252,6 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
     public static void setCurrentUser(User user) {
         currentUser = user;
     }
-
 
     public static RealEstate getActualRealEstate() {
         return mRealEstate;

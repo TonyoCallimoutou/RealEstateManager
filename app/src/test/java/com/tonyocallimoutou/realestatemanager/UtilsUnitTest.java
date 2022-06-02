@@ -4,11 +4,16 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import com.tonyocallimoutou.realestatemanager.FAKE.FakeData;
+import com.tonyocallimoutou.realestatemanager.model.RealEstate;
+import com.tonyocallimoutou.realestatemanager.util.CompareRealEstate;
 import com.tonyocallimoutou.realestatemanager.util.Utils;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -64,5 +69,28 @@ public class UtilsUnitTest {
         String dateString = Utils.getTodayDate();
 
         assertEquals(dateStringExpected, dateString);
+    }
+
+    @Test
+    public void compareRealEstateIsEqual() {
+        List<RealEstate> firstList = new ArrayList<>(FakeData.getFakeList());
+        List<RealEstate> secondList = new ArrayList<>(FakeData.getFakeList());
+
+        assertTrue(CompareRealEstate.compareListForMapIsEqual(firstList,secondList));
+        assertNotEquals(0,secondList.get(0).getSurface());
+
+        secondList.get(0).setSurface(0);
+
+        assertTrue(CompareRealEstate.compareListForMapIsEqual(firstList,secondList));
+    }
+
+    @Test
+    public void compareRealEstateIsNotEqual() {
+        List<RealEstate> firstList = new ArrayList<>(FakeData.getFakeList());
+        List<RealEstate> secondList = new ArrayList<>(FakeData.getFakeList());
+
+        secondList.remove(0);
+
+        assertFalse(CompareRealEstate.compareListForMapIsEqual(firstList,secondList));
     }
 }

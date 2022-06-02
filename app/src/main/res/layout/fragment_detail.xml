@@ -13,12 +13,21 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
+        android:visibility="gone"
         android:src="@drawable/ic_close_black_24dp" />
 
     <include
         layout="@layout/include_no_information"
         android:layout_height="match_parent"
         android:layout_width="match_parent" />
+
+    <ImageView
+        android:id="@+id/detail_image_sold_banner"
+        android:layout_width="@dimen/detail_sold_banner_size"
+        android:layout_height="@dimen/detail_sold_banner_size"
+        android:scaleType="centerCrop"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/sold_banner" />
 
     <RelativeLayout
         android:id="@+id/detail_information"
@@ -198,6 +207,12 @@
                     android:layout_margin="@dimen/detail_margin_category"
                     android:text="@string/detail_location" />
 
+                <TextView
+                    android:id="@+id/detail_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/detail_margin_category"/>
+
                 <FrameLayout
                     android:id="@+id/host_mini_map"
                     android:layout_width="wrap_content"
@@ -213,6 +228,19 @@
                 <include
                     android:id="@+id/detail_include_layout"
                     layout="@layout/include_information_side_view" />
+
+                <TextView
+                    android:id="@+id/detail_creation_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/detail_margin_category" />
+
+                <TextView
+                    android:id="@+id/detail_sold_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/detail_margin_category" />
+
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>

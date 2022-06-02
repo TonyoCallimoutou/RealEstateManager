@@ -63,20 +63,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     SwitchCompat switchMapList;
 
     public static Context context;
+    private static FragmentActivity fragmentActivity;
 
     private View sideView;
 
     private ViewModelUser viewModelUser;
     private ViewModelRealEstate viewModelRealEstate;
 
-    private static MenuItem editMenu;
+    private static MenuItem editItem;
+    private static MenuItem goToEditItem;
+    private static MenuItem addItem;
+    private static MenuItem searchItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Initialize the SDK
-        Places.initialize(getApplicationContext(), BuildConfig.MAPS_API_KEY);
+        if (! Places.isInitialized()) {
+            Places.initialize(getApplicationContext(), BuildConfig.MAPS_API_KEY);
+        }
 
         // Check Google play service
         int status = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
@@ -86,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             setContentView(R.layout.activity_main);
 
+            fragmentActivity = this;
             context = this;
             ButterKnife.bind(this);
 
@@ -202,11 +209,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
 
-        initDetailFragment(this, null);
+        initDetailFragment( null);
     }
 
-    public static void initDetailFragment(FragmentActivity activity, @Nullable RealEstate realEstate) {
-        activity.getSupportFragmentManager()
+    public static void initDetailFragment(@Nullable RealEstate realEstate) {
+        fragmentActivity.getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.host_fragment_2, DetailFragment.newInstance(realEstate))
                 .commit();
@@ -225,7 +232,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.actionbar_menu, menu);
-        editMenu = menu.findItem(R.id.edit_menu);
+        editItem = menu.findItem(R.id.edit_menu);
+        goToEditItem = menu.findItem(R.id.go_to_edit);
+        addItem = menu.findItem(R.id.add_menu);
+        searchItem = menu.findItem(R.id.search_menu);
         setVisibilityEditMenuItem(false);
         return true;
     }
@@ -244,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent intentNewRealEstate = new Intent(this, CreateOrEditRealEstateActivity.class);
                 startActivity(intentNewRealEstate);
                 return true;
-            case R.id.edit_menu:
+            case R.id.go_to_edit:
 
                 Intent intentEditRealEstate = new Intent(this, CreateOrEditRealEstateActivity.class);
                 Bundle bundle = new Bundle();
@@ -252,7 +262,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 intentEditRealEstate.putExtras(bundle);
                 startActivity(intentEditRealEstate);
 
+                DetailFragment.newInstance(null);
+
                 return true;
+
+            case R.id.sold_item:
+
+                soldRealEstate(DetailFragment.getActualRealEstate());
+
             case R.id.search_menu:
                 Toast.makeText(this, getString(R.string.actionbar_search), Toast.LENGTH_SHORT).show();
                 return true;
@@ -261,9 +278,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public static void setVisibilityEditMenuItem(boolean isVisible) {
-        if (editMenu != null) {
-            editMenu.setVisible(isVisible);
+        if (editItem != null) {
+            editItem.setVisible(isVisible);
         }
+    }
+
+    public static void setVisibilityAddAndSearchMenuItem(boolean isVisible) {
+        if (addItem != null && searchItem != null) {
+            addItem.setVisible(isVisible);
+            searchItem.setVisible(isVisible);
+        }
+    }
+
+    public static void setVisibilityGoToEditMenuItem(boolean isVisible) {
+        if (goToEditItem != null) {
+            goToEditItem.setVisible(isVisible);
+        }
+    }
+
+    private void soldRealEstate(RealEstate mRealEstate) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle(R.string.title_message_sold_real_estate);
+
+        String message;
+        if (mRealEstate.isSold()) {
+            message = MainActivity.context.getString(R.string.message_cancel_sold_real_estate);
+        }
+        else {
+            message = MainActivity.context.getString(R.string.message_sold_real_estate);
+        }
+
+        builder.setMessage(message);
+        builder.setCancelable(true);
+
+        builder.setPositiveButton(MainActivity.context.getString(R.string.button_message_sold_real_estate), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                initDetailFragment(viewModelRealEstate.soldRealEstate(mRealEstate));
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     //INIT SIDE VIEW
@@ -353,7 +410,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             DetailFragment.setListUser(list);
         });
 
-        viewModelRealEstate.getALlRealEstateLiveData().observe(this, listRealEstate -> {
+        viewModelRealEstate.getAllRealEstateLiveData().observe(this, listRealEstate -> {
             ListViewFragment.initResidenceList(listRealEstate);
             MapViewFragment.setRealEstateList(listRealEstate);
         });

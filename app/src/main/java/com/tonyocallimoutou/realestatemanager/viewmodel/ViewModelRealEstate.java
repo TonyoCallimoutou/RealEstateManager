@@ -32,10 +32,19 @@ public class ViewModelRealEstate extends ViewModel {
     }
 
     public void editRealEstate(RealEstate actual, RealEstate modify) {
-        realEstateRepository.editRealEstate(actual,modify);
+        if (userRepository.getCurrentUser().getUid().equals(actual.getUserId())) {
+            realEstateRepository.editRealEstate(actual, modify);
+        }
     }
 
-    public LiveData<List<RealEstate>> getALlRealEstateLiveData() {
+    public LiveData<List<RealEstate>> getAllRealEstateLiveData() {
         return listRealEstateLiveData;
+    }
+
+    public RealEstate soldRealEstate(RealEstate realEstate) {
+        if (userRepository.getCurrentUser().getUid().equals(realEstate.getUserId())) {
+            return realEstateRepository.soldRealEstate(realEstate);
+        }
+        return null;
     }
 }

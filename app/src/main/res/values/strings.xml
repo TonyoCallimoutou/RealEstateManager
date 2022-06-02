@@ -3,6 +3,8 @@
     <!--Firestore -->
     <string name="COLLECTION_NAME_USER"> users </string>
     <string name="COLLECTION_NAME_REAL_ESTATE"> real_estates </string>
+    <string name="COLLECTION_NAME_SOLD_REAL_ESTATE"> sold_real_estates </string>
+    <string name="COLLECTION_NAME_USER_SOLD_REAL_ESTATE"> user_sold </string>
 
     <!--Main Activity -->
     <string name="app_name">RealEstateManager</string>
@@ -59,6 +61,8 @@
     <string name="button_save"> Save </string>
     <string name="button_add_picture"> Add Picture </string>
     <string name="checkbox_main_picture"> Main Picture</string>
+    <string name="detail_date_creation"> Creation date : </string>
+    <string name="detail_date_sold"> Sold date :</string>
 
     <string name="new_title_alert_dialog"> Warning !!</string>
     <string name="new_message_alert_dialog"> Do you really want to abandon the creation of real estate ?</string>
@@ -66,6 +70,11 @@
     <string name="new_toast_unable_to_save"> Unable to save </string>
     <string name="new_error_enter_data"> Enter Data</string>
     <string name="new_error_price_format"> Incorrect Format </string>
+
+    <string name="title_message_sold_real_estate"> Caution </string>
+    <string name="message_sold_real_estate"> Are you sure you want to mark this property as \"sold\" ?</string>
+    <string name="message_cancel_sold_real_estate"> Are you sure you want to cancel the sale of this property ?</string>
+    <string name="button_message_sold_real_estate"> Sure </string>
 
     <!-- MapView -->
     <string name="title_message_map_view"> We are Sorry </string>

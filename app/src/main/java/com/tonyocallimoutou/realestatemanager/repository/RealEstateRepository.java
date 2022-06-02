@@ -25,8 +25,10 @@ import com.tonyocallimoutou.realestatemanager.FAKE.FakeData;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.Photo;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
+import com.tonyocallimoutou.realestatemanager.util.Utils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class RealEstateRepository {
@@ -135,6 +137,20 @@ public class RealEstateRepository {
                 liveData.setValue(realEstates);
             }
         });
+    }
+
+    public RealEstate soldRealEstate(RealEstate realEstate) {
+        if (realEstate.isSold()) {
+            realEstate.setSold(false);
+            realEstate.setSoldDate(null);
+        }
+        else {
+            realEstate.setSold(true);
+            realEstate.setSoldDate(Utils.getTodayDate());
+        }
+        getRealEstateCollection().document(realEstate.getId()).set(realEstate);
+
+        return realEstate;
     }
 
 }

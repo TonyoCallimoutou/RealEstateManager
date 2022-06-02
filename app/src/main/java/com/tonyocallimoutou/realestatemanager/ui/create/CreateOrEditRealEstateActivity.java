@@ -36,6 +36,7 @@ import com.tonyocallimoutou.realestatemanager.model.Photo;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.model.RealEstateLocation;
 import com.tonyocallimoutou.realestatemanager.model.User;
+import com.tonyocallimoutou.realestatemanager.ui.MainActivity;
 import com.tonyocallimoutou.realestatemanager.ui.detail.DetailFragment;
 import com.tonyocallimoutou.realestatemanager.ui.mapview.MiniMapFragment;
 import com.tonyocallimoutou.realestatemanager.util.Utils;
@@ -75,6 +76,8 @@ public class CreateOrEditRealEstateActivity extends AppCompatActivity implements
     TextView realEstateLocation;
     @BindView(R.id.add_picture)
     Button addPicture;
+    @BindView(R.id.detail_image_sold_banner)
+    ImageView soldBanner;
 
     private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
 
@@ -99,6 +102,10 @@ public class CreateOrEditRealEstateActivity extends AppCompatActivity implements
 
         viewModelRealEstate = new ViewModelProvider(this, ViewModelFactory.getInstance(this)).get(ViewModelRealEstate.class);
         viewModelUser = new ViewModelProvider(this, ViewModelFactory.getInstance(this)).get(ViewModelUser.class);
+
+
+        soldBanner.setVisibility(View.GONE);
+
 
         initPhotoManager();
 
@@ -230,6 +237,7 @@ public class CreateOrEditRealEstateActivity extends AppCompatActivity implements
         adapter.initAdapter(photos);
 
         realEstateDescription.setText(realEstate.getDescription());
+        realEstateType.setSelection(Utils.getIndexOfSpinner(realEstateType,realEstate.getType()));
         realEstatePrice.setText(String.valueOf(realEstate.getPriceUSD()));
         realEstateSurface.setText(String.valueOf(realEstate.getSurface()));
         realEstateRoom.setText(String.valueOf(realEstate.getNumberOfRooms()));
@@ -237,27 +245,13 @@ public class CreateOrEditRealEstateActivity extends AppCompatActivity implements
         realEstateBathroom.setText(String.valueOf(realEstate.getNumberOfBathrooms()));
         place = realEstate.getPlace();
         initPlaceInformation();
-    }
 
-    // SOLD BUTTON
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (realEstate != null) {
-            MenuInflater inflate = this.getMenuInflater();
-            inflate.inflate(R.menu.action_bar_edit_menu, menu);
+        if (realEstate.isSold()) {
+            soldBanner.setVisibility(View.VISIBLE);
         }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.sold_menu) {
-            Log.d("TAG", "onOptionsItemSelected: ");
-            return true;
+        else {
+            soldBanner.setVisibility(View.GONE);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @OnClick(R.id.button_location)

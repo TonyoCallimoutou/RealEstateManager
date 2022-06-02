@@ -3,6 +3,8 @@ package com.tonyocallimoutou.realestatemanager;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -22,6 +24,7 @@ import com.tonyocallimoutou.realestatemanager.model.RealEstateLocation;
 import com.tonyocallimoutou.realestatemanager.model.User;
 import com.tonyocallimoutou.realestatemanager.repository.RealEstateRepository;
 import com.tonyocallimoutou.realestatemanager.repository.UserRepository;
+import com.tonyocallimoutou.realestatemanager.util.Utils;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelRealEstate;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelUser;
 
@@ -160,6 +163,53 @@ public class ViewModelTest {
                 return null;
             }
         }).when(realEstateRepository).getAllRealEstates(any(MutableLiveData.class));
+
+        doAnswer(new Answer() {
+            @Override
+            public Void answer(InvocationOnMock invocation) throws Throwable {
+                Object[] args = invocation.getArguments();
+                RealEstate actual = (RealEstate) args[0];
+                RealEstate edit = (RealEstate) args[1];
+                for (RealEstate realEstate : fakeRealEstates) {
+                    if (realEstate.getId().equals(actual.getId())) {
+                        realEstate.setPhotos(edit.getPhotos());
+                        realEstate.setPriceUSD(edit.getPriceUSD());
+                        realEstate.setMainPicturePosition(edit.getMainPicturePosition());
+                        realEstate.setNumberOfBathrooms(edit.getNumberOfBathrooms());
+                        realEstate.setNumberOfRooms(edit.getNumberOfRooms());
+                        realEstate.setNumberOfBedrooms(edit.getNumberOfBedrooms());
+                        realEstate.setSurface(edit.getSurface());
+                        realEstate.setDescription(edit.getDescription());
+                        realEstate.setPlace(edit.getPlace());
+                        realEstate.setType(edit.getType());
+                    }
+                }
+                return null;
+            }
+        }).when(realEstateRepository).editRealEstate(any(RealEstate.class),any(RealEstate.class));
+
+        doAnswer(new Answer() {
+            @Override
+            public RealEstate answer(InvocationOnMock invocation) throws Throwable {
+                Object[] args = invocation.getArguments();
+                RealEstate realEstate = (RealEstate) args[0];
+                for (RealEstate item : fakeRealEstates) {
+                    if (item.getId().equals(realEstate.getId())) {
+                        if (item.isSold()) {
+                            item.setSold(false);
+                            item.setSoldDate(null);
+                        }
+                        else {
+                            item.setSold(true);
+                            item.setSoldDate(Utils.getTodayDate());
+                        }
+
+                        return item;
+                    }
+                }
+                return null;
+            }
+        }).when(realEstateRepository).soldRealEstate(any(RealEstate.class));
     }
 
 
@@ -243,7 +293,6 @@ public class ViewModelTest {
     public void createRealEstate() {
 
         RealEstateLocation location = new RealEstateLocation("test","name",1.0,2.0,"test");
-
         RealEstate newRealEstate = new RealEstate(100000,currentUser,"Fake Type",null,0,"Fake Description",120,1,1,1,location);
 
         viewModelRealEstate.createRealEstate(newRealEstate);
@@ -255,13 +304,60 @@ public class ViewModelTest {
     }
 
     @Test
+    public void editRealEstate() {
+        RealEstateLocation location = new RealEstateLocation("test","name",1.0,2.0,"test");
+        RealEstate newRealEstate = new RealEstate(100000,currentUser,"Fake Type",null,0,"Fake Description",120,1,1,1,location);
+
+        viewModelRealEstate.createRealEstate(newRealEstate);
+
+        viewModelRealEstate.setListRealEstate();
+        List<RealEstate> list = viewModelRealEstate.getAllRealEstateLiveData().getValue();
+        RealEstate actual = list.get(list.size()-1);
+
+        assertEquals(newRealEstate.getId(), actual.getId());
+        assertEquals(newRealEstate.getPriceUSD(), actual.getPriceUSD());
+        assertEquals(newRealEstate.getSurface(), actual.getSurface());
+
+        RealEstate edit = new RealEstate(200000,currentUser,"Fake Type",null,0,"Fake Description",300,1,1,1,location);
+
+        viewModelRealEstate.editRealEstate(newRealEstate,edit);
+
+        viewModelRealEstate.setListRealEstate();
+        List<RealEstate> list2 = viewModelRealEstate.getAllRealEstateLiveData().getValue();
+        RealEstate modify = list2.get(list2.size()-1);
+
+        assertNotEquals(modify.getId(),edit.getId());
+        assertEquals(modify.getId(), actual.getId());
+        assertEquals(modify.getPriceUSD(), edit.getPriceUSD());
+        assertEquals(modify.getSurface(), edit.getSurface());
+        assertEquals(list.size(),list2.size());
+
+    }
+
+    @Test
     public void getAllRealEstate() {
 
         viewModelRealEstate.setListRealEstate();
 
-        List<RealEstate> list = viewModelRealEstate.getALlRealEstateLiveData().getValue();
+        List<RealEstate> list = viewModelRealEstate.getAllRealEstateLiveData().getValue();
 
         assertEquals(fakeRealEstates,list);
+    }
+
+    @Test
+    public void soldRealEstate() {
+        RealEstate realEstate = fakeRealEstates.get(0);
+
+        assertFalse(realEstate.isSold());
+        assertNull(realEstate.getSoldDate());
+
+        RealEstate newRealEstate = viewModelRealEstate.soldRealEstate(realEstate);
+
+        assertTrue(realEstate.isSold());
+        assertNotNull(realEstate.getSoldDate());
+        assertEquals(realEstate,newRealEstate);
+
+
     }
 
 }

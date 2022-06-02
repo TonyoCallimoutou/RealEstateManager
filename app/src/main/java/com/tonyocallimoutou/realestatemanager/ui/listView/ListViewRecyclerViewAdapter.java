@@ -55,6 +55,13 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRe
         holder.realEstateType.setText(realEstate.getType());
         holder.realEstateLocation.setText(realEstate.getPlace().getName());
         holder.realEstatePrice.setText(realEstate.getStringPriceUSD());
+
+        if (realEstate.isSold()) {
+            holder.soldBanner.setVisibility(View.VISIBLE);
+        }
+        else {
+            holder.soldBanner.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -81,6 +88,8 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRe
         TextView realEstateLocation;
         @BindView(R.id.list_view_price_real_estate)
         TextView realEstatePrice;
+        @BindView(R.id.list_view_image_sold_banner)
+        ImageView soldBanner;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

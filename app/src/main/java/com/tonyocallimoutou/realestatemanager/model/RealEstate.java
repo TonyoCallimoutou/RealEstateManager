@@ -14,7 +14,7 @@ public class RealEstate implements Serializable {
 
 
     private String id;
-    private Date creationDate;
+    private String creationDate;
     private String userId;
     private int priceUSD;
     private String type;
@@ -27,7 +27,8 @@ public class RealEstate implements Serializable {
     private int numberOfBedrooms;
     private RealEstateLocation place;
     private boolean isSold;
-    private Date soldDate;
+    @Nullable
+    private String soldDate;
 
     public RealEstate(){}
 
@@ -43,7 +44,7 @@ public class RealEstate implements Serializable {
                      int numberOfBedrooms,
                       RealEstateLocation place) {
         this.id = user.getUid()+"_"+ user.getMyRealEstateId().size();
-        this.creationDate = new Date();
+        this.creationDate = Utils.getTodayDate();
         this.priceUSD = priceUSD;
         this.userId = user.getUid();
         this.type = type;
@@ -55,6 +56,7 @@ public class RealEstate implements Serializable {
         this.numberOfBathrooms = numberOfBathrooms;
         this.numberOfBedrooms = numberOfBedrooms;
         this.place = place;
+        this.isSold = false;
     }
 
     public String getId() {
@@ -65,11 +67,11 @@ public class RealEstate implements Serializable {
         this.id = id;
     }
 
-    public Date getCreationDate() {
+    public String getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -189,11 +191,12 @@ public class RealEstate implements Serializable {
         isSold = sold;
     }
 
-    public Date getSoldDate() {
+    @Nullable
+    public String getSoldDate() {
         return soldDate;
     }
 
-    public void setSoldDate(Date soldDate) {
+    public void setSoldDate(@Nullable String soldDate) {
         this.soldDate = soldDate;
     }
 }

@@ -36,5 +36,12 @@
         android:layout_below="@+id/list_view_location_real_estate"
         android:layout_toEndOf="@+id/list_view_image_real_estate" />
 
+    <ImageView
+        android:id="@+id/list_view_image_sold_banner"
+        android:layout_width="@dimen/list_view_image_real_estate_size"
+        android:layout_height="@dimen/list_view_image_real_estate_size"
+        android:scaleType="centerCrop"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/sold_banner" />
 
 </RelativeLayout>

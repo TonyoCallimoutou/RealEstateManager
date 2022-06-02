@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
+import android.widget.Spinner;
 
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.ui.MainActivity;
@@ -74,5 +75,15 @@ public class Utils {
     public static int getIntOfStringPrice(String price) {
         return Integer.parseInt(price.replace(",",""));
 
+    }
+
+    public static int getIndexOfSpinner(Spinner spinner, String myValue){
+        for (int i=0;i<spinner.getCount();i++){
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myValue)){
+                return i;
+            }
+        }
+
+        return 0;
     }
 }

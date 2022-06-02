@@ -320,7 +320,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
 
         // CAMERA
         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(),cameraZoomDefault));
-        MainActivity.initDetailFragment(getActivity(),markRealEstate);
+        MainActivity.initDetailFragment(markRealEstate);
 
         return true;
     }

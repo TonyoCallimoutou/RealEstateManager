@@ -11,7 +11,18 @@
         android:id="@+id/edit_menu"
         app:showAsAction="always"
         android:icon="@drawable/ic_edit_black_24dp"
-        android:title="@string/actionbar_edit" />
+        android:title="@string/actionbar_edit" >
+        <menu>
+            <item
+                android:id="@+id/go_to_edit"
+                android:icon="@drawable/ic_edit_black_24dp"
+                android:title="@string/actionbar_edit" />
+            <item
+                android:id="@+id/sold_item"
+                android:icon="@drawable/ic_dollar"
+                android:title="@string/actionbar_sold" />
+        </menu>
+    </item>
     <item
         android:id="@+id/search_menu"
         app:showAsAction="always"

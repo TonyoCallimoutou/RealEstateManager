@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".ui.filter.FilterFragment">
+
+    <LinearLayout
+        android:id="@+id/filter_main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/filter_layout_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/filter_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="villeDetpETCtruc" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/filter_spinner_price"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:entries="@array/SpinnerTypeOfResidence"
+                android:layout_weight="1"/>
+
+            <Spinner
+                android:id="@+id/filter_spinner_room"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:entries="@array/SpinnerTypeOfResidence"
+                android:layout_weight="1"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="min" />
+
+            <EditText
+                android:id="@+id/filter_min_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="max" />
+
+            <EditText
+                android:id="@+id/filter_max_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/filter_more"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/filter_checkbox_is_sold"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="isSold" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="DATE ?" />
+
+            </LinearLayout>
+
+            <Spinner
+                android:id="@+id/filter_spinner_creation_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/SpinnerTypeOfResidence" />
+
+            <Spinner
+                android:id="@+id/filter_spinner_nbr_picture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/SpinnerTypeOfResidence" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/filter_more_or_less"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/filter_text_more_or_less"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MORE OR LESS" />
+
+            <ImageView
+                android:id="@+id/filter_img_more_or_less"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add_black_24dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/filter_recyclerview_list_filter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

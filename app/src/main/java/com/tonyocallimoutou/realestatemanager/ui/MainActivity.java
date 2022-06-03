@@ -15,19 +15,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -37,6 +32,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.material.navigation.NavigationView;
 import com.tonyocallimoutou.realestatemanager.BuildConfig;
+import com.tonyocallimoutou.realestatemanager.ui.filter.FilterFragment;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.ui.create.CreateOrEditRealEstateActivity;
@@ -187,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         MapViewFragment mapViewFragment = MapViewFragment.newInstance();
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.host_fragment, listViewFragment)
+                .replace(R.id.host_list_or_map, listViewFragment)
                 .commit();
 
         switchMapList.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -196,13 +192,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if(isChecked) {
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.host_fragment, mapViewFragment)
+                            .replace(R.id.host_list_or_map, mapViewFragment)
                             .commit();
                 }
                 else {
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.host_fragment, listViewFragment)
+                            .replace(R.id.host_list_or_map, listViewFragment)
                             .commit();
                 }
             }
@@ -215,8 +211,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static void initDetailFragment(@Nullable RealEstate realEstate) {
         fragmentActivity.getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.host_fragment_2, DetailFragment.newInstance(realEstate))
+                .replace(R.id.host_detail_fragment, DetailFragment.newInstance(realEstate))
                 .commit();
+    }
+
+    public void initFilterFragment() {
+        if(!FilterFragment.isOpen) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.host_filter_fragment, FilterFragment.newInstance())
+                    .commit();
+        }
+        else {
+            FilterFragment.changeVisibilityOfFragment();
+        }
     }
 
 
@@ -271,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 soldRealEstate(DetailFragment.getActualRealEstate());
 
             case R.id.search_menu:
-                Toast.makeText(this, getString(R.string.actionbar_search), Toast.LENGTH_SHORT).show();
+                initFilterFragment();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -415,8 +423,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         viewModelRealEstate.getAllRealEstateLiveData().observe(this, listRealEstate -> {
-            ListViewFragment.initResidenceList(listRealEstate);
-            MapViewFragment.setRealEstateList(listRealEstate);
+            viewModelRealEstate.setListWithFilter(null,listRealEstate);
+        });
+
+        viewModelRealEstate.getFilterListLiveData().observe(this, listFilter -> {
+            ListViewFragment.initResidenceList(listFilter);
+            MapViewFragment.setRealEstateList(listFilter);
         });
 
     }

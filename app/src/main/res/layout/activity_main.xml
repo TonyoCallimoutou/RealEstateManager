@@ -12,8 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
+        <FrameLayout
+            android:id="@+id/host_filter_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <RelativeLayout
             android:id="@+id/layout_switch"
+            android:layout_below="@+id/host_filter_fragment"
             android:background="@drawable/border"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -30,14 +36,14 @@
         </RelativeLayout>
 
         <FrameLayout
-            android:id="@+id/host_fragment"
+            android:id="@+id/host_list_or_map"
             android:layout_below="@+id/layout_switch"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </FrameLayout>
 
         <FrameLayout
-            android:id="@+id/host_fragment_2"
+            android:id="@+id/host_detail_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </FrameLayout>

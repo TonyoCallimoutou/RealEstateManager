@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -94,12 +95,15 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
     private static List<User> users = new ArrayList<>();
     private static User currentUser;
 
+    private static FragmentActivity activity;
+    private static DetailFragment fragment;
+
     public DetailFragment() {
     }
 
 
     public static DetailFragment newInstance(@Nullable RealEstate realEstate) {
-        DetailFragment fragment = new DetailFragment();
+        fragment = new DetailFragment();
         Bundle args = new Bundle();
         args.putSerializable(BUNDLE_REAL_ESTATE, realEstate);
         fragment.setArguments(args);
@@ -125,6 +129,7 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
 
         relativeLayoutFragment = view.findViewById(R.id.detail_fragment);
 
+        activity = getActivity();
 
         recyclerViewPicture.setLayoutManager(new LinearLayoutManager(getContext()));
         LinearLayoutManager horizontalLayoutManager
@@ -238,9 +243,9 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
     }
 
     public static void closeFragment() {
-        relativeLayoutFragment.setVisibility(View.GONE);
         MainActivity.setVisibilityEditMenuItem(false);
         MainActivity.setVisibilityAddAndSearchMenuItem(true);
+        activity.getSupportFragmentManager().beginTransaction().remove(fragment).commit();
     }
 
     public static void setListUser(List<User> data) {

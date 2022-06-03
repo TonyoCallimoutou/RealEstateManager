@@ -1,5 +1,6 @@
 package com.tonyocallimoutou.realestatemanager.viewmodel;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -7,7 +8,9 @@ import androidx.lifecycle.ViewModel;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.repository.RealEstateRepository;
 import com.tonyocallimoutou.realestatemanager.repository.UserRepository;
+import com.tonyocallimoutou.realestatemanager.util.Filter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ViewModelRealEstate extends ViewModel {
@@ -16,6 +19,10 @@ public class ViewModelRealEstate extends ViewModel {
     private final UserRepository userRepository;
 
     private final MutableLiveData<List<RealEstate>> listRealEstateLiveData = new MutableLiveData<>();
+    private final MutableLiveData<List<RealEstate>> listRealEstateFilterLiveData = new MutableLiveData<>();
+
+    private List<Filter> filters = new ArrayList<>();
+    private List<RealEstate> actualList = new ArrayList<>();
 
     public ViewModelRealEstate(RealEstateRepository realEstateRepository, UserRepository userRepository) {
         this.realEstateRepository = realEstateRepository;
@@ -46,5 +53,27 @@ public class ViewModelRealEstate extends ViewModel {
             return realEstateRepository.soldRealEstate(realEstate);
         }
         return null;
+    }
+
+    public void setListWithFilter(@Nullable List<Filter> listFilter, @Nullable List<RealEstate> list) {
+        if (listFilter != null) {
+            filters = listFilter;
+        }
+        if (list != null) {
+            actualList = list;
+        }
+        if (actualList.size() != 0) {
+            List<RealEstate> newList = new ArrayList<>(actualList);
+
+            for (int i = 0; i < filters.size(); i++) {
+                newList = filters.get(i).modifyList(newList);
+            }
+
+            listRealEstateFilterLiveData.setValue(newList);
+        }
+    }
+
+    public LiveData<List<RealEstate>> getFilterListLiveData() {
+        return listRealEstateFilterLiveData;
     }
 }

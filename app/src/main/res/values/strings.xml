@@ -84,5 +84,9 @@
     <string name="title_alertDialog_error_location"> We are Sorry </string>
     <string name="message_alertDialog_error_location"> We were unable to locate you</string>
 
+    <!-- Filter -->
+    <string name="filter_more_filter">+ More Filter</string>
+    <string name="filter_less_filter">- Less Filter</string>
+
 
 </resources>

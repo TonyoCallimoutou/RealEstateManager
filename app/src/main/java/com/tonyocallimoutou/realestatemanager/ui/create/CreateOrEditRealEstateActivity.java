@@ -125,11 +125,13 @@ public class CreateOrEditRealEstateActivity extends AppCompatActivity implements
                 if (! editable.toString().isEmpty()) {
                     int actualPrice = Utils.getIntOfStringPrice(editable.toString());
                     String str = Utils.getStringOfPrice(actualPrice);
-
+                    Log.d("TAG" , "afterTextChanged: " + editable);
 
                     if (! str.equals(realEstatePrice.getText().toString())) {
+                        Log.d("TAG" , "up: " + str);
                         realEstatePrice.setText(str);
                         realEstatePrice.setSelection(realEstatePrice.getText().length());
+                        Log.d("TAG" , "down: " + editable);
                     }
                 }
 

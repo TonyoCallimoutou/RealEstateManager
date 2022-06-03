@@ -7,6 +7,7 @@
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable-v24/ic_close_black_24dp.xml" value="0.1" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable-v24/ic_folder_black_24dp.xml" value="0.174" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable-v24/ic_info_black_24dp.xml" value="0.174" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable-v24/ic_menu_white_24dp.xml" value="0.174" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable-v24/ic_my_location_black_24dp.xml" value="0.174" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/border.xml" value="0.174" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_add_black_24dp.xml" value="0.174" />
@@ -14,7 +15,9 @@
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_bedroom.xml" value="0.174" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_dollard.xml" value="0.1695" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_edit_black_24dp.xml" value="0.174" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_list.xml" value="0.174" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_location.xml" value="0.174" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_map.xml" value="0.174" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_menu_black_24dp.xml" value="0.174" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_power_settings_new_black_24dp.xml" value="0.174" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_price.xml" value="0.174" />
@@ -23,6 +26,10 @@
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_search_black_24dp.xml" value="0.174" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_settings_black_24dp.xml" value="0.174" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_surface.xml" value="0.1" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/switch_thumb.xml" value="0.174" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/switch_thumb_false.xml" value="0.174" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/switch_thumb_true.xml" value="0.174" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/switch_track.xml" value="0.174" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/activity_add_new_real_estate.xml" value="0.16041666666666668" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/activity_create_or_edit_real_estate.xml" value="0.16041666666666668" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/activity_main.xml" value="0.3120471014492754" />
@@ -38,7 +45,7 @@
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/fragment_detail.xml" value="0.16041666666666668" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/fragment_list.xml" value="0.3120471014492754" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/fragment_list_view.xml" value="0.3120471014492754" />
-        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/fragment_list_view_item.xml" value="0.22" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/fragment_list_view_item.xml" value="0.4466666666666667" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/fragment_map.xml" value="0.3120471014492754" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/fragment_map_view.xml" value="0.3120471014492754" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/fragment_mini_map.xml" value="0.28486646884273" />

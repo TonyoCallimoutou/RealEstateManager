@@ -14,8 +14,10 @@ import com.tonyocallimoutou.realestatemanager.ui.MainActivity;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class Utils {
     /**
@@ -64,8 +66,7 @@ public class Utils {
     }
 
     public static String getStringOfPrice(int price) {
-        DecimalFormat formatter = new DecimalFormat("###,###,###,###");
-        return formatter.format(price);
+        return NumberFormat.getNumberInstance(Locale.US).format(price);
     }
 
     public static String getStringOfPriceWithActualMoney(int price) {

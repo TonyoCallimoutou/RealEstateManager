@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,40 +7,47 @@
     android:layout_height="match_parent"
     tools:context=".ui.create.CreateOrEditRealEstateActivity">
 
-    <ImageView
-        android:id="@+id/detail_image_sold_banner"
-        android:layout_width="@dimen/detail_sold_banner_size"
-        android:layout_height="@dimen/detail_sold_banner_size"
-        android:scaleType="centerCrop"
-        android:layout_alignParentEnd="true"
-        android:src="@drawable/sold_banner" />
-
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textview_edit_media_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/DetailTitleCategory"
+            android:layout_margin="@dimen/detail_margin_category"
+            android:text="@string/detail_media_category"
+            android:textStyle="bold" />
+
+        <include
+            android:id="@+id/include_edit_picture"
+            android:layout_below="@+id/textview_edit_media_title"
+            layout="@layout/include_real_estate_picture"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content" />
+
+        <ImageView
+            android:id="@+id/detail_image_sold_banner"
+            android:layout_width="@dimen/detail_sold_banner_size"
+            android:layout_height="@dimen/detail_sold_banner_size"
+            android:scaleType="centerCrop"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/sold_banner" />
 
         <LinearLayout
             android:id="@+id/detail_linear_layout_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/include_edit_picture"
             android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/detail_margin_category"
-                android:text="@string/detail_media_category"
-                android:textStyle="bold" />
-
-            <include
-                layout="@layout/include_real_estate_picture"
-                />
 
             <Button
                 android:id="@+id/add_picture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:backgroundTint="@color/colorSecondary"
                 android:layout_margin="@dimen/detail_margin_add_picture_button"
                 android:text="@string/button_add_picture"/>
 
@@ -48,6 +55,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                style="@style/DetailTitleCategory"
                 android:layout_margin="@dimen/detail_margin_category"
                 android:text="@string/detail_description_category"
                 android:textStyle="bold" />
@@ -73,6 +81,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    style="@style/DetailTitleCategory"
                     android:text="@string/detail_type_category"
                     android:textStyle="bold" />
 
@@ -96,6 +105,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    style="@style/DetailTitleCategory"
                     android:text="@string/detail_price"
                     android:textStyle="bold" />
 
@@ -121,6 +131,7 @@
                     android:id="@+id/detail_surface"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    style="@style/DetailTitleCategory"
                     android:text="@string/detail_surface"
                     android:textStyle="bold" />
 
@@ -137,6 +148,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/detail_margin_information"
                     android:layout_row="0"
                     android:layout_column="4"
                     android:src="@drawable/ic_room" />
@@ -144,6 +156,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    style="@style/DetailTitleCategory"
                     android:text="@string/detail_rooms"
                     android:textStyle="bold" />
 
@@ -166,6 +179,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    style="@style/DetailTitleCategory"
                     android:text="@string/detail_bathrooms"
                     android:textStyle="bold" />
 
@@ -188,6 +202,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    style="@style/DetailTitleCategory"
                     android:text="@string/detail_bedrooms"
                     android:textStyle="bold" />
 
@@ -215,6 +230,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    style="@style/DetailTitleCategory"
                     android:text="@string/detail_location"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -234,6 +250,7 @@
                 android:id="@+id/button_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorSecondary"
                 android:layout_margin="@dimen/detail_margin_set_location_button"
                 android:text="@string/detail_set_location_button"/>
 
@@ -247,5 +264,5 @@
                 android:text="@string/button_save" />
         </LinearLayout>
 
-    </ScrollView>
-</RelativeLayout>
+    </RelativeLayout>
+</ScrollView>

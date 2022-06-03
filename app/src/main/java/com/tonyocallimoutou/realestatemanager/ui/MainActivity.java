@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void initActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
@@ -333,7 +333,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setCurrentUserInformation(currentUser);
 
+
+        ImageView profilePictureInformation = sideView.findViewById(R.id.profile_picture_information);
         ImageView profilePicture = sideView.findViewById(R.id.profile_picture_header_side_view);
+
+        profilePictureInformation.setVisibility(View.GONE);
 
         profilePicture.setOnClickListener(new View.OnClickListener() {
             @Override

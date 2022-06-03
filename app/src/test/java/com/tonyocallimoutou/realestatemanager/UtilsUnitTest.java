@@ -93,4 +93,42 @@ public class UtilsUnitTest {
 
         assertFalse(CompareRealEstate.compareListForMapIsEqual(firstList,secondList));
     }
+
+    @Test
+    public void convertIntPriceToStringPrice() {
+        int billion = 1000000000;
+        int million = 24565000;
+        int thousand = 25300;
+        int hundred = 456;
+
+        String strBillion = Utils.getStringOfPrice(billion);
+        String strMillion = Utils.getStringOfPrice(million);
+        String strThousand = Utils.getStringOfPrice(thousand);
+        String strHundred = Utils.getStringOfPrice(hundred);
+
+        assertEquals("1,000,000,000", strBillion);
+        assertEquals("24,565,000", strMillion);
+        assertEquals("25,300", strThousand);
+        assertEquals("456", strHundred);
+    }
+
+    @Test
+    public void convertStringPriceToInt() {
+        String strBillion = "1,000,000,000";
+        String strMillion = "24,565,000";
+        String strThousand = "25,300";
+        String strHundred = "456";
+
+
+        int billion = Utils.getIntOfStringPrice(strBillion);
+        int million = Utils.getIntOfStringPrice(strMillion);
+        int thousand = Utils.getIntOfStringPrice(strThousand);
+        int hundred = Utils.getIntOfStringPrice(strHundred);
+
+        assertEquals(1000000000, billion);
+        assertEquals(24565000, million);
+        assertEquals(25300, thousand);
+        assertEquals(456, hundred);
+
+    }
 }

@@ -6,11 +6,13 @@
         android:id="@+id/add_menu"
         app:showAsAction="always"
         android:icon="@drawable/ic_add_black_24dp"
+        app:iconTint="@color/white"
         android:title="@string/actionbar_add" />
     <item
         android:id="@+id/edit_menu"
         app:showAsAction="always"
         android:icon="@drawable/ic_edit_black_24dp"
+        app:iconTint="@color/white"
         android:title="@string/actionbar_edit" >
         <menu>
             <item
@@ -27,6 +29,7 @@
         android:id="@+id/search_menu"
         app:showAsAction="always"
         android:icon="@drawable/ic_search_black_24dp"
+        app:iconTint="@color/white"
         android:title="@string/actionbar_search" />
 
 </menu>

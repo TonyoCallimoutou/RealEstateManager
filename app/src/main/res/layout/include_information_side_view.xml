@@ -10,8 +10,9 @@
         >
 
         <ImageView
-            android:id="@+id/profile_picture_header_side_view"
+            android:id="@+id/profile_picture_information"
             android:src="@drawable/ic_no_image_available"
+            android:layout_centerVertical="true"
             android:layout_width="@dimen/profile_picture_header_side_view_size"
             android:layout_height="@dimen/profile_picture_header_side_view_size"
             android:layout_marginStart="@dimen/margin_information_header"
@@ -21,10 +22,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:orientation="vertical"
             android:layout_marginStart="@dimen/margin_text_information_start"
             android:layout_marginTop="@dimen/margin_text_information_top"
-            android:layout_toEndOf="@+id/profile_picture_header_side_view"
+            android:layout_toEndOf="@+id/profile_picture_information"
             >
             <TextView
                 android:id="@+id/user_name"

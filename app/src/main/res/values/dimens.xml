@@ -20,10 +20,14 @@
     <dimen name="alert_dialog_icon_choice"> 52dp</dimen>
     <dimen name="alert_dialog_margin_button_save"> 24dp </dimen>
 
+    <!-- Main Activity -->
+    <dimen name="switch_margin"> 12dp</dimen>
+
     <!-- List View -->
     <dimen name="list_view_image_real_estate_size"> 100dp </dimen>
     <dimen name="list_view_margin_image_text"> 12dp </dimen>
     <dimen name="list_view_no_real_estate_text_size"> 22sp</dimen>
+    <dimen name="list_view_margin_information"> 8dp</dimen>
 
     <!-- Detail Fragment + Add New Real Estate-->
     <dimen name="detail_margin_category"> 12dp </dimen>

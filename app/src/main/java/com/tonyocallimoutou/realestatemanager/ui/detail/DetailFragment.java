@@ -71,7 +71,7 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
     TextView userName;
     @BindView(R.id.user_email)
     TextView userEmail;
-    @BindView(R.id.profile_picture_header_side_view)
+    @BindView(R.id.profile_picture_information)
     ImageView userProfilePicture;
     @BindView(R.id.detail_creation_date)
     TextView creationDate;
@@ -180,10 +180,8 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
                             .into(userProfilePicture);
 
                     userEmail.setText(user.getEmail());
-                    userEmail.setTextColor(getContext().getResources().getColor(R.color.text_color_default));
 
                     userName.setText(user.getUsername());
-                    userName.setTextColor(getContext().getResources().getColor(R.color.text_color_default));
                 }
             }
 

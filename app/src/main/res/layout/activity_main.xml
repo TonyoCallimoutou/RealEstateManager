@@ -12,18 +12,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/switch_map_list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:checked="false"
-            android:text="Switch"
-            tools:ignore="UseSwitchCompatOrMaterialXml" />
+        <RelativeLayout
+            android:id="@+id/layout_switch"
+            android:background="@drawable/border"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switch_map_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/switch_margin"
+                android:layout_centerHorizontal="true"
+                app:track="@drawable/switch_track"
+                android:thumb="@drawable/switch_thumb" />
+
+        </RelativeLayout>
 
         <FrameLayout
             android:id="@+id/host_fragment"
-            android:layout_below="@+id/switch_map_list"
+            android:layout_below="@+id/layout_switch"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </FrameLayout>
@@ -43,7 +51,7 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/side_menu_view_header"
-        android:backgroundTint="@color/colorPrimary"
+        android:backgroundTint="@color/colorPrimaryLight"
         app:itemTextColor="@color/white"
         app:itemIconTint="@color/white"
         app:menu="@menu/side_nav_menu" />

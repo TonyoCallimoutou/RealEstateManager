@@ -1,5 +1,6 @@
 package com.tonyocallimoutou.realestatemanager.ui.filter;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -16,24 +17,37 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.location.places.AutocompleteFilter;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.textfield.TextInputEditText;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
+import com.tonyocallimoutou.realestatemanager.model.User;
 import com.tonyocallimoutou.realestatemanager.ui.MainActivity;
+import com.tonyocallimoutou.realestatemanager.ui.create.CreateOrEditRealEstateActivity;
 import com.tonyocallimoutou.realestatemanager.ui.listView.ListViewRecyclerViewAdapter;
 import com.tonyocallimoutou.realestatemanager.util.Filter;
 import com.tonyocallimoutou.realestatemanager.util.Utils;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelRealEstate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,16 +61,22 @@ public class FilterFragment extends Fragment {
 
     private static LinearLayout mainLayout;
 
-    @BindView(R.id.filter_location)
-    TextInputEditText inputLocation;
+    @BindView(R.id.filter_spinner_country)
+    AutoCompleteTextView editTextCountry;
     @BindView(R.id.filter_min_price)
     EditText minPrice;
     @BindView(R.id.filter_max_price)
     EditText maxPrice;
     @BindView(R.id.filter_spinner_room)
     Spinner spinnerRoom;
+    @BindView(R.id.filter_spinner_type)
+    Spinner spinnerType;
+    @BindView(R.id.filter_checkbox_is_mine)
+    CheckBox checkBoxIsMine;
     @BindView(R.id.filter_checkbox_is_sold)
     CheckBox checkBoxIsSold;
+    @BindView(R.id.filter_spinner_sold_date)
+    Spinner spinnerSoldDate;
     @BindView(R.id.filter_spinner_creation_date)
     Spinner spinnerCreationDate;
     @BindView(R.id.filter_spinner_nbr_picture)
@@ -74,12 +94,18 @@ public class FilterFragment extends Fragment {
 
     private FilterRecyclerViewAdapter adapter;
 
+    private static final int AUTOCOMPLETE_REQUEST_CODE = 2;
+
     private static FragmentActivity activity;
     private static FilterFragment fragment;
     public static boolean isOpen;
 
     private static List<Filter> filters;
     private static ViewModelRealEstate viewModelRealEstate;
+    private static List<String> countries = new ArrayList<>();
+    private static Map<String,List<String>> mapListCountryCity = new HashMap<>();
+
+    private static User currentUser;
 
     public FilterFragment() {
     }
@@ -112,10 +138,9 @@ public class FilterFragment extends Fragment {
         adapter = new FilterRecyclerViewAdapter(filters, new FilterRecyclerViewAdapter.FilterItemClickListener() {
             @Override
             public void onListItemClick(int position) {
-                String type = filters.get(position).getType();
-                filters.remove(position);
+                String filterType = filters.get(position).getFilterType();
+                setDataVisible(filterType);
                 applyFilter();
-                setDataVisible(type);
             }
         });
 
@@ -126,7 +151,7 @@ public class FilterFragment extends Fragment {
 
         initMoreFilter();
 
-        initPriceFilter();
+        initAllFilter();
 
         return view;
     }
@@ -151,13 +176,49 @@ public class FilterFragment extends Fragment {
         });
     }
 
-    private void setDataVisible(String type) {
-        if (type.equals(Filter.TYPE_MIN_PRICE)) {
+    private void setDataVisible(String filterType) {
+        if (filterType.equals(Filter.TYPE_MIN_PRICE)) {
             minPrice.setText("");
         }
-        else if (type.equals(Filter.TYPE_MAX_PRICE)) {
+        else if (filterType.equals(Filter.TYPE_MAX_PRICE)) {
             maxPrice.setText("");
         }
+        else if (filterType.equals(Filter.TYPE_TYPE)) {
+            spinnerType.setSelection(0);
+        }
+        else if (filterType.equals(Filter.TYPE_ROOM)) {
+            spinnerRoom.setSelection(0);
+        }
+        else if (filterType.equals(Filter.TYPE_CREATION)) {
+            spinnerCreationDate.setSelection(0);
+        }
+        else if (filterType.equals(Filter.TYPE_PICTURE)) {
+            spinnerNbrPicture.setSelection(0);
+        }
+        else if (filterType.equals(Filter.TYPE_SOLD)) {
+            checkBoxIsSold.setChecked(false);
+        }
+        else if (filterType.equals(Filter.TYPE_MINE)) {
+            checkBoxIsMine.setChecked(false);
+        }
+    }
+
+    // INIT FILTER
+
+    private void initAllFilter() {
+        initPlaceFilter();
+        initPriceFilter();
+        initTypeSpinner();
+        initRoomSpinner();
+        initCreationDateSpinner();
+        initPictureSpinner();
+        initMineCheckbox();
+        initSoldFilter();
+    }
+
+    private void initPlaceFilter() {
+
+
     }
 
     private void initPriceFilter() {
@@ -236,10 +297,195 @@ public class FilterFragment extends Fragment {
         });
     }
 
+    private void initTypeSpinner() {
+        Filter filterType = new Filter(Filter.TYPE_TYPE);
+
+        String[] brut = getResources().getStringArray(R.array.SpinnerTypeOfResidence);
+        String[] type = new String[brut.length+1];
+
+        type[0] = "All type";
+        for (int i=1; i<type.length; i++) {
+            type[i] = brut[i-1];
+        }
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,type);
+
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinnerType.setAdapter(arrayAdapter);
+
+        spinnerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i== 0) {
+                    filters.remove(filterType);
+                }
+                else {
+                    filterType.setType(type[i]);
+
+                    filters.remove(filterType);
+                    filters.add(filterType);
+
+                }
+                applyFilter();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    private void initRoomSpinner() {
+        Filter filterRoom = new Filter(Filter.TYPE_ROOM);
+
+        spinnerRoom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i== 0) {
+                    filters.remove(filterRoom);
+                }
+                else {
+                    filterRoom.setMinRoom(i+1);
+
+                    filters.remove(filterRoom);
+                    filters.add(filterRoom);
+                }
+                applyFilter();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    private void initCreationDateSpinner() {
+        Filter filterCreationDate = new Filter(Filter.TYPE_CREATION);
+
+        spinnerCreationDate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i== 0) {
+                    filters.remove(filterCreationDate);
+                }
+                else {
+                    filterCreationDate.setCreationDateLimit(i);
+
+                    filters.remove(filterCreationDate);
+                    filters.add(filterCreationDate);
+                }
+                applyFilter();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    private void initPictureSpinner() {
+        Filter filterPicture = new Filter(Filter.TYPE_PICTURE);
+
+        spinnerNbrPicture.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i== 0) {
+                    filters.remove(filterPicture);
+                }
+                else {
+                    filterPicture.setMinNbrPicture(i+1);
+
+                    filters.remove(filterPicture);
+                    filters.add(filterPicture);
+                }
+                applyFilter();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    private void initMineCheckbox() {
+        Filter filterMine = new Filter(Filter.TYPE_MINE);
+
+        checkBoxIsMine.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+
+                    filterMine.setUserId(currentUser.getUid());
+
+                    filters.remove(filterMine);
+                    filters.add(filterMine);
+
+                }
+                else {
+                    filters.remove(filterMine);
+                }
+
+                applyFilter();
+            }
+        });
+    }
+
+    private void initSoldFilter() {
+        Filter filterSold = new Filter(Filter.TYPE_SOLD);
+
+        checkBoxIsSold.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (!b) {
+                    spinnerSoldDate.setSelection(0);
+                    spinnerSoldDate.setVisibility(View.GONE);
+
+                    filters.remove(filterSold);
+                    applyFilter();
+                }
+                else {
+                    spinnerSoldDate.setVisibility(View.VISIBLE);
+
+                    filterSold.setCreationDateLimit(0);
+
+                    filters.remove(filterSold);
+                    filters.add(filterSold);
+
+                    applyFilter();
+
+                    spinnerSoldDate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            filterSold.setDateSoldLimit(i);
+
+                            filters.remove(filterSold);
+                            filters.add(filterSold);
+
+                            applyFilter();
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
+
+                        }
+                    });
+
+                }
+            }
+        });
+    }
+
+
+    // STATIC VOID
+
     public static void changeVisibilityOfFragment() {
         if (mainLayout.getVisibility() == View.VISIBLE) {
             if (filters.size() != 0) {
-                Log.d("TAG", "closeFragment: ");
                 mainLayout.setVisibility(View.GONE);
             }
             else {
@@ -255,6 +501,10 @@ public class FilterFragment extends Fragment {
     public void applyFilter() {
         adapter.initAdapter(filters);
         viewModelRealEstate.setListWithFilter(filters, null);
+    }
+
+    public static void setCurrentUser(User user) {
+        currentUser = user;
     }
 
 }

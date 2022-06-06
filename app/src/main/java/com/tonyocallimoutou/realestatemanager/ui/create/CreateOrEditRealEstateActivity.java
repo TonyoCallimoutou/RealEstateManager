@@ -182,7 +182,7 @@ public class CreateOrEditRealEstateActivity extends AppCompatActivity implements
 
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE && resultCode == RESULT_OK) {
             Log.d("TAG", "onActivityResult: ");
-            place = new RealEstateLocation(Autocomplete.getPlaceFromIntent(data));
+            place = new RealEstateLocation(this,Autocomplete.getPlaceFromIntent(data));
 
             initPlaceInformation();
         }

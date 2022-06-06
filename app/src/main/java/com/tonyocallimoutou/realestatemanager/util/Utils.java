@@ -7,9 +7,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
+import android.util.Log;
 import android.widget.Spinner;
 
 import com.tonyocallimoutou.realestatemanager.R;
+import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.ui.MainActivity;
 
 import java.text.DateFormat;
@@ -86,5 +88,37 @@ public class Utils {
         }
 
         return 0;
+    }
+
+    public static int getAgeOfRealEstate(RealEstate realEstate) {
+        String today = getTodayDate();
+        String creation = realEstate.getCreationDate();
+
+        String[] dateToday = today.split("/");
+        String[] dateCreation = creation.split("/");
+
+        int yearsGap = Integer.parseInt(dateToday[2]) - Integer.parseInt(dateCreation[2]);
+        int monthGap = Integer.parseInt(dateToday[1]) - Integer.parseInt(dateCreation[1]);
+        if (Integer.parseInt(dateToday[0]) >= Integer.parseInt(dateCreation[0])) {
+            monthGap ++;
+        }
+
+        return monthGap +yearsGap * 12;
+    }
+
+    public static int getAgeOfSold(RealEstate realEstate) {
+        String today = getTodayDate();
+        String sold = realEstate.getSoldDate();
+
+        String[] dateToday = today.split("/");
+        String[] dateSold = sold.split("/");
+
+        int yearsGap = Integer.parseInt(dateToday[2]) - Integer.parseInt(dateSold[2]);
+        int monthGap = Integer.parseInt(dateToday[1]) - Integer.parseInt(dateSold[1]);
+        if (Integer.parseInt(dateToday[0]) >= Integer.parseInt(dateSold[0])) {
+            monthGap ++;
+        }
+
+        return monthGap + yearsGap * 12;
     }
 }

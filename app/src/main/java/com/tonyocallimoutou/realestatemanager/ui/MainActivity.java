@@ -39,6 +39,7 @@ import com.tonyocallimoutou.realestatemanager.ui.create.CreateOrEditRealEstateAc
 import com.tonyocallimoutou.realestatemanager.ui.detail.DetailFragment;
 import com.tonyocallimoutou.realestatemanager.ui.listView.ListViewFragment;
 import com.tonyocallimoutou.realestatemanager.ui.mapview.MapViewFragment;
+import com.tonyocallimoutou.realestatemanager.util.Filter;
 import com.tonyocallimoutou.realestatemanager.util.UtilsProfilePictureManager;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelFactory;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelRealEstate;
@@ -415,6 +416,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 initSideView(currentUserResults);
                 DetailFragment.setCurrentUser(currentUserResults);
+                FilterFragment.setCurrentUser(currentUserResults);
             }
         });
 

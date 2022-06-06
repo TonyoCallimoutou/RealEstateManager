@@ -1,9 +1,17 @@
 package com.tonyocallimoutou.realestatemanager.model;
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.Place;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
+import java.util.Locale;
 
 public class RealEstateLocation implements Serializable {
 
@@ -12,16 +20,30 @@ public class RealEstateLocation implements Serializable {
     private double lat;
     private double lng;
     private String address;
+    private String country;
+    private String city;
 
     public RealEstateLocation() {
     }
 
-    public RealEstateLocation(Place place) {
+    public RealEstateLocation(Context context, Place place){
         this.placeId = place.getId();
         this.name = place.getName();
         this.lat = place.getLatLng().latitude;
         this.lng = place.getLatLng().longitude;
         this.address = place.getAddress();
+
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        List<Address> addresses = null ;
+        try {
+            addresses = geocoder.getFromLocation(lat, lng, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Address address = addresses.get(0);
+
+        this.country = address.getCountryName();
+        this.city = address.getLocality();
     }
 
     public RealEstateLocation(String placeId, String name, double lat, double lng, String address) {
@@ -70,5 +92,21 @@ public class RealEstateLocation implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 }

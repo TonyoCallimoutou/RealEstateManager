@@ -85,8 +85,34 @@
     <string name="message_alertDialog_error_location"> We were unable to locate you</string>
 
     <!-- Filter -->
-    <string name="filter_more_filter">+ More Filter</string>
-    <string name="filter_less_filter">- Less Filter</string>
+    <string name="filter_more_filter">More Filter</string>
+    <string name="filter_less_filter">Less Filter</string>
+    <string name="filter_is_mine">My Real Estate </string>
+    <string name="filter_is_sold">Only Sold Real Estate </string>
+    <string name="filter_price_price">Price : </string>
+    <string name="filter_price_min">Min : </string>
+    <string name="filter_price_max">Max : </string>
+    <string name="filter_location_city">City : </string>
+
+
+    <array name="Spinner_room">
+        <item> Room : 1 or more </item>
+        <item> Room : 2 or more </item>
+        <item> Room : 3 or more </item>
+    </array>
+
+    <array name="Spinner_creation_date">
+        <item> All publication date </item>
+        <item> Last months </item>
+        <item> Last 2 months </item>
+        <item> Last 3 months </item>
+    </array>
+
+    <array name="Spinner_picture">
+        <item> Picture : 1 or more </item>
+        <item> Picture : 2 or more </item>
+        <item> Picture : 3 or more </item>
+    </array>
 
 
 </resources>

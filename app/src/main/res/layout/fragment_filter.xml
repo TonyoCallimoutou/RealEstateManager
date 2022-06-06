@@ -13,18 +13,19 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/filter_layout_edit_text"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/filter_location"
-                android:layout_width="match_parent"
+            <AutoCompleteTextView
+                android:id="@+id/filter_spinner_country"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="villeDetpETCtruc" />
+                android:layout_weight="1"/>
 
-        </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,46 +33,54 @@
             android:orientation="horizontal">
 
             <Spinner
-                android:id="@+id/filter_spinner_price"
+                android:id="@+id/filter_spinner_type"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:entries="@array/SpinnerTypeOfResidence"
                 android:layout_weight="1"/>
 
             <Spinner
                 android:id="@+id/filter_spinner_room"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:entries="@array/SpinnerTypeOfResidence"
                 android:layout_weight="1"
+                android:entries="@array/Spinner_room"
                 />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/filter_price_price" />
+
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="min" />
+                android:text="@string/filter_price_min" />
 
             <EditText
                 android:id="@+id/filter_min_price"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:inputType="number" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="max" />
+                android:text="@string/filter_price_max" />
 
             <EditText
                 android:id="@+id/filter_max_price"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:inputType="number" />
 
         </LinearLayout>
@@ -81,6 +90,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <CheckBox
+                android:id="@+id/filter_checkbox_is_mine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_is_mine" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -92,13 +107,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="isSold" />
+                    android:text="@string/filter_is_sold" />
 
-                <TextView
-                    android:layout_width="0dp"
+                <Spinner
+                    android:id="@+id/filter_spinner_sold_date"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="DATE ?" />
+                    android:visibility="gone"
+                    android:entries="@array/Spinner_creation_date" />
 
             </LinearLayout>
 
@@ -106,13 +122,13 @@
                 android:id="@+id/filter_spinner_creation_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:entries="@array/SpinnerTypeOfResidence" />
+                android:entries="@array/Spinner_creation_date" />
 
             <Spinner
                 android:id="@+id/filter_spinner_nbr_picture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:entries="@array/SpinnerTypeOfResidence" />
+                android:entries="@array/Spinner_picture" />
 
         </LinearLayout>
 

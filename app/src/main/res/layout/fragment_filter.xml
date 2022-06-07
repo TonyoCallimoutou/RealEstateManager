@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/filter_margin"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".ui.filter.FilterFragment">
@@ -13,23 +14,77 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <LinearLayout
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            >
+
+            <fragment
+                android:id="@+id/autocomplete_fragment"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+        </androidx.cardview.widget.CardView>
+
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/filter_range_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:valueFrom="0"
+            android:valueTo="50.0"
+            android:stepSize="5.0"  />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/filter_height_category"
             android:orientation="horizontal">
 
-            <AutoCompleteTextView
-                android:id="@+id/filter_spinner_country"
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:textColor="@color/black"
+                android:layout_weight="1"
+                android:text="@string/filter_price_price" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="@string/filter_price_min" />
+
+            <EditText
+                android:id="@+id/filter_min_price"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="number" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="@string/filter_price_max" />
+
+            <EditText
+                android:id="@+id/filter_max_price"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="number" />
 
         </LinearLayout>
 
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/filter_height_category"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <Spinner
@@ -45,44 +100,6 @@
                 android:layout_weight="1"
                 android:entries="@array/Spinner_room"
                 />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/filter_price_price" />
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/filter_price_min" />
-
-            <EditText
-                android:id="@+id/filter_min_price"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="number" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/filter_price_max" />
-
-            <EditText
-                android:id="@+id/filter_max_price"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="number" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -114,20 +131,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
-                    android:entries="@array/Spinner_creation_date" />
+                    android:entries="@array/Spinner_sold_date" />
 
             </LinearLayout>
 
             <Spinner
                 android:id="@+id/filter_spinner_creation_date"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/filter_height_category"
                 android:entries="@array/Spinner_creation_date" />
 
             <Spinner
                 android:id="@+id/filter_spinner_nbr_picture"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/filter_height_category"
                 android:entries="@array/Spinner_picture" />
 
         </LinearLayout>
@@ -143,7 +160,8 @@
                 android:id="@+id/filter_text_more_or_less"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="MORE OR LESS" />
+                android:textColor="@color/black"
+                android:text="@string/filter_more_filter" />
 
             <ImageView
                 android:id="@+id/filter_img_more_or_less"

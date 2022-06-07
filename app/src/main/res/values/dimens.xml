@@ -50,6 +50,10 @@
     <dimen name="mini_map_height"> 200dp </dimen>
     <dimen name="mini_map_margin"> 12dp</dimen>
 
+    <!-- Filter -->
+    <dimen name="filter_margin"> 12dp </dimen>
+    <dimen name="filter_height_category"> 48dp</dimen>
+
 
 
 

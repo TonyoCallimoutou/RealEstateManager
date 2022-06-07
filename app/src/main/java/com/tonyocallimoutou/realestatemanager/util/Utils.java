@@ -3,6 +3,7 @@ package com.tonyocallimoutou.realestatemanager.util;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -10,6 +11,7 @@ import android.net.wifi.WifiManager;
 import android.util.Log;
 import android.widget.Spinner;
 
+import com.google.android.libraries.places.api.model.Place;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.ui.MainActivity;
@@ -76,7 +78,14 @@ public class Utils {
     }
 
     public static int getIntOfStringPrice(String price) {
-        return Integer.parseInt(price.replace(",",""));
+        try {
+            return Integer.parseInt(price.replace(",",""));
+        }
+        catch (Exception e){
+            String str = price.replaceFirst(".$","");
+            return Integer.parseInt(str.replace(",",""));
+        }
+
 
     }
 
@@ -120,5 +129,19 @@ public class Utils {
         }
 
         return monthGap + yearsGap * 12;
+    }
+
+    public static float getDistanceFromCityInKm(RealEstate realEstate, Place place) {
+        Location realEstateLocation = new Location("");
+        Location placeLocation = new Location("");
+
+        realEstateLocation.setLatitude(realEstate.getPlace().getLat());
+        realEstateLocation.setLongitude(realEstate.getPlace().getLng());
+
+        placeLocation.setLatitude(place.getLatLng().latitude);
+        placeLocation.setLongitude(place.getLatLng().longitude);
+
+        return (placeLocation.distanceTo(realEstateLocation) / 1000);
+
     }
 }

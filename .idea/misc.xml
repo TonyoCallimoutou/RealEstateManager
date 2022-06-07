@@ -10,6 +10,7 @@
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable-v24/ic_menu_white_24dp.xml" value="0.174" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable-v24/ic_my_location_black_24dp.xml" value="0.174" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/border.xml" value="0.174" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/button_rounded_corner.xml" value="0.174" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_add_black_24dp.xml" value="0.174" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_bathroom.xml" value="0.174" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/drawable/ic_bedroom.xml" value="0.174" />
@@ -45,7 +46,7 @@
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/fragment_autocomplete_item.xml" value="0.16041666666666668" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/fragment_blank.xml" value="0.3120471014492754" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/fragment_detail.xml" value="0.16041666666666668" />
-        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/fragment_filter.xml" value="0.3120471014492754" />
+        <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/fragment_filter.xml" value="0.3028391167192429" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/fragment_filter_item.xml" value="0.3120471014492754" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/fragment_list.xml" value="0.3120471014492754" />
         <entry key="..\:/Documents/Code/OpenClassroom/Projet_9/MyProject/RealEstateManager/app/src/main/res/layout/fragment_list_view.xml" value="0.3120471014492754" />

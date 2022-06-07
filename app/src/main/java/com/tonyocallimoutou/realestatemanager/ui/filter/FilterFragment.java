@@ -3,6 +3,7 @@ package com.tonyocallimoutou.realestatemanager.ui.filter;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -10,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -28,10 +30,15 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.android.material.slider.RangeSlider;
 import com.google.android.material.textfield.TextInputEditText;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
@@ -61,8 +68,8 @@ public class FilterFragment extends Fragment {
 
     private static LinearLayout mainLayout;
 
-    @BindView(R.id.filter_spinner_country)
-    AutoCompleteTextView editTextCountry;
+    @BindView(R.id.filter_range_distance)
+    RangeSlider filterDistance;
     @BindView(R.id.filter_min_price)
     EditText minPrice;
     @BindView(R.id.filter_max_price)
@@ -93,6 +100,8 @@ public class FilterFragment extends Fragment {
     RecyclerView recyclerView;
 
     private FilterRecyclerViewAdapter adapter;
+
+    private View clearButtonAutocomplete;
 
     private static final int AUTOCOMPLETE_REQUEST_CODE = 2;
 
@@ -133,13 +142,13 @@ public class FilterFragment extends Fragment {
 
         filters = new ArrayList<>();
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         adapter = new FilterRecyclerViewAdapter(filters, new FilterRecyclerViewAdapter.FilterItemClickListener() {
             @Override
             public void onListItemClick(int position) {
-                String filterType = filters.get(position).getFilterType();
-                setDataVisible(filterType);
+                Filter filter = filters.get(position);
+                setDataVisible(filter);
                 applyFilter();
             }
         });
@@ -164,43 +173,49 @@ public class FilterFragment extends Fragment {
             public void onClick(View view) {
                 if(moreFilter.getVisibility() == View.GONE) {
                     moreFilter.setVisibility(View.VISIBLE);
-                    textMoreOrLessFilter.setText(getString(R.string.filter_more_filter));
-                    imageViewMoreFilter.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_add_black_24dp, null));
+                    textMoreOrLessFilter.setText(getString(R.string.filter_less_filter));
+                    imageViewMoreFilter.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_minus_24dp, null));
                 }
                 else {
                     moreFilter.setVisibility(View.GONE);
-                    textMoreOrLessFilter.setText(getString(R.string.filter_less_filter));
-                    imageViewMoreFilter.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_minus_24dp, null));
+                    textMoreOrLessFilter.setText(getString(R.string.filter_more_filter));
+                    imageViewMoreFilter.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_add_black_24dp, null));
                 }
             }
         });
     }
 
-    private void setDataVisible(String filterType) {
-        if (filterType.equals(Filter.TYPE_MIN_PRICE)) {
+    private void setDataVisible(Filter filter) {
+        if (filter.getFilterType().equals(Filter.TYPE_MIN_PRICE)) {
             minPrice.setText("");
         }
-        else if (filterType.equals(Filter.TYPE_MAX_PRICE)) {
+        else if (filter.getFilterType().equals(Filter.TYPE_MAX_PRICE)) {
             maxPrice.setText("");
         }
-        else if (filterType.equals(Filter.TYPE_TYPE)) {
+        else if (filter.getFilterType().equals(Filter.TYPE_TYPE)) {
             spinnerType.setSelection(0);
         }
-        else if (filterType.equals(Filter.TYPE_ROOM)) {
+        else if (filter.getFilterType().equals(Filter.TYPE_ROOM)) {
             spinnerRoom.setSelection(0);
         }
-        else if (filterType.equals(Filter.TYPE_CREATION)) {
+        else if (filter.getFilterType().equals(Filter.TYPE_CREATION)) {
             spinnerCreationDate.setSelection(0);
         }
-        else if (filterType.equals(Filter.TYPE_PICTURE)) {
+        else if (filter.getFilterType().equals(Filter.TYPE_PICTURE)) {
             spinnerNbrPicture.setSelection(0);
         }
-        else if (filterType.equals(Filter.TYPE_SOLD)) {
+        else if (filter.getFilterType().equals(Filter.TYPE_SOLD)) {
             checkBoxIsSold.setChecked(false);
         }
-        else if (filterType.equals(Filter.TYPE_MINE)) {
+        else if (filter.getFilterType().equals(Filter.TYPE_MINE)) {
             checkBoxIsMine.setChecked(false);
         }
+        else if (filter.getFilterType().equals(Filter.TYPE_LOCATION)) {
+            clearButtonAutocomplete.performClick();
+        }
+
+        filters.remove(filter);
+        applyFilter();
     }
 
     // INIT FILTER
@@ -217,6 +232,67 @@ public class FilterFragment extends Fragment {
     }
 
     private void initPlaceFilter() {
+        Filter filterLocation = new Filter(Filter.TYPE_LOCATION);
+
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+                getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+
+        List<Place.Field> fields = Arrays.asList(
+                Place.Field.ID,
+                Place.Field.NAME,
+                Place.Field.ADDRESS,
+                Place.Field.LAT_LNG
+        );
+
+        autocompleteFragment.setHint(getString(R.string.filter_hint_location));
+        autocompleteFragment.setTypeFilter(TypeFilter.CITIES);
+        autocompleteFragment.setPlaceFields(fields);
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onError(@NonNull Status status) {
+            }
+
+            @Override
+            public void onPlaceSelected(@NonNull Place place) {
+                filterLocation.setFilterCity(place);
+                filterLocation.setDistance(filterDistance.getValues().get(0));
+                filters.remove(filterLocation);
+                filters.add(filterLocation);
+                applyFilter();
+
+                filterDistance.setVisibility(View.VISIBLE);
+
+                clearButtonAutocomplete = autocompleteFragment
+                        .getView()
+                        .findViewById(com.google.android.libraries.places.R.id.places_autocomplete_clear_button);
+
+                clearButtonAutocomplete.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                filterDistance.setVisibility(View.GONE);
+                                filters.remove(filterLocation);
+                                applyFilter();
+
+                                autocompleteFragment.setText("");
+                                view.setVisibility(View.GONE);
+
+                            }
+                        });
+
+                filterDistance.addOnChangeListener(new RangeSlider.OnChangeListener() {
+                    @Override
+                    public void onValueChange(@NonNull RangeSlider slider, float value, boolean fromUser) {
+                        filterLocation.setDistance(value);
+                        filters.remove(filterLocation);
+                        filters.add(filterLocation);
+                        applyFilter();
+                    }
+                });
+            }
+        });
+
+
 
 
     }
@@ -251,12 +327,11 @@ public class FilterFragment extends Fragment {
                     filters.remove(filterMinPrice);
                     filters.add(filterMinPrice);
 
-                    applyFilter();
                 }
                 else {
                     filters.remove(filterMinPrice);
-                    adapter.initAdapter(filters);
                 }
+                applyFilter();
             }
         });
 
@@ -287,12 +362,11 @@ public class FilterFragment extends Fragment {
                     filters.remove(filterMaxPrice);
                     filters.add(filterMaxPrice);
 
-                    applyFilter();
                 }
                 else {
                     filters.remove(filterMaxPrice);
-                    adapter.initAdapter(filters);
                 }
+                applyFilter();
             }
         });
     }
@@ -394,6 +468,7 @@ public class FilterFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i== 0) {
+                    Log.d("TAG", "onItemSelected: ");
                     filters.remove(filterPicture);
                 }
                 else {
@@ -484,21 +559,32 @@ public class FilterFragment extends Fragment {
     // STATIC VOID
 
     public static void changeVisibilityOfFragment() {
-        if (mainLayout.getVisibility() == View.VISIBLE) {
-            if (filters.size() != 0) {
-                mainLayout.setVisibility(View.GONE);
-            }
-            else {
-                isOpen = false;
-                activity.getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+        if (isOpen) {
+            if (mainLayout.getVisibility() == View.VISIBLE) {
+                if (filters.size() != 0) {
+                    mainLayout.setVisibility(View.GONE);
+                } else {
+                    closeFragment();
+                }
+            } else {
+                mainLayout.setVisibility(View.VISIBLE);
             }
         }
         else {
-            mainLayout.setVisibility(View.VISIBLE);
+            MainActivity.initFilterFragment();
         }
     }
 
+    private static void closeFragment(){
+        isOpen = false;
+        MainActivity.switchColorOfFilterItem(false);
+        activity.getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+    }
+
     public void applyFilter() {
+        if (filters.size() == 0 && mainLayout.getVisibility() == View.GONE) {
+            closeFragment();
+        }
         adapter.initAdapter(filters);
         viewModelRealEstate.setListWithFilter(filters, null);
     }

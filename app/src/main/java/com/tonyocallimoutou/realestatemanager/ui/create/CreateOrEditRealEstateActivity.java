@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.tonyocallimoutou.realestatemanager.R;
@@ -181,7 +182,6 @@ public class CreateOrEditRealEstateActivity extends AppCompatActivity implements
         }
 
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE && resultCode == RESULT_OK) {
-            Log.d("TAG", "onActivityResult: ");
             place = new RealEstateLocation(this,Autocomplete.getPlaceFromIntent(data));
 
             initPlaceInformation();
@@ -255,8 +255,6 @@ public class CreateOrEditRealEstateActivity extends AppCompatActivity implements
 
     @OnClick(R.id.button_location)
     public void chooseAddress() {
-
-        Log.d("TAG", "chooseAddress: ");
         List<Place.Field> fields = Arrays.asList(
                 Place.Field.ID,
                 Place.Field.NAME,
@@ -265,6 +263,7 @@ public class CreateOrEditRealEstateActivity extends AppCompatActivity implements
         );
 
         Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                .setTypeFilter(TypeFilter.ADDRESS)
                 .build(CreateOrEditRealEstateActivity.this);
         startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
     }

@@ -16,6 +16,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static MenuItem editItem;
     private static MenuItem goToEditItem;
     private static MenuItem addItem;
-    private static MenuItem searchItem;
+    private static MenuItem filterItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -216,15 +217,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .commit();
     }
 
-    public void initFilterFragment() {
-        if(!FilterFragment.isOpen) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.host_filter_fragment, FilterFragment.newInstance())
-                    .commit();
+    public static void initFilterFragment() {
+        fragmentActivity.getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.host_filter_fragment, FilterFragment.newInstance())
+                .commit();
+
+        switchColorOfFilterItem(true);
+    }
+
+    public static void switchColorOfFilterItem(boolean isOpen) {
+        if (isOpen) {
+            filterItem.getIcon().setTint(fragmentActivity.getResources().getColor(R.color.colorSecondaryLight));
         }
         else {
-            FilterFragment.changeVisibilityOfFragment();
+            filterItem.getIcon().setTint(fragmentActivity.getResources().getColor(R.color.white));
         }
     }
 
@@ -244,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         editItem = menu.findItem(R.id.edit_menu);
         goToEditItem = menu.findItem(R.id.go_to_edit);
         addItem = menu.findItem(R.id.add_menu);
-        searchItem = menu.findItem(R.id.search_menu);
+        filterItem = menu.findItem(R.id.filter_menu);
         setVisibilityEditMenuItem(false);
         return true;
     }
@@ -279,8 +286,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 soldRealEstate(DetailFragment.getActualRealEstate());
 
-            case R.id.search_menu:
-                initFilterFragment();
+            case R.id.filter_menu:
+                FilterFragment.changeVisibilityOfFragment();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -293,9 +300,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public static void setVisibilityAddAndSearchMenuItem(boolean isVisible) {
-        if (addItem != null && searchItem != null) {
+        if (addItem != null && filterItem != null) {
             addItem.setVisible(isVisible);
-            searchItem.setVisible(isVisible);
+            filterItem.setVisible(isVisible);
         }
     }
 

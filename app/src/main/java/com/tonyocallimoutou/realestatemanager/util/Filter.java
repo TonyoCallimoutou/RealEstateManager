@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.google.android.libraries.places.api.model.Place;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 
 import java.util.ArrayList;
@@ -23,7 +24,8 @@ public class Filter {
     public static String TYPE_SOLD = "TYPE_SOLD";
     private String filterType;
     private String filterCountry;
-    private String filterCity;
+    private Place filterCity;
+    private float distance;
     private String type;
     private Integer minPrice;
     private Integer maxPrice;
@@ -45,12 +47,20 @@ public class Filter {
         this.filterCountry = filterCountry;
     }
 
-    public String getFilterCity() {
+    public Place getFilterCity() {
         return filterCity;
     }
 
-    public void setFilterCity(String filterCity) {
+    public void setFilterCity(Place filterCity) {
         this.filterCity = filterCity;
+    }
+
+    public float getDistance() {
+        return distance;
+    }
+
+    public void setDistance(float distance) {
+        this.distance = distance;
     }
 
     public String getFilterType() {
@@ -186,6 +196,14 @@ public class Filter {
                 }
             }
         }
+        else if (filterType.equals(TYPE_LOCATION)) {
+
+            for (RealEstate realEstate : original) {
+                if (realEstate.getPlace().getCity().equals(filterCity.getName()) || Utils.getDistanceFromCityInKm(realEstate,filterCity) < distance) {
+                    newList.add(realEstate);
+                }
+            }
+        }
 
         return newList;
     }
@@ -196,10 +214,10 @@ public class Filter {
             return "Type : " +type;
         }
         else if (filterType.equals(TYPE_MIN_PRICE)) {
-            return "min : "+ minPrice;
+            return "min : "+ Utils.getStringOfPrice(minPrice);
         }
         else if (filterType.equals(TYPE_MAX_PRICE)) {
-            return "max : "+ maxPrice;
+            return "max : "+ Utils.getStringOfPrice(maxPrice);
         }
         else if (filterType.equals(TYPE_ROOM)) {
             return "more than " + minRoom + " room";
@@ -218,6 +236,14 @@ public class Filter {
         }
         else if (filterType.equals(TYPE_PICTURE)) {
             return "more than " + minNbrPicture + " pictures";
+        }
+        else if (filterType.equals(TYPE_LOCATION)) {
+            if (distance > 0) {
+                return filterCity.getName() + " + " + distance + " km";
+            }
+            else {
+                return filterCity.getName();
+            }
         }
         return "none";
     }

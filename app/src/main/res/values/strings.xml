@@ -93,6 +93,7 @@
     <string name="filter_price_min">Min : </string>
     <string name="filter_price_max">Max : </string>
     <string name="filter_location_city">City : </string>
+    <string name="filter_hint_location"> City </string>
 
 
     <array name="Spinner_room">
@@ -103,6 +104,13 @@
 
     <array name="Spinner_creation_date">
         <item> All publication date </item>
+        <item> Last months </item>
+        <item> Last 2 months </item>
+        <item> Last 3 months </item>
+    </array>
+
+    <array name="Spinner_sold_date">
+        <item> All sold date </item>
         <item> Last months </item>
         <item> Last 2 months </item>
         <item> Last 3 months </item>

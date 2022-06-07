@@ -26,7 +26,7 @@
         </menu>
     </item>
     <item
-        android:id="@+id/search_menu"
+        android:id="@+id/filter_menu"
         app:showAsAction="always"
         android:icon="@drawable/ic_filter_24dp"
         app:iconTint="@color/white"

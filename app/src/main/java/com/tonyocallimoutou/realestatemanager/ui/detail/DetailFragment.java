@@ -4,7 +4,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -28,6 +33,7 @@ import com.tonyocallimoutou.realestatemanager.model.Photo;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.model.User;
 import com.tonyocallimoutou.realestatemanager.ui.create.ListPictureRecyclerViewAdapter;
+import com.tonyocallimoutou.realestatemanager.util.UtilContactUser;
 import com.tonyocallimoutou.realestatemanager.util.Utils;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelRealEstate;
 
@@ -68,10 +74,14 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
     TextView textNumberOfRoom;
     @BindView(R.id.detail_location)
     TextView textLocation;
+    @BindView(R.id.information_user)
+    RelativeLayout informationUserLayout;
     @BindView(R.id.user_name)
     TextView userName;
     @BindView(R.id.user_email)
     TextView userEmail;
+    @BindView(R.id.user_phone_number)
+    TextView userPhone;
     @BindView(R.id.profile_picture_information)
     ImageView userProfilePicture;
     @BindView(R.id.detail_creation_date)
@@ -90,10 +100,12 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
     private static ViewModelRealEstate viewModelRealEstate;
 
     private ListPictureRecyclerViewAdapter adapter;
+    private ActivityResultLauncher<String> permissionResult;
 
     private List<Photo> photos = new ArrayList<>();
     private static List<User> users = new ArrayList<>();
     private static User currentUser;
+    private User userWriter;
 
     private static FragmentActivity activity;
     private static DetailFragment fragment;
@@ -116,6 +128,16 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
         if (getArguments() != null) {
             mRealEstate = (RealEstate) getArguments().getSerializable(BUNDLE_REAL_ESTATE);
         }
+
+        permissionResult= registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                new ActivityResultCallback<Boolean>() {
+                    @Override
+                    public void onActivityResult(Boolean result) {
+                        UtilContactUser.onRequestPermissionsResult(result);
+                    }
+                }
+        );
     }
 
     @Override
@@ -179,15 +201,26 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
 
             for (User user : users) {
                 if (user.getUid().equals(mRealEstate.getUserId())) {
+                    userWriter = user;
+
                     Glide.with(getContext())
                             .load(user.getUrlPicture())
                             .apply(RequestOptions.circleCropTransform())
                             .into(userProfilePicture);
 
                     userEmail.setText(user.getEmail());
-
                     userName.setText(user.getUsername());
+                    userPhone.setText(user.getPhoneNumber());
                 }
+            }
+
+            if (! currentUser.getUid().equals(userWriter.getUid())) {
+                informationUserLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UtilContactUser.getContactOfUser(getActivity(), userWriter, permissionResult);
+                    }
+                });
             }
 
             if (mRealEstate.getUserId().equals(currentUser.getUid())) {

@@ -158,6 +158,11 @@ public class UserRepository {
         getUsersCollection().document(currentUser.getUid()).set(currentUser);
     }
 
+    public void setPhoneNumberOfCurrentUser(String phoneNumber) {
+        currentUser.setPhoneNumber(phoneNumber);
+        getUsersCollection().document(currentUser.getUid()).set(currentUser);
+    }
+
     public void setCurrentUserLivedata(MutableLiveData<User> liveData) {
         getUsersCollection().addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -172,6 +177,7 @@ public class UserRepository {
                     User user = document.   toObject(User.class);
                     if (getCurrentFirebaseUser()!=null) {
                         if (user.getUid().equals(getCurrentFirebaseUser().getUid())) {
+                            currentUser = user;
                             liveData.setValue(user);
                         }
                     }

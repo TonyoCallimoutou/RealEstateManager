@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
@@ -15,6 +16,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -33,6 +36,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.material.navigation.NavigationView;
 import com.tonyocallimoutou.realestatemanager.BuildConfig;
+import com.tonyocallimoutou.realestatemanager.ui.setting.SettingActivity;
 import com.tonyocallimoutou.realestatemanager.ui.filter.FilterFragment;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
@@ -40,7 +44,6 @@ import com.tonyocallimoutou.realestatemanager.ui.create.CreateOrEditRealEstateAc
 import com.tonyocallimoutou.realestatemanager.ui.detail.DetailFragment;
 import com.tonyocallimoutou.realestatemanager.ui.listView.ListViewFragment;
 import com.tonyocallimoutou.realestatemanager.ui.mapview.MapViewFragment;
-import com.tonyocallimoutou.realestatemanager.util.Filter;
 import com.tonyocallimoutou.realestatemanager.util.UtilsProfilePictureManager;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelFactory;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelRealEstate;
@@ -374,9 +377,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         TextView email = sideView.findViewById(R.id.user_email);
         TextView name = sideView.findViewById(R.id.user_name);
+        ImageView warning = sideView.findViewById(R.id.phone_number_warning);
+        TextView phoneNumber = sideView.findViewById(R.id.user_phone_number);
+
 
         email.setText(currentUser.getEmail());
         name.setText(currentUser.getUsername());
+        if (currentUser.getPhoneNumber() != null && ! currentUser.getPhoneNumber().isEmpty()) {
+            warning.setVisibility(View.GONE);
+            phoneNumber.setText(currentUser.getPhoneNumber());
+        }
+        else {
+            warning.setVisibility(View.VISIBLE);
+            phoneNumber.setText(getString(R.string.information_no_phone_number));
+        }
     }
 
     @Override
@@ -384,10 +398,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (item.getItemId()) {
             case R.id.navigation_setting:
-                /*
                 Intent intent = new Intent(this, SettingActivity.class);
                 startActivity(intent);
-                 */
                 break;
 
             case R.id.navigation_logout:
@@ -419,6 +431,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 sharedPreferences
                         .edit()
                         .putString(getString(R.string.shared_preference_username), currentUserResults.getUsername())
+                        .putString(getString(R.string.shared_preference_phone_number), currentUserResults.getPhoneNumber())
                         .apply();
 
                 initSideView(currentUserResults);

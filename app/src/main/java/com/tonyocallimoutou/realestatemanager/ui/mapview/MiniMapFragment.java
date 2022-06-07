@@ -70,14 +70,12 @@ public class MiniMapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         MapsInitializer.initialize(getContext());
-        Log.d("TAG", "onMapReady: ");
 
         addMarker(googleMap);
     }
 
     private void addMarker(GoogleMap googleMap) {
         LatLng latLng = new LatLng(lat,lng);
-        Log.d("TAG", "addMarker: " + lat + lng);
 
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(latLng);

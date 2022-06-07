@@ -14,8 +14,9 @@ public class User {
     private String username;
     private String urlPicture;
     private String email;
+    @Nullable
+    private String phoneNumber;
     private List<String> myRealEstateId = new ArrayList<>();
-
 
     public User() {}
 
@@ -59,6 +60,15 @@ public class User {
         this.email = email;
     }
 
+    @Nullable
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(@Nullable String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public List<String> getMyRealEstateId() {
         return myRealEstateId;
     }
@@ -70,5 +80,7 @@ public class User {
     public void addRealEstateToMyList(RealEstate realEstate) {
         myRealEstateId.add(realEstate.getId());
     }
+
+
 
 }

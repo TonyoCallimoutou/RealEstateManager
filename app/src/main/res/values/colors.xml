@@ -6,8 +6,8 @@
     <color name="colorSecondary">#f06292</color>
     <color name="colorSecondaryLight">#ff94c2</color>
     <color name="colorSecondaryDark">#ba2d65</color>
-    <color name="background"> #F0F0F2 </color>
 
     <color name="white"> #ffff </color>
     <color name="black"> #FF000000 </color>
+    <color name="warning"> #B00020</color>
 </resources>

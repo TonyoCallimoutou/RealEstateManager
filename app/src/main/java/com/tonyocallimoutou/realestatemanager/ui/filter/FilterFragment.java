@@ -468,7 +468,6 @@ public class FilterFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i== 0) {
-                    Log.d("TAG", "onItemSelected: ");
                     filters.remove(filterPicture);
                 }
                 else {

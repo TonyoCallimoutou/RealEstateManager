@@ -51,6 +51,10 @@ public class ViewModelUser extends ViewModel {
         userRepository.setNameOfCurrentUser(name);
     }
 
+    public void setPhoneNumberOfCurrentUser(String phoneNumber) {
+        userRepository.setPhoneNumberOfCurrentUser(phoneNumber);
+    }
+
     public void setCurrentUserLiveData() {
         userRepository.setCurrentUserLivedata(currentUserLiveData);
     }

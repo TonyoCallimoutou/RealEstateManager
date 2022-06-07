@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/linear_layout_choice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:id="@+id/alert_dialog_phone_choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/alert_dialog_margin_between_choice"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/alert_dialog_icon_choice"
+                android:layout_height="@dimen/alert_dialog_icon_choice"
+                android:src="@drawable/ic_phone_24dp" />
+
+            <TextView
+                android:id="@+id/alert_dialog_phone_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/alert_dialog_email_choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/alert_dialog_icon_choice"
+                android:layout_height="@dimen/alert_dialog_icon_choice"
+                android:src="@drawable/ic_email_24dp" />
+
+            <TextView
+                android:id="@+id/alert_dialog_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -8,6 +8,7 @@
 
     <!--Main Activity -->
     <string name="app_name">RealEstateManager</string>
+    <string name="information_no_phone_number">Go to settings to manage your phone number</string>
     <string name="side_view_setting">SETTINGS</string>
     <string name="side_view_LOGOUT">LOGOUT</string>
 
@@ -25,8 +26,12 @@
     <string name="actionbar_edit"> Edit </string>
     <string name="actionbar_search"> Search </string>
     <string name="actionbar_sold"> Sold </string>
+
     <!-- Preferences -->
     <string name="shared_preference_username"> USERNAME </string>
+    <string name="shared_preference_phone_number"> PHONE_NUMBER </string>
+    <string name="shared_preference_language"> LANGUAGE </string>
+    <string name="shared_preference_money"> MONEY </string>
 
 
     <!-- Alert dialog profile picture -->
@@ -49,6 +54,7 @@
     <string name="detail_location"> Location </string>
     <string name="detail_manager_category"> Manager </string>
     <string name="detail_no_information"> No Information</string>
+    <string name="explain_call"> Sorry, we need your permission to call</string>
 
     <!-- Add new Real Estate -->
     <string-array name="SpinnerTypeOfResidence">
@@ -97,30 +103,58 @@
 
 
     <array name="Spinner_room">
-        <item> Room : 1 or more </item>
-        <item> Room : 2 or more </item>
-        <item> Room : 3 or more </item>
+        <item>Room : 1 or more</item>
+        <item>Room : 2 or more</item>
+        <item>Room : 3 or more</item>
     </array>
 
     <array name="Spinner_creation_date">
-        <item> All publication date </item>
-        <item> Last months </item>
-        <item> Last 2 months </item>
-        <item> Last 3 months </item>
+        <item>All publication date</item>
+        <item>Last months</item>
+        <item>Last 2 months</item>
+        <item>Last 3 months</item>
     </array>
 
     <array name="Spinner_sold_date">
-        <item> All sold date </item>
-        <item> Last months </item>
-        <item> Last 2 months </item>
-        <item> Last 3 months </item>
+        <item>All sold date</item>
+        <item>Last months</item>
+        <item>Last 2 months</item>
+        <item>Last 3 months</item>
     </array>
 
     <array name="Spinner_picture">
-        <item> Picture : 1 or more </item>
-        <item> Picture : 2 or more </item>
-        <item> Picture : 3 or more </item>
+        <item>Picture : 1 or more</item>
+        <item>Picture : 2 or more</item>
+        <item>Picture : 3 or more</item>
     </array>
+    <!-- Setting -->
+    <string name="preferences_general"> General </string>
+    <string name="preferences_languages"> Languages </string>
+    <string name="preferences_money"> Money </string>
+    <string name="preferences_personal"> Personal information </string>
+    <string name="preferences_name"> Name </string>
+    <string name="preferences_your_actual_name"> Your actual name is </string>
+    <string name="preference_name_title_alert"> Your Name</string>
+    <string name="preference_name_message_alert"> Enter Your Complete Name</string>
+    <string name="preferences_phone_number"> Phone number </string>
+    <string name="preferences_your_actual_phone_number"> Your actual phone number is </string>
+    <string name="preference_phone_title_alert"> Your Phone Number</string>
+    <string name="preference_phone_message_alert"> Enter Your Phone Number</string>
+    <string name="preferences_account"> Account </string>
+    <string name="preferences_remove_account"> Remove account </string>
+
+    <string name="setting_account_title_alert"> Remove Account </string>
+    <string name="setting_account_message_alert"> Are you sure you want to delete your account ? </string>
+    <string name="setting_account_button_alert"> remove </string>
+
+    <string-array name="language">
+        <item>English</item>
+        <item>French</item>
+    </string-array>
+    <string-array name="money">
+        <item>Dollar USD</item>
+        <item>Euro EUR</item>
+    </string-array>
 
 
 </resources>

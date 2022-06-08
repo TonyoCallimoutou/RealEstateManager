@@ -54,7 +54,7 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRe
 
         holder.realEstateType.setText(realEstate.getType());
         holder.realEstateLocation.setText(realEstate.getPlace().getAddress());
-        holder.realEstatePrice.setText(realEstate.getStringPriceUSD());
+        holder.realEstatePrice.setText(realEstate.getStringPriceUSD(mContext));
 
         if (realEstate.isSold()) {
             holder.soldBanner.setVisibility(View.VISIBLE);

@@ -16,10 +16,12 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelUser;
@@ -77,6 +79,12 @@ public class SettingFragment extends PreferenceFragmentCompat {
         phonePreference = findPreference(getString(R.string.preferences_phone_number));
         phonePreference.setSummary(getString(R.string.preferences_your_actual_phone_number)+ " " + phone);
         phonePreference.setText(phone);
+        phonePreference.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
+            @Override
+            public void onBindEditText(@NonNull EditText editText) {
+                editText.setInputType(InputType.TYPE_CLASS_PHONE);
+            }
+        });
 
         languagePreference = findPreference(getString(R.string.preferences_languages));
         languagePreference.setSummary(defaultLanguage);

@@ -191,28 +191,6 @@ public class UserRepository {
         return currentUser;
     }
 
-    public void getAllUser(MutableLiveData<List<User>> liveData) {
-
-        getUsersCollection().addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-
-                if (error != null) {
-                    Log.w("TAG", "Listen failed.", error);
-                    return;
-                }
-
-                List<User> workmatesList = new ArrayList<>();
-                for (DocumentSnapshot document : value) {
-                    User user = document.toObject(User.class);
-                    workmatesList.add(user);
-                }
-
-                liveData.setValue(workmatesList);
-            }
-        });
-    }
-
 
     // Real Estate
 

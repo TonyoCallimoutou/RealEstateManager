@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Firestore -->
+    <string name="COLLECTION_NAME_USER"> users </string>
+    <string name="COLLECTION_NAME_REAL_ESTATE"> real_estates </string>
+    <string name="COLLECTION_NAME_SOLD_REAL_ESTATE"> sold_real_estates </string>
+    <string name="COLLECTION_NAME_USER_SOLD_REAL_ESTATE"> user_sold </string>
+
+    <!-- Preferences -->
+    <string name="shared_preference_username"> USERNAME </string>
+    <string name="shared_preference_phone_number"> PHONE_NUMBER </string>
+    <string name="shared_preference_language"> LANGUAGE </string>
+    <string name="shared_preference_money"> MONEY </string>
+
+    <!--Main Activity -->
+    <string name="app_name">RealEstateManager</string>
+    <string name="information_no_phone_number">Accédez aux paramètres pour gérer votre numéro de téléphone</string>
+    <string name="side_view_setting">PARAMETRES</string>
+    <string name="side_view_LOGOUT">DECONNEXION</string>
+
+    <string name="title_alertDialog_google_play_service"> ERREUR !!</string>
+    <string name="message_alertDialog_google_play_service_download"> Veuillez télécharger le service Google Play</string>
+    <string name="message_alertDialog_google_play_service_update"> Veuillez mettre à jour votre service Google Play</string>
+    <string name="positive_button_alertDialog_permission"> OK</string>
+
+    <!-- Action bar -->
+    <string name="actionbar_add"> Ajouter </string>
+    <string name="actionbar_edit"> modifier </string>
+    <string name="actionbar_filter"> Filtrer </string>
+    <string name="actionbar_sold"> Vendre </string>
+
+    <!-- Alert dialog profile picture -->
+    <string name="alert_dialog_choice_files"> Dossier</string>
+    <string name="alert_dialog_choice_camera"> Caméra</string>
+    <string name="alert_dialog_button_save"> Sauvegarder </string>
+
+    <!-- List View -->
+    <string name="list_view_no_real_estate">Aucun bien immobilier</string>
+
+    <!--Detail Fragment -->
+    <string name="detail_media_category"> Media </string>
+    <string name="detail_description_category"> Description </string>
+    <string name="detail_type_category"> Type </string>
+    <string name="detail_price"> Prix </string>
+    <string name="detail_surface"> Surface </string>
+    <string name="detail_rooms"> Nombre de pièces </string>
+    <string name="detail_bathrooms"> Nombre de salle de bains </string>
+    <string name="detail_bedrooms"> nombre de chambre </string>
+    <string name="detail_location"> Localisation </string>
+    <string name="detail_manager_category"> Responsable </string>
+    <string name="detail_no_information"> Aucune informations</string>
+    <string name="explain_call"> Désolé, nous avons besoin de votre permission pour appeler</string>
+
+    <!-- Add new Real Estate -->
+    <string-array name="SpinnerTypeOfResidence">
+        <item>Maison</item>
+        <item>Appartement</item>
+        <item>Duplex</item>
+        <item>Penthouse</item>
+    </string-array>
+    <string name="detail_set_location_button"> Ajouter une localisation</string>
+    <string name="button_save"> Sauvegarder </string>
+    <string name="button_add_picture"> Ajouter photos </string>
+    <string name="checkbox_main_picture"> Photo principal</string>
+    <string name="detail_date_creation"> Date de publication : </string>
+    <string name="detail_date_sold"> date de vente :</string>
+
+    <string name="new_title_alert_dialog"> Attention !!</string>
+    <string name="new_message_alert_dialog"> Voulez-vous vraiment abandonner la création immobilière ?</string>
+    <string name="new_button_alert_dialog"> OUI </string>
+    <string name="new_toast_unable_to_save"> Impossible de sauvegarder </string>
+    <string name="new_error_enter_data"> Entrer des données</string>
+    <string name="new_error_price_format"> Format Incorrect </string>
+
+    <string name="title_message_sold_real_estate"> Attention </string>
+    <string name="message_sold_real_estate"> Êtes-vous sûr de vouloir marquer cette propriété comme \"vendue\" ?</string>
+    <string name="message_cancel_sold_real_estate"> Êtes-vous sûr de vouloir annuler la vente de ce bien ?</string>
+    <string name="button_message_sold_real_estate"> Oui </string>
+
+    <!-- MapView -->
+    <string name="title_message_map_view"> Nous sommes désolés </string>
+    <string name="message_map_view"> Nous avons besoin d\'accéder à votre emplacement pour vous montrer la carte.\nVoulez-vous nous accorder cette autorisation</string>
+    <string name="button_message_map_view"> OK</string>
+
+    <string name="title_alertDialog_error_location"> Nous sommes désolés</string>
+    <string name="message_alertDialog_error_location"> Nous n\'avons pas pu vous localiser</string>
+
+    <!-- Filter -->
+    <string name="filter_more_filter">Plus de filtre</string>
+    <string name="filter_less_filter">Moins de filtre</string>
+    <string name="filter_is_mine">Mes biens immobiliers </string>
+    <string name="filter_is_sold">Les bien immobiliers vendu </string>
+    <string name="filter_price_price">Prix : </string>
+    <string name="filter_price_min">Min : </string>
+    <string name="filter_price_max">Max : </string>
+    <string name="filter_location_city">Ville : </string>
+    <string name="filter_hint_location"> Ville </string>
+
+
+    <array name="Spinner_room">
+        <item>Pièces : 1 ou plus</item>
+        <item>Pièces : 2 ou plus</item>
+        <item>Pièces : 3 ou plus</item>
+    </array>
+
+    <array name="Spinner_creation_date">
+        <item>Toutes les dates de publication</item>
+        <item>Moins de 1 mois</item>
+        <item>Moins de 2 mois</item>
+        <item>Moins de 3mois</item>
+    </array>
+
+    <array name="Spinner_sold_date">
+        <item>Toutes les dates de ventes</item>
+        <item>Moins de 1 mois</item>
+        <item>Moins de 2 mois</item>
+        <item>Moins de 3mois</item>
+    </array>
+
+    <array name="Spinner_picture">
+        <item>Photos : 1 ou plus</item>
+        <item>Photos : 2 ou plus</item>
+        <item>Photos : 3 ou plus</item>
+    </array>
+    <!-- Setting -->
+    <string name="preferences_general"> Général </string>
+    <string name="preferences_languages"> Langues </string>
+    <string name="preferences_money"> Monnaie </string>
+    <string name="preferences_personal"> Information Personnel</string>
+    <string name="preferences_name"> Nom </string>
+    <string name="preferences_your_actual_name"> Ton nom actuel est </string>
+    <string name="preference_name_title_alert"> Ton nom</string>
+    <string name="preference_name_message_alert"> Entre ton nom</string>
+    <string name="preferences_phone_number"> Numéro de téléphone </string>
+    <string name="preferences_your_actual_phone_number"> Ton numéro de téléphone actuel est </string>
+    <string name="preference_phone_title_alert"> Ton numéro de téléphone</string>
+    <string name="preference_phone_message_alert"> Entre ton numéro de téléphone</string>
+    <string name="preferences_account"> Compte </string>
+    <string name="preferences_remove_account"> Supprimer le compte </string>
+
+    <string name="setting_account_title_alert"> Supprimer le compte  </string>
+    <string name="setting_account_message_alert"> Êtes-vous sûr de vouloir supprimer votre compte? </string>
+    <string name="setting_account_button_alert"> Supprimer </string>
+
+    <string-array name="language">
+        <item>Englais</item>
+        <item>Français</item>
+    </string-array>
+    <string-array name="language_key">
+        <item>en</item>
+        <item>fr</item>
+    </string-array>
+    <string-array name="money">
+        <item>Dollar USD</item>
+        <item>Euro EUR</item>
+    </string-array>
+    <string name="money_key_dollar"> USD</string>
+    <string name="money_key_euro"> EUR</string>
+</resources>

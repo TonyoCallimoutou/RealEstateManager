@@ -24,7 +24,8 @@
         android:theme="@style/Theme.RealEstateManager">
         <activity
             android:name=".ui.setting.SettingActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/PreferenceCategory" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

@@ -37,10 +37,10 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(ViewModelUser.class)) {
-            return (T) new ViewModelUser(userRepository);
+            return (T) ViewModelUser.getInstance(userRepository);
         }
         if (modelClass.isAssignableFrom(ViewModelRealEstate.class)) {
-            return (T) new ViewModelRealEstate(realEstateRepository,userRepository);
+            return (T) ViewModelRealEstate.getInstance(realEstateRepository,userRepository);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }

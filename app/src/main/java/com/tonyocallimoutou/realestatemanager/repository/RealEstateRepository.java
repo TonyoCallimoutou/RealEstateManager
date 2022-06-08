@@ -130,14 +130,11 @@ public class RealEstateRepository {
 
                 List<RealEstate> realEstates = new ArrayList<>();
                 for (DocumentSnapshot document : value) {
-                    try {
-                        RealEstate realEstate = document.toObject(RealEstate.class);
-                        realEstates.add(realEstate);
-                    }
-                    catch (Exception e) {
-                        Log.d("TAG", "onEvent: " + e);
-                    }
+                    RealEstate realEstate = document.toObject(RealEstate.class);
+                    realEstates.add(realEstate);
                 }
+
+                Log.d("TAG", "onEvent: " + realEstates);
 
                 liveData.setValue(realEstates);
             }

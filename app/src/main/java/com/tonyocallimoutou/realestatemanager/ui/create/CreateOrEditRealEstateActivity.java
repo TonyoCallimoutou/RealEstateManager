@@ -37,6 +37,7 @@ import com.tonyocallimoutou.realestatemanager.model.Photo;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.model.RealEstateLocation;
 import com.tonyocallimoutou.realestatemanager.model.User;
+import com.tonyocallimoutou.realestatemanager.ui.BaseActivity;
 import com.tonyocallimoutou.realestatemanager.ui.MainActivity;
 import com.tonyocallimoutou.realestatemanager.ui.detail.DetailFragment;
 import com.tonyocallimoutou.realestatemanager.ui.mapview.MiniMapFragment;
@@ -55,12 +56,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CreateOrEditRealEstateActivity extends AppCompatActivity implements ListPictureRecyclerViewAdapter.ListPictureClickListener {
+public class CreateOrEditRealEstateActivity extends BaseActivity implements ListPictureRecyclerViewAdapter.ListPictureClickListener {
 
     @BindView(R.id.recycler_view_add_picture_real_estate)
     RecyclerView recyclerView;
     @BindView(R.id.input_spinner_type)
     Spinner realEstateType;
+    @BindView(R.id.create_text_view_price)
+    TextView textViewPrice;
     @BindView(R.id.input_price)
     EditText realEstatePrice;
     @BindView(R.id.input_description)
@@ -81,6 +84,8 @@ public class CreateOrEditRealEstateActivity extends AppCompatActivity implements
     ImageView soldBanner;
 
     private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
+
+    private String moneyKey;
 
     private ViewModelRealEstate viewModelRealEstate;
     private ViewModelUser viewModelUser;
@@ -104,6 +109,7 @@ public class CreateOrEditRealEstateActivity extends AppCompatActivity implements
         viewModelRealEstate = new ViewModelProvider(this, ViewModelFactory.getInstance(this)).get(ViewModelRealEstate.class);
         viewModelUser = new ViewModelProvider(this, ViewModelFactory.getInstance(this)).get(ViewModelUser.class);
 
+        initPrice();
 
         soldBanner.setVisibility(View.GONE);
 
@@ -143,6 +149,16 @@ public class CreateOrEditRealEstateActivity extends AppCompatActivity implements
             realEstate = (RealEstate) extras.getSerializable(BUNDLE_REAL_ESTATE);
             initInformation();
         }
+    }
+
+    // Init Price
+
+    private void initPrice() {
+        moneyKey = Utils.getKeyMoney(this);
+
+        String str = getString(R.string.detail_price) + " " + moneyKey;
+
+        textViewPrice.setText(str);
     }
 
     // Picture Manager
@@ -324,8 +340,10 @@ public class CreateOrEditRealEstateActivity extends AppCompatActivity implements
             int bedroom = Integer.parseInt(realEstateBedroom.getText().toString());
             int bathroom = Integer.parseInt(realEstateBathroom.getText().toString());
 
+            int priceUsd = Utils.getPriceInUSD(this,price, moneyKey);
 
-            RealEstate realEstateToCreate = new RealEstate(price, currentUser, type, photos, mainPicturePosition, description, surface, room, bathroom, bedroom, place);
+
+            RealEstate realEstateToCreate = new RealEstate(priceUsd, currentUser, type, photos, mainPicturePosition, description, surface, room, bathroom, bedroom, place);
             if (realEstate == null) {
                 viewModelRealEstate.createRealEstate(realEstateToCreate);
             }

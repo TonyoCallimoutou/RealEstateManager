@@ -6,6 +6,12 @@
     <string name="COLLECTION_NAME_SOLD_REAL_ESTATE"> sold_real_estates </string>
     <string name="COLLECTION_NAME_USER_SOLD_REAL_ESTATE"> user_sold </string>
 
+    <!-- Preferences -->
+    <string name="shared_preference_username"> USERNAME </string>
+    <string name="shared_preference_phone_number"> PHONE_NUMBER </string>
+    <string name="shared_preference_language"> LANGUAGE </string>
+    <string name="shared_preference_money"> MONEY </string>
+
     <!--Main Activity -->
     <string name="app_name">RealEstateManager</string>
     <string name="information_no_phone_number">Go to settings to manage your phone number</string>
@@ -17,22 +23,11 @@
     <string name="message_alertDialog_google_play_service_update"> Please update your google play service</string>
     <string name="positive_button_alertDialog_permission"> OK</string>
 
-    <!-- Money -->
-    <string name="USD"> USD</string>
-    <string name="EURO"> EUR</string>
-
     <!-- Action bar -->
     <string name="actionbar_add"> Add </string>
     <string name="actionbar_edit"> Edit </string>
-    <string name="actionbar_search"> Search </string>
+    <string name="actionbar_filter"> Filter </string>
     <string name="actionbar_sold"> Sold </string>
-
-    <!-- Preferences -->
-    <string name="shared_preference_username"> USERNAME </string>
-    <string name="shared_preference_phone_number"> PHONE_NUMBER </string>
-    <string name="shared_preference_language"> LANGUAGE </string>
-    <string name="shared_preference_money"> MONEY </string>
-
 
     <!-- Alert dialog profile picture -->
     <string name="alert_dialog_choice_files"> Files</string>
@@ -151,10 +146,14 @@
         <item>English</item>
         <item>French</item>
     </string-array>
+    <string-array name="language_key">
+        <item>en</item>
+        <item>fr</item>
+    </string-array>
     <string-array name="money">
         <item>Dollar USD</item>
         <item>Euro EUR</item>
     </string-array>
-
-
+    <string name="money_key_dollar"> USD</string>
+    <string name="money_key_euro"> EUR</string>
 </resources>

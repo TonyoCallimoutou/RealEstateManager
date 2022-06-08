@@ -1,5 +1,7 @@
 package com.tonyocallimoutou.realestatemanager.model;
 
+import android.content.Context;
+
 import androidx.annotation.Nullable;
 
 import com.google.android.libraries.places.api.model.Place;
@@ -15,7 +17,7 @@ public class RealEstate implements Serializable {
 
     private String id;
     private String creationDate;
-    private String userId;
+    private User user;
     private int priceUSD;
     private String type;
     private List<Photo> photos;
@@ -46,7 +48,7 @@ public class RealEstate implements Serializable {
         this.id = user.getUid()+"_"+ user.getMyRealEstateId().size();
         this.creationDate = Utils.getTodayDate();
         this.priceUSD = priceUSD;
-        this.userId = user.getUid();
+        this.user = user;
         this.type = type;
         this.photos = photos;
         this.mainPicturePosition = mainPicturePosition;
@@ -75,20 +77,20 @@ public class RealEstate implements Serializable {
         this.creationDate = creationDate;
     }
 
-    public String getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public int getPriceUSD() {
         return priceUSD;
     }
 
-    public String getStringPriceUSD() {
-        return Utils.getStringOfPriceWithActualMoney(priceUSD);
+    public String getStringPriceUSD(Context context) {
+        return Utils.getStringOfPriceWithActualMoney(context,priceUSD);
     }
 
     public void setPriceUSD(int priceUSD) {

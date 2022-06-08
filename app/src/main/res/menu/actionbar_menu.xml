@@ -30,6 +30,6 @@
         app:showAsAction="always"
         android:icon="@drawable/ic_filter_24dp"
         app:iconTint="@color/white"
-        android:title="@string/actionbar_search" />
+        android:title="@string/actionbar_filter" />
 
 </menu>

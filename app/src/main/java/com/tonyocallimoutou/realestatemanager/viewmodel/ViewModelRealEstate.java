@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
+import com.tonyocallimoutou.realestatemanager.model.User;
 import com.tonyocallimoutou.realestatemanager.repository.RealEstateRepository;
 import com.tonyocallimoutou.realestatemanager.repository.UserRepository;
 import com.tonyocallimoutou.realestatemanager.util.Filter;
@@ -24,10 +25,15 @@ public class ViewModelRealEstate extends ViewModel {
     private List<Filter> filters = new ArrayList<>();
     private List<RealEstate> actualList = new ArrayList<>();
 
-    public ViewModelRealEstate(RealEstateRepository realEstateRepository, UserRepository userRepository) {
+    private ViewModelRealEstate(RealEstateRepository realEstateRepository, UserRepository userRepository) {
         this.realEstateRepository = realEstateRepository;
         this.userRepository = userRepository;
     }
+
+    public static ViewModelRealEstate getInstance(RealEstateRepository realEstateRepository, UserRepository userRepository) {
+        return new ViewModelRealEstate(realEstateRepository,userRepository);
+    }
+
 
     public void createRealEstate(RealEstate realEstate) {
         realEstateRepository.createRealEstate(realEstate);
@@ -39,7 +45,7 @@ public class ViewModelRealEstate extends ViewModel {
     }
 
     public void editRealEstate(RealEstate actual, RealEstate modify) {
-        if (userRepository.getCurrentUser().getUid().equals(actual.getUserId())) {
+        if (userRepository.getCurrentUser().getUid().equals(actual.getUser().getUid())) {
             realEstateRepository.editRealEstate(actual, modify);
         }
     }
@@ -49,7 +55,7 @@ public class ViewModelRealEstate extends ViewModel {
     }
 
     public RealEstate soldRealEstate(RealEstate realEstate) {
-        if (userRepository.getCurrentUser().getUid().equals(realEstate.getUserId())) {
+        if (userRepository.getCurrentUser().getUid().equals(realEstate.getUser().getUid())) {
             return realEstateRepository.soldRealEstate(realEstate);
         }
         return null;
@@ -62,15 +68,14 @@ public class ViewModelRealEstate extends ViewModel {
         if (list != null) {
             actualList = list;
         }
-        if (actualList.size() != 0) {
-            List<RealEstate> newList = new ArrayList<>(actualList);
 
-            for (int i = 0; i < filters.size(); i++) {
-                newList = filters.get(i).modifyList(newList);
-            }
+        List<RealEstate> newList = new ArrayList<>(actualList);
 
-            listRealEstateFilterLiveData.setValue(newList);
+        for (int i = 0; i < filters.size(); i++) {
+            newList = filters.get(i).modifyList(newList);
         }
+
+        listRealEstateFilterLiveData.setValue(newList);
     }
 
     public LiveData<List<RealEstate>> getFilterListLiveData() {

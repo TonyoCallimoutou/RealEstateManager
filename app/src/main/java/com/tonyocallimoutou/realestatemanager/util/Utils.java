@@ -2,6 +2,7 @@ package com.tonyocallimoutou.realestatemanager.util;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.location.Location;
 import android.net.ConnectivityManager;
@@ -10,6 +11,8 @@ import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 import android.widget.Spinner;
+
+import androidx.preference.PreferenceManager;
 
 import com.google.android.libraries.places.api.model.Place;
 import com.tonyocallimoutou.realestatemanager.R;
@@ -20,6 +23,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
@@ -69,12 +73,46 @@ public class Utils {
                 + '/' + context.getResources().getResourceEntryName(drawableId) );
     }
 
+    public static String getKeyMoney(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String defaultLanguage = sharedPreferences.getString(context.getString(R.string.shared_preference_language),context.getResources().getConfiguration().locale.getDisplayLanguage());
+
+        String[] lang = context.getResources().getStringArray(R.array.language);
+        String[] moneyStr = context.getResources().getStringArray(R.array.money);
+
+        String defaultMoney;
+        if (Arrays.asList(lang).contains(defaultLanguage)) {
+            defaultMoney = moneyStr[Arrays.asList(lang).indexOf(defaultLanguage)];
+        }
+        else {
+            defaultMoney = moneyStr[0];
+        }
+        String money = sharedPreferences.getString(context.getString(R.string.shared_preference_money), defaultMoney);
+
+        String[] moneyKey = money.split(" ");
+
+        return moneyKey[moneyKey.length-1];
+    }
+
+    public static int getPriceInUSD(Context context, int price, String moneyKey) {
+        if (moneyKey.equals(context.getString(R.string.money_key_euro))) {
+            return convertEuroToDollar(price);
+        }
+        return price;
+    }
+
     public static String getStringOfPrice(int price) {
         return NumberFormat.getNumberInstance(Locale.US).format(price);
     }
 
-    public static String getStringOfPriceWithActualMoney(int price) {
-        return getStringOfPrice(price)+" " + MainActivity.context.getString(R.string.USD);
+    public static String getStringOfPriceWithActualMoney(Context context, int price) {
+        String moneyKey = getKeyMoney(context);
+
+        if (moneyKey.equals(context.getString(R.string.money_key_euro))) {
+            price = convertDollarToEuro(price);
+        }
+
+        return getStringOfPrice(price)+" " + moneyKey;
     }
 
     public static int getIntOfStringPrice(String price) {
@@ -143,5 +181,17 @@ public class Utils {
 
         return (placeLocation.distanceTo(realEstateLocation) / 1000);
 
+    }
+
+    public static String getKeyFromLanguage(Context context, String ref) {
+        String[] language = context.getResources().getStringArray(R.array.language);
+        String[] keyLanguage = context.getResources().getStringArray(R.array.language_key);
+
+        if (Arrays.asList(language).contains(ref)) {
+            return keyLanguage[Arrays.asList(language).indexOf(ref)];
+        }
+        else {
+            return keyLanguage[0];
+        }
     }
 }

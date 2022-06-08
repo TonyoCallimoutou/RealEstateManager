@@ -23,8 +23,12 @@ public class ViewModelUser extends ViewModel {
 
     private final MutableLiveData<List<User>> listUserLiveData = new MutableLiveData<>();
 
-    public ViewModelUser(UserRepository userRepository) {
+    private ViewModelUser(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    public static ViewModelUser getInstance(UserRepository userRepository) {
+        return new ViewModelUser(userRepository);
     }
 
     public boolean isCurrentLogged() {
@@ -65,14 +69,6 @@ public class ViewModelUser extends ViewModel {
 
     public User getCurrentUser() {
         return userRepository.getCurrentUser();
-    }
-
-    public void setListUser() {
-        userRepository.getAllUser(listUserLiveData);
-    }
-
-    public LiveData<List<User>> getAllUser() {
-        return listUserLiveData;
     }
 
 }

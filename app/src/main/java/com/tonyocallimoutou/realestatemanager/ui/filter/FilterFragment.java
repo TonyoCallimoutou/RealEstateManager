@@ -116,6 +116,8 @@ public class FilterFragment extends Fragment {
 
     private static User currentUser;
 
+    private String moneyKey;
+
     public FilterFragment() {
     }
 
@@ -137,6 +139,8 @@ public class FilterFragment extends Fragment {
         ButterKnife.bind(this,view);
 
         viewModelRealEstate = new ViewModelProvider(requireActivity()).get(ViewModelRealEstate.class);
+
+        moneyKey = Utils.getKeyMoney(getContext());
 
         mainLayout = view.findViewById(R.id.filter_main_layout);
 
@@ -300,6 +304,10 @@ public class FilterFragment extends Fragment {
     private void initPriceFilter() {
         Filter filterMinPrice = new Filter(Filter.TYPE_MIN_PRICE);
         Filter filterMaxPrice = new Filter(Filter.TYPE_MAX_PRICE);
+
+        filterMinPrice.setMoneyKey(getContext(),moneyKey);
+        filterMaxPrice.setMoneyKey(getContext(),moneyKey);
+
         minPrice.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

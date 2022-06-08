@@ -56,7 +56,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawer;
@@ -421,7 +421,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         viewModelUser.createUser(this);
         viewModelUser.setCurrentUserLiveData();
-        viewModelUser.setListUser();
         viewModelRealEstate.setListRealEstate();
 
         viewModelUser.getCurrentUserLiveData().observe(this, currentUserResults -> {
@@ -438,10 +437,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 DetailFragment.setCurrentUser(currentUserResults);
                 FilterFragment.setCurrentUser(currentUserResults);
             }
-        });
-
-        viewModelUser.getAllUser().observe(this, list -> {
-            DetailFragment.setListUser(list);
         });
 
         viewModelRealEstate.getAllRealEstateLiveData().observe(this, listRealEstate -> {

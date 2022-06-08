@@ -70,8 +70,8 @@ public class ViewModelTest {
         initAnswerUser();
         initAnswerRealEstate();
 
-        viewModelUser = new ViewModelUser(userRepository);
-        viewModelRealEstate = new ViewModelRealEstate(realEstateRepository,userRepository);
+        viewModelUser = ViewModelUser.getInstance(userRepository);
+        viewModelRealEstate = ViewModelRealEstate.getInstance(realEstateRepository,userRepository);
     }
 
     private void initAnswerUser() {
@@ -130,16 +130,6 @@ public class ViewModelTest {
                 return null;
             }
         }).when(userRepository).createRealEstate(any(RealEstate.class));
-
-        doAnswer(new Answer() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                Object[] args = invocation.getArguments();
-                MutableLiveData<List<User>> liveData = (MutableLiveData<List<User>>) args[0];
-                liveData.setValue(fakeWorkmates);
-                return null;
-            }
-        }).when(userRepository).getAllUser(any(MutableLiveData.class));
 
     }
 
@@ -277,16 +267,6 @@ public class ViewModelTest {
         viewModelUser.setCurrentUserPicture(newPicture);
 
         assertEquals(newPicture, viewModelUser.getCurrentUser().getUrlPicture());
-    }
-
-    @Test
-    public void getAllUser() {
-
-        viewModelUser.setListUser();
-
-        List<User> users = viewModelUser.getAllUser().getValue();
-
-        assertEquals(fakeWorkmates, users);
     }
 
     @Test

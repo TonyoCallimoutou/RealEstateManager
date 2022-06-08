@@ -28,14 +28,13 @@
             android:key="@string/preferences_name"
             android:title="@string/preferences_name"
             android:dialogTitle="@string/preference_name_title_alert"
-            android:dialogMessage="Enter Your Complete Name"/>
+            android:dialogMessage="@string/preference_name_message_alert"/>
 
         <androidx.preference.EditTextPreference
             android:key="@string/preferences_phone_number"
             android:title="@string/preferences_phone_number"
             android:dialogTitle="@string/preference_phone_title_alert"
-            android:dialogMessage="@string/preference_phone_message_alert"
-            android:inputType="textPassword"/>
+            android:dialogMessage="@string/preference_phone_message_alert"/>
 
     </androidx.preference.PreferenceCategory>
 

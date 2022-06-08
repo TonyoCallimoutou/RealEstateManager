@@ -97,13 +97,10 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
     private static final String BUNDLE_REAL_ESTATE = "BUNDLE_REAL_ESTATE";
     private static RealEstate mRealEstate;
 
-    private static ViewModelRealEstate viewModelRealEstate;
-
     private ListPictureRecyclerViewAdapter adapter;
     private ActivityResultLauncher<String> permissionResult;
 
     private List<Photo> photos = new ArrayList<>();
-    private static List<User> users = new ArrayList<>();
     private static User currentUser;
     private User userWriter;
 
@@ -147,8 +144,6 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
         view = inflater.inflate(R.layout.fragment_detail, container, false);
         ButterKnife.bind(this,view);
 
-        viewModelRealEstate = new ViewModelProvider(requireActivity()).get(ViewModelRealEstate.class);
-
         relativeLayoutFragment = view.findViewById(R.id.detail_fragment);
 
         activity = getActivity();
@@ -186,7 +181,7 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
             textNumberOfBathroom.setText(mRealEstate.getStringNumberOfBathrooms());
             textNumberOfBedroom.setText(mRealEstate.getStringNumberOfBedrooms());
             textLocation.setText(mRealEstate.getPlace().getName());
-            textPrice.setText(mRealEstate.getStringPriceUSD());
+            textPrice.setText(mRealEstate.getStringPriceUSD(getContext()));
             String strCreationDate = getString(R.string.detail_date_creation) + " " + mRealEstate.getCreationDate();
             creationDate.setText(strCreationDate);
 
@@ -199,20 +194,16 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
                 soldBanner.setVisibility(View.GONE);
             }
 
-            for (User user : users) {
-                if (user.getUid().equals(mRealEstate.getUserId())) {
-                    userWriter = user;
+            userWriter = mRealEstate.getUser();
 
-                    Glide.with(getContext())
-                            .load(user.getUrlPicture())
-                            .apply(RequestOptions.circleCropTransform())
-                            .into(userProfilePicture);
+            Glide.with(getContext())
+                    .load(userWriter.getUrlPicture())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(userProfilePicture);
 
-                    userEmail.setText(user.getEmail());
-                    userName.setText(user.getUsername());
-                    userPhone.setText(user.getPhoneNumber());
-                }
-            }
+            userEmail.setText(userWriter.getEmail());
+            userName.setText(userWriter.getUsername());
+            userPhone.setText(userWriter.getPhoneNumber());
 
             if (! currentUser.getUid().equals(userWriter.getUid())) {
                 informationUserLayout.setOnClickListener(new View.OnClickListener() {
@@ -223,7 +214,7 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
                 });
             }
 
-            if (mRealEstate.getUserId().equals(currentUser.getUid())) {
+            if (mRealEstate.getUser().getUid().equals(currentUser.getUid())) {
                 MainActivity.setVisibilityEditMenuItem(true);
             }
 
@@ -279,10 +270,6 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
         MainActivity.setVisibilityEditMenuItem(false);
         MainActivity.setVisibilityAddAndSearchMenuItem(true);
         activity.getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-    }
-
-    public static void setListUser(List<User> data) {
-        users = data;
     }
 
     public static void setCurrentUser(User user) {

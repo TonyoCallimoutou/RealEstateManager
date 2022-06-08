@@ -1,5 +1,6 @@
 package com.tonyocallimoutou.realestatemanager.util;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -29,6 +30,8 @@ public class Filter {
     private String type;
     private Integer minPrice;
     private Integer maxPrice;
+    private String moneyKey;
+    private Context context;
     private Integer minRoom;
     private String userId;
     private int dateSoldLimit;
@@ -95,6 +98,15 @@ public class Filter {
         this.maxPrice = maxPrice;
     }
 
+    public String getMoneyKey() {
+        return moneyKey;
+    }
+
+    public void setMoneyKey(Context context, String moneyKey) {
+        this.moneyKey = moneyKey;
+        this.context = context;
+    }
+
     public Integer getMinRoom() {
         return minRoom;
     }
@@ -137,17 +149,20 @@ public class Filter {
     }
 
     public List<RealEstate> modifyList(List<RealEstate> original) {
+
         List<RealEstate> newList = new ArrayList<>();
         if (filterType.equals(TYPE_MIN_PRICE)) {
+            int minPriceUSD = Utils.getPriceInUSD(context,minPrice,moneyKey);
             for (RealEstate realEstate : original) {
-                if (realEstate.getPriceUSD() > minPrice) {
+                if (realEstate.getPriceUSD() > minPriceUSD) {
                     newList.add(realEstate);
                 }
             }
         }
         else if (filterType.equals(TYPE_MAX_PRICE)) {
+            int maxPriceUSD = Utils.getPriceInUSD(context,maxPrice,moneyKey);
             for (RealEstate realEstate : original) {
-                if (realEstate.getPriceUSD() < maxPrice) {
+                if (realEstate.getPriceUSD() < maxPriceUSD) {
                     newList.add(realEstate);
                 }
             }
@@ -191,7 +206,7 @@ public class Filter {
         }
         else if (filterType.equals(TYPE_MINE)) {
             for (RealEstate realEstate : original) {
-                if (realEstate.getUserId().equals(userId)) {
+                if (realEstate.getUser().getUid().equals(userId)) {
                     newList.add(realEstate);
                 }
             }
@@ -214,10 +229,10 @@ public class Filter {
             return "Type : " +type;
         }
         else if (filterType.equals(TYPE_MIN_PRICE)) {
-            return "min : "+ Utils.getStringOfPrice(minPrice);
+            return "min : "+ Utils.getStringOfPrice(minPrice) + " " + moneyKey;
         }
         else if (filterType.equals(TYPE_MAX_PRICE)) {
-            return "max : "+ Utils.getStringOfPrice(maxPrice);
+            return "max : "+ Utils.getStringOfPrice(maxPrice)+ " " + moneyKey;
         }
         else if (filterType.equals(TYPE_ROOM)) {
             return "more than " + minRoom + " room";

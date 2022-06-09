@@ -81,4 +81,8 @@ public class ViewModelRealEstate extends ViewModel {
     public LiveData<List<RealEstate>> getFilterListLiveData() {
         return listRealEstateFilterLiveData;
     }
+
+    public void setMyRealEstates(User currentUser) {
+        realEstateRepository.setMyRealEstates(currentUser);
+    }
 }

@@ -103,8 +103,6 @@ public class FilterFragment extends Fragment {
 
     private View clearButtonAutocomplete;
 
-    private static final int AUTOCOMPLETE_REQUEST_CODE = 2;
-
     private static FragmentActivity activity;
     private static FilterFragment fragment;
     public static boolean isOpen;

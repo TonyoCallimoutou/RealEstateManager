@@ -5,10 +5,11 @@ import android.net.Uri;
 
 import androidx.annotation.Nullable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User {
+public class User implements Serializable {
 
     private String uid;
     private String username;

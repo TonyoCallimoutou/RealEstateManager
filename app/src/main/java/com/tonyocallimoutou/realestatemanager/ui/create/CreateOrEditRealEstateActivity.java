@@ -366,7 +366,8 @@ public class CreateOrEditRealEstateActivity extends BaseActivity implements List
         builder.setPositiveButton(getString(R.string.new_button_alert_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
+                Intent intent = new Intent(CreateOrEditRealEstateActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
 

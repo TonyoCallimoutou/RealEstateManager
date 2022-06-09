@@ -433,6 +433,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         .putString(getString(R.string.shared_preference_phone_number), currentUserResults.getPhoneNumber())
                         .apply();
 
+                viewModelRealEstate.setMyRealEstates(currentUserResults);
+
                 initSideView(currentUserResults);
                 DetailFragment.setCurrentUser(currentUserResults);
                 FilterFragment.setCurrentUser(currentUserResults);

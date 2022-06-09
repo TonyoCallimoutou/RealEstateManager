@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -25,6 +26,7 @@ import com.tonyocallimoutou.realestatemanager.FAKE.FakeData;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.Photo;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
+import com.tonyocallimoutou.realestatemanager.model.User;
 import com.tonyocallimoutou.realestatemanager.util.Utils;
 
 import java.util.ArrayList;
@@ -134,8 +136,6 @@ public class RealEstateRepository {
                     realEstates.add(realEstate);
                 }
 
-                Log.d("TAG", "onEvent: " + realEstates);
-
                 liveData.setValue(realEstates);
             }
         });
@@ -153,6 +153,28 @@ public class RealEstateRepository {
         getRealEstateCollection().document(realEstate.getId()).set(realEstate);
 
         return realEstate;
+    }
+
+    public void setMyRealEstates(User user) {
+
+        getRealEstateCollection().get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (!queryDocumentSnapshots.isEmpty()) {
+
+                    List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+
+                    for (DocumentSnapshot document : list) {
+                        RealEstate realEstates = document.toObject(RealEstate.class);
+
+                        if (realEstates.getUser().getUid().equals(user.getUid())) {
+                            realEstates.setUser(user);
+                            getRealEstateCollection().document(realEstates.getId()).set(realEstates);
+                        }
+                    }
+                }
+            }
+        });
     }
 
 }

@@ -183,15 +183,11 @@ public class Utils {
 
     }
 
-    public static String getKeyFromLanguage(Context context, String ref) {
-        String[] language = context.getResources().getStringArray(R.array.language);
-        String[] keyLanguage = context.getResources().getStringArray(R.array.language_key);
+    public static String getKeyFromLanguage(Context context, String language) {
+        String[] listLanguage = context.getResources().getStringArray(R.array.language);
+        String[] key = context.getResources().getStringArray(R.array.language_key);
 
-        if (Arrays.asList(language).contains(ref)) {
-            return keyLanguage[Arrays.asList(language).indexOf(ref)];
-        }
-        else {
-            return keyLanguage[0];
-        }
+        return key[Arrays.asList(listLanguage).indexOf(language)];
+
     }
-}
+ }

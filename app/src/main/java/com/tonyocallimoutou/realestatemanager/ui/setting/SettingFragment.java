@@ -24,9 +24,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.tonyocallimoutou.realestatemanager.R;
+import com.tonyocallimoutou.realestatemanager.util.Utils;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelUser;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 import butterknife.BindView;
 
@@ -56,14 +58,14 @@ public class SettingFragment extends PreferenceFragmentCompat {
 
         String name = sharedPreferences.getString(getString(R.string.shared_preference_username),"");
         String phone = sharedPreferences.getString(getString(R.string.shared_preference_phone_number),"");
-        String defaultLanguage = sharedPreferences.getString(getString(R.string.shared_preference_language),getResources().getConfiguration().locale.getDisplayLanguage());
+        String defaultLanguageKey = sharedPreferences.getString(getString(R.string.shared_preference_language),getResources().getConfiguration().locale.getLanguage());
 
-        String[] lang = getResources().getStringArray(R.array.language);
+        String[] languageKey = getResources().getStringArray(R.array.language_key);
         String[] moneyStr = getResources().getStringArray(R.array.money);
 
         String defaultMoney;
-        if (Arrays.asList(lang).contains(defaultLanguage)) {
-            defaultMoney = moneyStr[Arrays.asList(lang).indexOf(defaultLanguage)];
+        if (Arrays.asList(languageKey).contains(defaultLanguageKey)) {
+            defaultMoney = moneyStr[Arrays.asList(languageKey).indexOf(defaultLanguageKey)];
         }
         else {
             defaultMoney = moneyStr[0];
@@ -85,6 +87,11 @@ public class SettingFragment extends PreferenceFragmentCompat {
                 editText.setInputType(InputType.TYPE_CLASS_PHONE);
             }
         });
+
+
+        Locale locale = new Locale(defaultLanguageKey);
+        String defaultLanguage = locale.getDisplayLanguage(locale);
+        defaultLanguage = defaultLanguage.substring(0,1).toUpperCase() + defaultLanguage.substring(1).toLowerCase();
 
         languagePreference = findPreference(getString(R.string.preferences_languages));
         languagePreference.setSummary(defaultLanguage);
@@ -131,9 +138,12 @@ public class SettingFragment extends PreferenceFragmentCompat {
         languagePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
+
+                String key = Utils.getKeyFromLanguage(getContext(), (String) newValue);
+
                 sharedPreferences
                         .edit()
-                        .putString(getString(R.string.shared_preference_language), (String) newValue)
+                        .putString(getString(R.string.shared_preference_language), key)
                         .apply();
 
                 getActivity().finish();

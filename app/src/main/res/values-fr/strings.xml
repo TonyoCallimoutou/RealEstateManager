@@ -44,7 +44,7 @@
     <string name="detail_price"> Prix </string>
     <string name="detail_surface"> Surface </string>
     <string name="detail_rooms"> Nombre de pièces </string>
-    <string name="detail_bathrooms"> Nombre de salle de bains </string>
+    <string name="detail_bathrooms"> Nombre de salle de bain </string>
     <string name="detail_bedrooms"> nombre de chambre </string>
     <string name="detail_location"> Localisation </string>
     <string name="detail_manager_category"> Responsable </string>

@@ -18,6 +18,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.tonyocallimoutou.realestatemanager.BuildConfig;
 import com.tonyocallimoutou.realestatemanager.R;
+import com.tonyocallimoutou.realestatemanager.model.User;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelUser;
 
 import java.io.File;
@@ -59,7 +60,7 @@ public class UtilsProfilePictureManager {
                 .into(actualPicture);
     }
 
-    public static void createAlertDialog(Activity activity, ViewModelUser viewModelUser) {
+    public static void createAlertDialog(Activity activity, ViewModelUser viewModelUser, User currentUser) {
 
         mActivity = activity;
 
@@ -72,7 +73,7 @@ public class UtilsProfilePictureManager {
         FloatingActionButton removePicture = view.findViewById(R.id.alert_dialog_remove_picture);
         Button saveButton = view.findViewById(R.id.alert_dialog_save_button);
 
-        newProfilePicture = viewModelUser.getCurrentUser().getUrlPicture();
+        newProfilePicture = currentUser.getUrlPicture();
         updatePictureInImageView();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);

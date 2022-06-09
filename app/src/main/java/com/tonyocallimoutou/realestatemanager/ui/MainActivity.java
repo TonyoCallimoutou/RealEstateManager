@@ -361,7 +361,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         profilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UtilsProfilePictureManager.createAlertDialog(MainActivity.this, viewModelUser);
+                UtilsProfilePictureManager.createAlertDialog(MainActivity.this, viewModelUser, currentUser);
             }
         });
     }
@@ -404,7 +404,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
             case R.id.navigation_logout:
                 mDrawer.close();
-                viewModelUser.signOut(this);
+                viewModelUser.signOut();
 
                 startSignInActivity();
 
@@ -420,8 +420,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public void initData() {
 
         viewModelUser.createUser(this);
-        viewModelUser.setCurrentUserLiveData();
-        viewModelRealEstate.setListRealEstate();
 
         viewModelUser.getCurrentUserLiveData().observe(this, currentUserResults -> {
             if (currentUserResults != null) {
@@ -429,6 +427,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
                 sharedPreferences
                         .edit()
+                        .putString(getString(R.string.shared_preference_user_uid),currentUserResults.getUid())
                         .putString(getString(R.string.shared_preference_username), currentUserResults.getUsername())
                         .putString(getString(R.string.shared_preference_phone_number), currentUserResults.getPhoneNumber())
                         .apply();
@@ -439,10 +438,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 DetailFragment.setCurrentUser(currentUserResults);
                 FilterFragment.setCurrentUser(currentUserResults);
             }
-        });
-
-        viewModelRealEstate.getAllRealEstateLiveData().observe(this, listRealEstate -> {
-            viewModelRealEstate.setListWithFilter(null,listRealEstate);
         });
 
         viewModelRealEstate.getFilterListLiveData().observe(this, listFilter -> {

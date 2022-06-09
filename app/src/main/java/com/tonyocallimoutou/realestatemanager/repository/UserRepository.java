@@ -2,12 +2,15 @@ package com.tonyocallimoutou.realestatemanager.repository;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.preference.PreferenceManager;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.Continuation;
@@ -26,177 +29,133 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.tonyocallimoutou.realestatemanager.R;
+import com.tonyocallimoutou.realestatemanager.data.firebase.FirebaseDataUser;
+import com.tonyocallimoutou.realestatemanager.data.room.UserDao;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.model.User;
+import com.tonyocallimoutou.realestatemanager.ui.MainActivity;
 import com.tonyocallimoutou.realestatemanager.util.Utils;
 import com.tonyocallimoutou.realestatemanager.util.UtilsProfilePictureManager;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelUser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 public class UserRepository {
 
-    private final String COLLECTION_NAME;
-
-    private User currentUser;
-
     private static volatile UserRepository instance;
 
+    private final FirebaseDataUser firebaseDataUser;
+    private final UserDao userDao;
+    private final Executor executor;
+    private final Context context;
+    private final SharedPreferences sharedPreferences;
 
-    private UserRepository(Context context) {
-        COLLECTION_NAME = context.getString(R.string.COLLECTION_NAME_USER);
+    private final MutableLiveData<User> currentUserLiveData = new MutableLiveData<>();
+
+    private String currentUserId;
+
+
+    private UserRepository(Context context, UserDao userDao, Executor executor) {
+        firebaseDataUser = FirebaseDataUser.getInstance(context);
+        this.context = context;
+        this.userDao = userDao;
+        this.executor = executor;
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        currentUserId = sharedPreferences.getString(context.getString(R.string.shared_preference_user_uid), "");
+
     }
 
-    public static UserRepository getInstance(Context context ) {
+    public static UserRepository getInstance(Context context, UserDao userDao, Executor executor) {
         synchronized (UserRepository.class) {
             if (instance == null) {
-                instance = new UserRepository(context);
+                instance = new UserRepository(context, userDao, executor);
             }
             return instance;
         }
     }
 
-    // My Firestore Collection
-
-    private CollectionReference getUsersCollection() {
-        return FirebaseFirestore.getInstance().collection(COLLECTION_NAME);
-    }
-
-    // Storage
-
-    private FirebaseStorage getFirebaseStorage() {
-        return FirebaseStorage.getInstance();
-    }
-
-    private FirebaseUser getCurrentFirebaseUser() {
-        return FirebaseAuth.getInstance().getCurrentUser();
-    }
-
     public boolean isCurrentLogged() {
-        return this.getCurrentFirebaseUser() != null;
+        if (Utils.isInternetAvailable(context)) {
+            return firebaseDataUser.isCurrentLogged();
+        }
+        else {
+            return !currentUserId.isEmpty();
+        }
     }
 
     public void createUser(Activity activity, ViewModelUser viewModelUser) {
-        FirebaseUser user = getCurrentFirebaseUser();
-
-        getUsersCollection().get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        boolean isAlreadyExisting = false;
-                        if (!queryDocumentSnapshots.isEmpty()) {
-                            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-                            for (DocumentSnapshot document : list) {
-                                User workmate = document.toObject(User.class);
-                                if (workmate.getUid().equals(user.getUid())) {
-                                    isAlreadyExisting = true;
-                                    currentUser = workmate;
-                                }
-                            }
-                        }
-                        if ( ! isAlreadyExisting) {
-
-                            String picture = Utils.convertDrawableResourcesToUri(activity.getApplicationContext(), R.drawable.ic_no_image_available).toString();
-
-                            String username = user.getDisplayName();
-                            String uid = user.getUid();
-                            String email = user.getEmail();
-
-                            currentUser = new User(uid, username, picture,email);
-                            getUsersCollection().document(currentUser.getUid()).set(currentUser);
-
-                            UtilsProfilePictureManager.createAlertDialog(activity, viewModelUser);
-                        }
-                    }
-                });
+        firebaseDataUser.createUser(activity,viewModelUser, userDao, executor);
     }
 
     public void setCurrentUserPicture(String picture) {
+        firebaseDataUser.setCurrentUserPicture(picture);
 
-        Uri pictureUri = Uri.parse(picture);
+    }
 
-        StorageReference ref = getFirebaseStorage().getReference(currentUser.getUid()).child(pictureUri.getLastPathSegment());
-        UploadTask uploadTask = ref.putFile(pictureUri);
+    public void signOut() {
+        firebaseDataUser.signOut(context);
+        sharedPreferences
+                .edit()
+                .putString(context.getString(R.string.shared_preference_user_uid),"")
+                .apply();
+    }
 
-        uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-            @Override
-            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                if (!task.isSuccessful()) {
-                    throw task.getException();
-                }
 
-                // Continue with the task to get the download URL
-                return ref.getDownloadUrl();
-            }
-        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-            @Override
-            public void onComplete(@NonNull Task<Uri> task) {
-                if (task.isSuccessful()) {
-                    Uri downloadUri = task.getResult();
-                    currentUser.setUrlPicture(downloadUri.toString());
-                    getUsersCollection().document(currentUser.getUid()).set(currentUser);
-                }
-            }
+    public Task<Void> deleteUser() {
+        sharedPreferences
+                .edit()
+                .putString(context.getString(R.string.shared_preference_user_uid),"")
+                .apply();
+
+        executor.execute(() -> {
+            userDao.deleteUser(currentUserId);
         });
 
-    }
-
-    public Task<Void> signOut(Context context) {
-        return AuthUI.getInstance().signOut(context);
-    }
-
-
-    public Task<Void> deleteUser(Context context) {
-        getUsersCollection().document(currentUser.getUid()).delete();
-        currentUser = null;
-        return signOut(context);
+        return firebaseDataUser.deleteUser(context);
     }
 
     public void setNameOfCurrentUser(String name) {
-        currentUser.setUsername(name);
-        getUsersCollection().document(currentUser.getUid()).set(currentUser);
+        if (Utils.isInternetAvailable(context)) {
+            firebaseDataUser.setNameOfCurrentUser(name);
+        }
+        else {
+            !!
+            executor.execute(()-> {
+                userDao.setNameOfCurrentUser(currentUserId,name);
+            });
+        }
     }
 
     public void setPhoneNumberOfCurrentUser(String phoneNumber) {
-        currentUser.setPhoneNumber(phoneNumber);
-        getUsersCollection().document(currentUser.getUid()).set(currentUser);
+        firebaseDataUser.setPhoneNumberOfCurrentUser(phoneNumber);
     }
 
-    public void setCurrentUserLivedata(MutableLiveData<User> liveData) {
-        getUsersCollection().addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+    public LiveData<User> getCurrentUserLiveData() {
 
-                if (error != null) {
-                    Log.w("TAG", "Listen failed.", error);
-                    return;
-                }
+        if (Utils.isInternetAvailable(context)) {
 
-                for (DocumentSnapshot document : value) {
-                    User user = document.   toObject(User.class);
-                    if (getCurrentFirebaseUser()!=null) {
-                        if (user.getUid().equals(getCurrentFirebaseUser().getUid())) {
-                            currentUser = user;
-                            liveData.setValue(user);
-                        }
-                    }
+            firebaseDataUser.setCurrentUserLivedata(currentUserLiveData);
 
-                }
-            }
-        });
+            return currentUserLiveData;
+        }
+
+        else {
+            return userDao.getCurrentUserLiveData(currentUserId);
+        }
+
     }
-
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
 
     // Real Estate
 
     public void createRealEstate(RealEstate realEstate) {
-        currentUser.addRealEstateToMyList(realEstate);
-        getUsersCollection().document(currentUser.getUid()).set(currentUser);
+        firebaseDataUser.createRealEstate(realEstate);
+    }
+
+    public User getCurrentUser() {
+        return firebaseDataUser.getCurrentUser();
     }
 
 }

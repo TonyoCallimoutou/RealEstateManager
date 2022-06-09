@@ -185,7 +185,7 @@ public class SettingFragment extends PreferenceFragmentCompat {
         builder.setPositiveButton(getContext().getResources().getString(R.string.setting_account_button_alert), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                viewModelUser.deleteUser(getContext()).addOnCompleteListener(task -> {
+                viewModelUser.deleteUser().addOnCompleteListener(task -> {
                     getActivity().finish();
                 });
             }

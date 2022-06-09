@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.Continuation;
@@ -24,157 +25,72 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.tonyocallimoutou.realestatemanager.FAKE.FakeData;
 import com.tonyocallimoutou.realestatemanager.R;
+import com.tonyocallimoutou.realestatemanager.data.firebase.FirebaseDataRealEstate;
+import com.tonyocallimoutou.realestatemanager.data.room.RealEstateDao;
 import com.tonyocallimoutou.realestatemanager.model.Photo;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.model.User;
+import com.tonyocallimoutou.realestatemanager.util.Filter;
 import com.tonyocallimoutou.realestatemanager.util.Utils;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 public class RealEstateRepository {
 
-    private final String COLLECTION_NAME;
-
     private static volatile RealEstateRepository instance;
 
+    private final FirebaseDataRealEstate firebaseDataRealEstate;
+    private final RealEstateDao realEstateDao;
+    private final Executor executor;
 
-    private RealEstateRepository(Context context) {
-        COLLECTION_NAME = context.getString(R.string.COLLECTION_NAME_REAL_ESTATE);
+    private List<Filter> filters = new ArrayList<>();
+
+    private final MutableLiveData<List<RealEstate>> listRealEstateLiveData = new MutableLiveData<>();
+
+
+    private RealEstateRepository(Context context, RealEstateDao realEstateDao, Executor executor) {
+        firebaseDataRealEstate = FirebaseDataRealEstate.getInstance(context);
+        this.realEstateDao = realEstateDao;
+        this.executor = executor;
     }
 
-    public static RealEstateRepository getInstance(Context context ) {
+    public static RealEstateRepository getInstance(Context context,RealEstateDao realEstateDao, Executor executor) {
         synchronized (RealEstateRepository.class) {
             if (instance == null) {
-                instance = new RealEstateRepository(context);
+                instance = new RealEstateRepository(context, realEstateDao, executor);
             }
             return instance;
         }
     }
 
-    // My Firestore Collection
-
-    private CollectionReference getRealEstateCollection() {
-        return FirebaseFirestore.getInstance().collection(COLLECTION_NAME);
-    }
-
-    // Storage
-
-    private FirebaseStorage getFirebaseStorage() {
-        return FirebaseStorage.getInstance();
-    }
-
 
     public void createRealEstate(RealEstate realEstate) {
-        List<Photo> newList = new ArrayList<>();
-        for (Photo photo : realEstate.getPhotos()) {
-
-            Uri pictureUri = Uri.parse(photo.getReference());
-
-            StorageReference ref = getFirebaseStorage().getReference(realEstate.getId()).child(pictureUri.getLastPathSegment());
-            UploadTask uploadTask = ref.putFile(pictureUri);
-
-            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                @Override
-                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                    if (!task.isSuccessful()) {
-                        throw task.getException();
-                    }
-
-                    // Continue with the task to get the download URL
-                    return ref.getDownloadUrl();
-                }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if (task.isSuccessful()) {
-                        Uri downloadUri = task.getResult();
-                        Photo newPhoto = new Photo(downloadUri.toString(),photo.getDescription());
-
-                        newList.add(newPhoto);
-
-                        if (newList.size() == realEstate.getPhotos().size()) {
-                            realEstate.setPhotos(newList);
-                            getRealEstateCollection().document(realEstate.getId()).set(realEstate);
-                        }
-                    }
-                }
-            });
-        }
-        getRealEstateCollection().document(realEstate.getId()).set(realEstate);
+        firebaseDataRealEstate.createRealEstate(realEstate);
     }
 
     public void editRealEstate(RealEstate actual, RealEstate modify) {
-        actual.setPhotos(modify.getPhotos());
-        actual.setPriceUSD(modify.getPriceUSD());
-        actual.setMainPicturePosition(modify.getMainPicturePosition());
-        actual.setNumberOfBathrooms(modify.getNumberOfBathrooms());
-        actual.setNumberOfRooms(modify.getNumberOfRooms());
-        actual.setNumberOfBedrooms(modify.getNumberOfBedrooms());
-        actual.setSurface(modify.getSurface());
-        actual.setDescription(modify.getDescription());
-        actual.setPlace(modify.getPlace());
-        actual.setType(modify.getType());
-
-        getRealEstateCollection().document(actual.getId()).set(actual);
+        firebaseDataRealEstate.editRealEstate(actual,modify);
     }
 
-    public void getAllRealEstates(MutableLiveData<List<RealEstate>> liveData) {
-        getRealEstateCollection().addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+    public void setFilterList(List<Filter> list) {
+        filters = list;
+        firebaseDataRealEstate.getListWithFilter(filters,listRealEstateLiveData);
+    }
 
-                if (error != null) {
-                    Log.w("TAG", "Listen failed.", error);
-                    return;
-                }
-
-                List<RealEstate> realEstates = new ArrayList<>();
-                for (DocumentSnapshot document : value) {
-                    RealEstate realEstate = document.toObject(RealEstate.class);
-                    realEstates.add(realEstate);
-                }
-
-                liveData.setValue(realEstates);
-            }
-        });
+    public LiveData<List<RealEstate>> getListWithFilter() {
+        firebaseDataRealEstate.getListWithFilter(filters,listRealEstateLiveData);
+        return listRealEstateLiveData;
     }
 
     public RealEstate soldRealEstate(RealEstate realEstate) {
-        if (realEstate.isSold()) {
-            realEstate.setSold(false);
-            realEstate.setSoldDate(null);
-        }
-        else {
-            realEstate.setSold(true);
-            realEstate.setSoldDate(Utils.getTodayDate());
-        }
-        getRealEstateCollection().document(realEstate.getId()).set(realEstate);
-
-        return realEstate;
+        return firebaseDataRealEstate.soldRealEstate(realEstate);
     }
 
     public void setMyRealEstates(User user) {
-
-        getRealEstateCollection().get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if (!queryDocumentSnapshots.isEmpty()) {
-
-                    List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-
-                    for (DocumentSnapshot document : list) {
-                        RealEstate realEstates = document.toObject(RealEstate.class);
-
-                        if (realEstates.getUser().getUid().equals(user.getUid())) {
-                            realEstates.setUser(user);
-                            getRealEstateCollection().document(realEstates.getId()).set(realEstates);
-                        }
-                    }
-                }
-            }
-        });
+        firebaseDataRealEstate.setMyRealEstates(user);
     }
 
 }

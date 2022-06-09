@@ -376,7 +376,6 @@ public class CreateOrEditRealEstateActivity extends BaseActivity implements List
     }
 
     private void initData() {
-        viewModelUser.setCurrentUserLiveData();
 
         viewModelUser.getCurrentUserLiveData().observe(this, currentUserLiveData -> {
             currentUser = currentUserLiveData;

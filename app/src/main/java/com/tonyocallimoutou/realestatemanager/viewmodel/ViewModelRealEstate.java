@@ -19,12 +19,6 @@ public class ViewModelRealEstate extends ViewModel {
     private final RealEstateRepository realEstateRepository;
     private final UserRepository userRepository;
 
-    private final MutableLiveData<List<RealEstate>> listRealEstateLiveData = new MutableLiveData<>();
-    private final MutableLiveData<List<RealEstate>> listRealEstateFilterLiveData = new MutableLiveData<>();
-
-    private List<Filter> filters = new ArrayList<>();
-    private List<RealEstate> actualList = new ArrayList<>();
-
     private ViewModelRealEstate(RealEstateRepository realEstateRepository, UserRepository userRepository) {
         this.realEstateRepository = realEstateRepository;
         this.userRepository = userRepository;
@@ -40,18 +34,10 @@ public class ViewModelRealEstate extends ViewModel {
         userRepository.createRealEstate(realEstate);
     }
 
-    public void setListRealEstate() {
-        realEstateRepository.getAllRealEstates(listRealEstateLiveData);
-    }
-
     public void editRealEstate(RealEstate actual, RealEstate modify) {
         if (userRepository.getCurrentUser().getUid().equals(actual.getUser().getUid())) {
             realEstateRepository.editRealEstate(actual, modify);
         }
-    }
-
-    public LiveData<List<RealEstate>> getAllRealEstateLiveData() {
-        return listRealEstateLiveData;
     }
 
     public RealEstate soldRealEstate(RealEstate realEstate) {
@@ -61,28 +47,15 @@ public class ViewModelRealEstate extends ViewModel {
         return null;
     }
 
-    public void setListWithFilter(@Nullable List<Filter> listFilter, @Nullable List<RealEstate> list) {
-        if (listFilter != null) {
-            filters = listFilter;
-        }
-        if (list != null) {
-            actualList = list;
-        }
-
-        List<RealEstate> newList = new ArrayList<>(actualList);
-
-        for (int i = 0; i < filters.size(); i++) {
-            newList = filters.get(i).modifyList(newList);
-        }
-
-        listRealEstateFilterLiveData.setValue(newList);
-    }
-
     public LiveData<List<RealEstate>> getFilterListLiveData() {
-        return listRealEstateFilterLiveData;
+        return realEstateRepository.getListWithFilter();
     }
 
     public void setMyRealEstates(User currentUser) {
         realEstateRepository.setMyRealEstates(currentUser);
+    }
+
+    public void setFilterList(List<Filter> filters) {
+        realEstateRepository.setFilterList(filters);
     }
 }

@@ -5,6 +5,11 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.Place;
 
@@ -13,8 +18,11 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 
+@Entity
 public class RealEstateLocation implements Serializable {
 
+    @PrimaryKey
+    @NonNull
     private String placeId;
     private String name;
     private double lat;
@@ -23,6 +31,7 @@ public class RealEstateLocation implements Serializable {
     private String country;
     private String city;
 
+    @Ignore
     public RealEstateLocation() {
     }
 

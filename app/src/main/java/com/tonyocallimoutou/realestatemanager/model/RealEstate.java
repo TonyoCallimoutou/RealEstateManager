@@ -2,9 +2,18 @@ package com.tonyocallimoutou.realestatemanager.model;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.room.Embedded;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 import com.google.android.libraries.places.api.model.Place;
+import com.tonyocallimoutou.realestatemanager.data.room.PhotoConverter;
+import com.tonyocallimoutou.realestatemanager.data.room.StringListConverter;
 import com.tonyocallimoutou.realestatemanager.util.Utils;
 
 import java.io.Serializable;
@@ -12,14 +21,18 @@ import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 
+@Entity
 public class RealEstate implements Serializable {
 
-
+    @PrimaryKey
+    @NonNull
     private String id;
     private String creationDate;
+    @Embedded(prefix = "user_")
     private User user;
     private int priceUSD;
     private String type;
+    @TypeConverters({PhotoConverter.class})
     private List<Photo> photos;
     private int mainPicturePosition;
     private String description;
@@ -27,11 +40,13 @@ public class RealEstate implements Serializable {
     private int numberOfRooms;
     private int numberOfBathrooms;
     private int numberOfBedrooms;
+    @Embedded(prefix = "place_")
     private RealEstateLocation place;
     private boolean isSold;
     @Nullable
     private String soldDate;
 
+    @Ignore
     public RealEstate(){}
 
     public RealEstate(int priceUSD,

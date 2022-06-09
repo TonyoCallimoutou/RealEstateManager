@@ -591,7 +591,7 @@ public class FilterFragment extends Fragment {
             closeFragment();
         }
         adapter.initAdapter(filters);
-        viewModelRealEstate.setListWithFilter(filters, null);
+        viewModelRealEstate.setFilterList(filters);
     }
 
     public static void setCurrentUser(User user) {

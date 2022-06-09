@@ -19,10 +19,6 @@ public class ViewModelUser extends ViewModel {
 
     private final UserRepository userRepository;
 
-    private final MutableLiveData<User> currentUserLiveData = new MutableLiveData<>();
-
-    private final MutableLiveData<List<User>> listUserLiveData = new MutableLiveData<>();
-
     private ViewModelUser(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -35,8 +31,8 @@ public class ViewModelUser extends ViewModel {
         return userRepository.isCurrentLogged();
     }
 
-    public Task<Void> signOut(Context context) {
-        return userRepository.signOut(context);
+    public void signOut() {
+        userRepository.signOut();
     }
 
     public void createUser(Activity activity) {
@@ -47,8 +43,8 @@ public class ViewModelUser extends ViewModel {
         userRepository.setCurrentUserPicture(picture);
     }
 
-    public Task<Void> deleteUser(Context context){
-        return userRepository.deleteUser(context);
+    public Task<Void> deleteUser(){
+        return userRepository.deleteUser();
     }
 
     public void setNameOfCurrentUser(String name) {
@@ -59,16 +55,8 @@ public class ViewModelUser extends ViewModel {
         userRepository.setPhoneNumberOfCurrentUser(phoneNumber);
     }
 
-    public void setCurrentUserLiveData() {
-        userRepository.setCurrentUserLivedata(currentUserLiveData);
-    }
-
     public LiveData<User> getCurrentUserLiveData() {
-        return currentUserLiveData;
-    }
-
-    public User getCurrentUser() {
-        return userRepository.getCurrentUser();
+        return userRepository.getCurrentUserLiveData();
     }
 
 }

@@ -7,6 +7,7 @@
     <string name="COLLECTION_NAME_USER_SOLD_REAL_ESTATE"> user_sold </string>
 
     <!-- Preferences -->
+    <string name="shared_preference_user_uid"> UID </string>
     <string name="shared_preference_username"> USERNAME </string>
     <string name="shared_preference_phone_number"> PHONE_NUMBER </string>
     <string name="shared_preference_language"> LANGUAGE </string>

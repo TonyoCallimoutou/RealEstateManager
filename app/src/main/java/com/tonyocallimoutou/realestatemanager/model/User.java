@@ -3,22 +3,36 @@ package com.tonyocallimoutou.realestatemanager.model;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
+import com.tonyocallimoutou.realestatemanager.data.room.StringListConverter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class User implements Serializable {
 
+    @PrimaryKey
+    @NonNull
     private String uid;
+    @ColumnInfo(name = "user_name")
     private String username;
     private String urlPicture;
     private String email;
     @Nullable
     private String phoneNumber;
+    @TypeConverters({StringListConverter.class})
     private List<String> myRealEstateId = new ArrayList<>();
 
+    @Ignore
     public User() {}
 
     public User(String uid, String username, String urlPicture, String email) {

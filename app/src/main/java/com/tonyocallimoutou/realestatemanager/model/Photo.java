@@ -7,6 +7,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 public class Photo implements Serializable {
@@ -16,6 +17,7 @@ public class Photo implements Serializable {
     private String reference;
     @Nullable
     private String description;
+    private boolean isSync;
 
     @Ignore
     public Photo() {}
@@ -23,6 +25,7 @@ public class Photo implements Serializable {
     public Photo(String reference, @Nullable String description) {
         this.reference = reference;
         this.description = description;
+        this.isSync = false;
     }
 
     public String getReference() {
@@ -40,5 +43,26 @@ public class Photo implements Serializable {
 
     public void setDescription(@Nullable String description) {
         this.description = description;
+    }
+
+    public boolean isSync() {
+        return isSync;
+    }
+
+    public void setSync(boolean sync) {
+        isSync = sync;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Photo photo = (Photo) o;
+        return reference.equals(photo.reference) && Objects.equals(description, photo.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(reference, description);
     }
 }

@@ -118,7 +118,7 @@ public class FirebaseDataUser {
                 });
     }
 
-    public void setCurrentUserPicture(String picture) {
+    public void setCurrentUserPicture(String picture, UserDao userDao, Executor executor) {
 
         Uri pictureUri = Uri.parse(picture);
 
@@ -142,6 +142,10 @@ public class FirebaseDataUser {
                     Uri downloadUri = task.getResult();
                     currentUser.setUrlPicture(downloadUri.toString());
                     getUsersCollection().document(currentUser.getUid()).set(currentUser);
+
+                    executor.execute(() -> {
+                        userDao.setCurrentUserPicture(currentUser.getUid(), downloadUri.toString());
+                    });
                 }
             }
         });
@@ -180,8 +184,8 @@ public class FirebaseDataUser {
                 }
 
                 for (DocumentSnapshot document : value) {
-                    User user = document.   toObject(User.class);
-                    if (getCurrentFirebaseUser()!=null) {
+                    User user = document.toObject(User.class);
+                    if (getCurrentFirebaseUser()!= null) {
                         if (user.getUid().equals(getCurrentFirebaseUser().getUid())) {
                             currentUser = user;
                             liveData.setValue(user);
@@ -193,8 +197,9 @@ public class FirebaseDataUser {
         });
     }
 
-    public User getCurrentUser() {
-        return currentUser;
+    public void syncCurrentUser(User user) {
+        getUsersCollection().document(user.getUid()).set(user);
+        currentUser = user;
     }
 
     // Real Estate

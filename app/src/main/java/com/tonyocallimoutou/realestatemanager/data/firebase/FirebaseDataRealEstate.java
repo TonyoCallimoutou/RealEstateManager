@@ -9,7 +9,9 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -19,9 +21,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnPausedListener;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.tonyocallimoutou.realestatemanager.R;
+import com.tonyocallimoutou.realestatemanager.data.room.RealEstateDao;
 import com.tonyocallimoutou.realestatemanager.model.Photo;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.model.User;
@@ -31,6 +36,7 @@ import com.tonyocallimoutou.realestatemanager.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 public class FirebaseDataRealEstate {
 
@@ -65,61 +71,73 @@ public class FirebaseDataRealEstate {
     }
 
 
-    public void createRealEstate(RealEstate realEstate) {
-        List<Photo> newList = new ArrayList<>();
-        for (Photo photo : realEstate.getPhotos()) {
+    public void savePicture(RealEstate realEstate, RealEstateDao realEstateDao, Executor executor) {
+        executor.execute(() -> {
+            realEstateDao.createRealEstate(realEstate);
+        });
 
-            Uri pictureUri = Uri.parse(photo.getReference());
 
-            StorageReference ref = getFirebaseStorage().getReference(realEstate.getId()).child(pictureUri.getLastPathSegment());
-            UploadTask uploadTask = ref.putFile(pictureUri);
+        Log.d("TAG", "savePicture: " + realEstate.getId());
 
-            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                @Override
-                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                    if (!task.isSuccessful()) {
-                        throw task.getException();
+        for (int i=0; i<realEstate.getPhotos().size(); i++) {
+
+            Photo photo = realEstate.getPhotos().get(i);
+
+            if ( !photo.isSync()) {
+
+                Log.d("TAG", "savePicture: " + i);
+
+                Uri pictureUri = Uri.parse(photo.getReference());
+
+                StorageReference ref = getFirebaseStorage().getReference(realEstate.getId()).child(pictureUri.getLastPathSegment());
+
+                Log.d("TAG", "savePicture: " + pictureUri);
+                Log.d("TAG","savePicture "+ ref);
+
+                UploadTask uploadTask = ref.putFile(pictureUri);
+
+                int finalI = i;
+                uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                    @Override
+                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                        if (!task.isSuccessful()) {
+                            throw task.getException();
+                        }
+
+                        // Continue with the task to get the download URL
+                        return ref.getDownloadUrl();
                     }
+                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if (task.isSuccessful()) {
+                            Uri downloadUri = task.getResult();
 
-                    // Continue with the task to get the download URL
-                    return ref.getDownloadUrl();
-                }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if (task.isSuccessful()) {
-                        Uri downloadUri = task.getResult();
-                        Photo newPhoto = new Photo(downloadUri.toString(),photo.getDescription());
+                            Photo newPhoto = new Photo(downloadUri.toString(), photo.getDescription());
+                            newPhoto.setSync(true);
 
-                        newList.add(newPhoto);
+                            List<Photo> list = realEstate.getPhotos();
+                            list.set(finalI, newPhoto);
 
-                        if (newList.size() == realEstate.getPhotos().size()) {
-                            realEstate.setPhotos(newList);
-                            getRealEstateCollection().document(realEstate.getId()).set(realEstate);
+                            realEstate.setPhotos(list);
+
+                            executor.execute(() -> {
+                                Log.d("TAG", "onComplete: " + finalI);
+                                realEstateDao.createRealEstate(realEstate);
+                            });
                         }
                     }
-                }
-            });
+                });
+            }
         }
+    }
+
+    public void editRealEstate(RealEstate realEstate) {
+        realEstate.setSync(true);
         getRealEstateCollection().document(realEstate.getId()).set(realEstate);
     }
 
-    public void editRealEstate(RealEstate actual, RealEstate modify) {
-        actual.setPhotos(modify.getPhotos());
-        actual.setPriceUSD(modify.getPriceUSD());
-        actual.setMainPicturePosition(modify.getMainPicturePosition());
-        actual.setNumberOfBathrooms(modify.getNumberOfBathrooms());
-        actual.setNumberOfRooms(modify.getNumberOfRooms());
-        actual.setNumberOfBedrooms(modify.getNumberOfBedrooms());
-        actual.setSurface(modify.getSurface());
-        actual.setDescription(modify.getDescription());
-        actual.setPlace(modify.getPlace());
-        actual.setType(modify.getType());
-
-        getRealEstateCollection().document(actual.getId()).set(actual);
-    }
-
-    public void getListWithFilter(List<Filter> filters, MutableLiveData<List<RealEstate>> liveData) {
+    public void getListRealEstates(MutableLiveData<List<RealEstate>> liveData) {
         getRealEstateCollection().addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -135,28 +153,9 @@ public class FirebaseDataRealEstate {
                     realEstates.add(realEstate);
                 }
 
-
-                for (int i = 0; i < filters.size(); i++) {
-                    realEstates = filters.get(i).modifyList(realEstates);
-                }
-
                 liveData.setValue(realEstates);
             }
         });
-    }
-
-    public RealEstate soldRealEstate(RealEstate realEstate) {
-        if (realEstate.isSold()) {
-            realEstate.setSold(false);
-            realEstate.setSoldDate(null);
-        }
-        else {
-            realEstate.setSold(true);
-            realEstate.setSoldDate(Utils.getTodayDate());
-        }
-        getRealEstateCollection().document(realEstate.getId()).set(realEstate);
-
-        return realEstate;
     }
 
     public void setMyRealEstates(User user) {
@@ -173,7 +172,7 @@ public class FirebaseDataRealEstate {
 
                         if (realEstates.getUser().getUid().equals(user.getUid())) {
                             realEstates.setUser(user);
-                            getRealEstateCollection().document(realEstates.getId()).set(realEstates);
+                            editRealEstate(realEstates);
                         }
                     }
                 }

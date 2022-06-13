@@ -8,6 +8,7 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
@@ -27,6 +28,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -36,6 +38,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.material.navigation.NavigationView;
 import com.tonyocallimoutou.realestatemanager.BuildConfig;
+import com.tonyocallimoutou.realestatemanager.model.Photo;
 import com.tonyocallimoutou.realestatemanager.ui.setting.SettingActivity;
 import com.tonyocallimoutou.realestatemanager.ui.filter.FilterFragment;
 import com.tonyocallimoutou.realestatemanager.R;
@@ -55,6 +58,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -424,10 +428,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         viewModelUser.getCurrentUserLiveData().observe(this, currentUserResults -> {
             if (currentUserResults != null) {
 
+                viewModelUser.setCurrentUser(currentUserResults);
+
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
                 sharedPreferences
                         .edit()
-                        .putString(getString(R.string.shared_preference_user_uid),currentUserResults.getUid())
+                        .putString(getString(R.string.shared_preference_user_uid), currentUserResults.getUid())
                         .putString(getString(R.string.shared_preference_username), currentUserResults.getUsername())
                         .putString(getString(R.string.shared_preference_phone_number), currentUserResults.getPhoneNumber())
                         .apply();
@@ -440,10 +446,32 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
         });
 
-        viewModelRealEstate.getFilterListLiveData().observe(this, listFilter -> {
-            ListViewFragment.initResidenceList(listFilter);
-            MapViewFragment.setRealEstateList(listFilter);
+        viewModelRealEstate.getAllRealEstatesLiveData().observe(this, list -> {
+            viewModelRealEstate.setAllRealEstates(list);
         });
 
+        viewModelRealEstate.getDraftRealEstate().observe(this, list -> {
+            if (list.size() > 0) {
+                Log.d("TAG", "onBindViewHolder: " + list.get(0).getProgressSync());
+                for (RealEstate realEstate : list) {
+                    if (realEstate.getProgressSync() ==100) {
+                        Log.d("TAG", "Start Sync: ");
+                        viewModelRealEstate.syncInFirebase(realEstate);
+                    }
+                }
+            }
+            ListViewFragment.initDraftList(list);
+            //MapViewFragment.setDraftList(listFilter);
+        });
+
+        viewModelRealEstate.getFilterListLiveData().observe(this, listFilter -> {
+            Log.d(this.getClass().getSimpleName(), "");
+            ListViewFragment.initRealEstateSyncList(listFilter);
+            MapViewFragment.setRealEstateList(listFilter);
+        });
+    }
+
+    public static void test(boolean isConnected) {
+        Toast.makeText(context, "connection :" + isConnected, Toast.LENGTH_SHORT).show();
     }
 }

@@ -9,7 +9,9 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
 
 import com.firebase.ui.auth.AuthUI;
@@ -52,9 +54,14 @@ public class UserRepository {
     private final Context context;
     private final SharedPreferences sharedPreferences;
 
-    private final MutableLiveData<User> currentUserLiveData = new MutableLiveData<>();
+    private static boolean isConnected;
 
-    private String currentUserId;
+    private final MediatorLiveData<User> mediator = new MediatorLiveData<>();
+    private MutableLiveData<User> currentUserLiveData = new MutableLiveData<>();
+
+    private User currentUser;
+
+    private final String currentUserId;
 
 
     private UserRepository(Context context, UserDao userDao, Executor executor) {
@@ -78,10 +85,10 @@ public class UserRepository {
     }
 
     public boolean isCurrentLogged() {
-        if (Utils.isInternetAvailable(context)) {
+        if (isConnected) {
             return firebaseDataUser.isCurrentLogged();
-        }
-        else {
+        } else {
+            // WARNING Auth without connection
             return !currentUserId.isEmpty();
         }
     }
@@ -91,23 +98,30 @@ public class UserRepository {
     }
 
     public void setCurrentUserPicture(String picture) {
-        firebaseDataUser.setCurrentUserPicture(picture);
 
+        if (isConnected) {
+            firebaseDataUser.setCurrentUserPicture(picture, userDao, executor);
+        }
+        else {
+            executor.execute(() -> {
+                userDao.setCurrentUserPicture(currentUserId, picture);
+            });
+        }
     }
 
     public void signOut() {
-        firebaseDataUser.signOut(context);
         sharedPreferences
                 .edit()
-                .putString(context.getString(R.string.shared_preference_user_uid),"")
+                .putString(context.getString(R.string.shared_preference_user_uid), "")
                 .apply();
+        firebaseDataUser.signOut(context);
     }
 
 
     public Task<Void> deleteUser() {
         sharedPreferences
                 .edit()
-                .putString(context.getString(R.string.shared_preference_user_uid),"")
+                .putString(context.getString(R.string.shared_preference_user_uid), "")
                 .apply();
 
         executor.execute(() -> {
@@ -118,44 +132,95 @@ public class UserRepository {
     }
 
     public void setNameOfCurrentUser(String name) {
-        if (Utils.isInternetAvailable(context)) {
+        if (isConnected) {
             firebaseDataUser.setNameOfCurrentUser(name);
         }
         else {
-            !!
-            executor.execute(()-> {
-                userDao.setNameOfCurrentUser(currentUserId,name);
+            executor.execute(() -> {
+                userDao.setNameOfCurrentUser(currentUserId, name);
+                initLiveDataUser();
             });
         }
     }
 
     public void setPhoneNumberOfCurrentUser(String phoneNumber) {
-        firebaseDataUser.setPhoneNumberOfCurrentUser(phoneNumber);
+        if (isConnected) {
+            firebaseDataUser.setPhoneNumberOfCurrentUser(phoneNumber);
+        }
+        else {
+            executor.execute(() -> {
+                userDao.setPhoneNumberOfCurrentUser(currentUserId, phoneNumber);
+                initLiveDataUser();
+            });
+        }
     }
 
     public LiveData<User> getCurrentUserLiveData() {
 
-        if (Utils.isInternetAvailable(context)) {
 
+
+        if (isConnected) {
             firebaseDataUser.setCurrentUserLivedata(currentUserLiveData);
-
-            return currentUserLiveData;
         }
-
         else {
-            return userDao.getCurrentUserLiveData(currentUserId);
+            initLiveDataUser();
         }
+        return currentUserLiveData;
 
+    }
+
+    private void initLiveDataUser() {
+        executor.execute(()-> {
+            currentUserLiveData.postValue(userDao.getCurrentUser(currentUserId));
+        });
     }
 
     // Real Estate
 
     public void createRealEstate(RealEstate realEstate) {
-        firebaseDataUser.createRealEstate(realEstate);
+
+        if (isConnected) {
+
+            firebaseDataUser.createRealEstate(realEstate);
+        }
+        else {
+
+            executor.execute(() -> {
+                User user = getCurrentUser();
+                user.addRealEstateToMyList(realEstate);
+                userDao.createUser(user);
+                initLiveDataUser();
+            });
+        }
+
+
     }
 
     public User getCurrentUser() {
-        return firebaseDataUser.getCurrentUser();
+        return currentUser;
     }
 
+    public void setCurrentUser(User user) {
+        if (! user.equals(currentUser)) {
+            currentUser = user;
+            if (isConnected) {
+                instance.firebaseDataUser.syncCurrentUser(instance.currentUser);
+                executor.execute(() -> {
+                    userDao.createUser(user);
+                });
+            }
+        }
+    }
+
+
+    public static void ConnectionChanged(boolean result) {
+        Log.d("TAG", "ConnectionChanged: " + result);
+        if (result && instance!= null && !isConnected) {
+            if (instance.currentUser != null) {
+                Log.d("TAG", "ConnectionChanged: ");
+                instance.firebaseDataUser.syncCurrentUser(instance.currentUser);
+            }
+        }
+        isConnected = result;
+    }
 }

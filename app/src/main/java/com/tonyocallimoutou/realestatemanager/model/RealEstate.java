@@ -1,9 +1,11 @@
 package com.tonyocallimoutou.realestatemanager.model;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.room.ColumnInfo;
 import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -20,12 +22,14 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class RealEstate implements Serializable {
 
     @PrimaryKey
     @NonNull
+    @ColumnInfo(name = "realEstate_id")
     private String id;
     private String creationDate;
     @Embedded(prefix = "user_")
@@ -45,6 +49,8 @@ public class RealEstate implements Serializable {
     private boolean isSold;
     @Nullable
     private String soldDate;
+    @ColumnInfo(name = "real_estate_is_synchro")
+    private boolean isSync;
 
     @Ignore
     public RealEstate(){}
@@ -59,7 +65,7 @@ public class RealEstate implements Serializable {
                      int numberOfRooms,
                      int numberOfBathrooms,
                      int numberOfBedrooms,
-                      RealEstateLocation place) {
+                     RealEstateLocation place) {
         this.id = user.getUid()+"_"+ user.getMyRealEstateId().size();
         this.creationDate = Utils.getTodayDate();
         this.priceUSD = priceUSD;
@@ -74,6 +80,7 @@ public class RealEstate implements Serializable {
         this.numberOfBedrooms = numberOfBedrooms;
         this.place = place;
         this.isSold = false;
+        this.isSync = false;
     }
 
     public String getId() {
@@ -215,5 +222,36 @@ public class RealEstate implements Serializable {
 
     public void setSoldDate(@Nullable String soldDate) {
         this.soldDate = soldDate;
+    }
+
+    public boolean isSync() {
+        return isSync;
+    }
+
+    public void setSync(boolean sync) {
+        isSync = sync;
+    }
+
+    public double getProgressSync() {
+        int count =0;
+        for (Photo photo : photos) {
+            if (photo.isSync()) {
+                count ++;
+            }
+        }
+        return (count/(double)photos.size())*100;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RealEstate that = (RealEstate) o;
+        return priceUSD == that.priceUSD && mainPicturePosition == that.mainPicturePosition && surface == that.surface && numberOfRooms == that.numberOfRooms && numberOfBathrooms == that.numberOfBathrooms && numberOfBedrooms == that.numberOfBedrooms && isSold == that.isSold && id.equals(that.id) && Objects.equals(creationDate, that.creationDate) && Objects.equals(user.getUid(), that.user.getUid()) && Objects.equals(type, that.type) && Objects.equals(photos, that.photos) && Objects.equals(description, that.description) && Objects.equals(place, that.place) && Objects.equals(soldDate, that.soldDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, creationDate, user, priceUSD, type, photos, mainPicturePosition, description, surface, numberOfRooms, numberOfBathrooms, numberOfBedrooms, place, isSold, soldDate);
     }
 }

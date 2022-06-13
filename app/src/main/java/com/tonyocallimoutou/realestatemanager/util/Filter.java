@@ -14,16 +14,16 @@ import java.util.Objects;
 
 public class Filter {
 
-    public static String TYPE_LOCATION = "TYPE_LOCATION";
-    public static String TYPE_MIN_PRICE = "TYPE_MIN_PRICE";
-    public static String TYPE_MAX_PRICE = "TYPE_MAX_PRICE";
-    public static String TYPE_TYPE = "TYPE_TYPE";
-    public static String TYPE_ROOM = "TYPE_ROOM";
-    public static String TYPE_CREATION = "TYPE_CREATION";
-    public static String TYPE_PICTURE = "TYPE_PICTURE";
-    public static String TYPE_MINE = "TYPE_MINE";
-    public static String TYPE_SOLD = "TYPE_SOLD";
-    private String filterType;
+    public static int TYPE_LOCATION = 1;
+    public static int TYPE_MIN_PRICE = 2;
+    public static int TYPE_MAX_PRICE = 3;
+    public static int TYPE_TYPE = 4;
+    public static int TYPE_ROOM = 5;
+    public static int TYPE_CREATION = 6;
+    public static int TYPE_PICTURE = 7;
+    public static int TYPE_MINE = 8;
+    public static int TYPE_SOLD = 9;
+    private int filterType;
     private String filterCountry;
     private Place filterCity;
     private float distance;
@@ -38,7 +38,7 @@ public class Filter {
     private int creationDateLimit;
     private int minNbrPicture;
 
-    public Filter(String filterType) {
+    public Filter(int filterType) {
         this.filterType = filterType;
     }
 
@@ -66,11 +66,11 @@ public class Filter {
         this.distance = distance;
     }
 
-    public String getFilterType() {
+    public int getFilterType() {
         return filterType;
     }
 
-    public void setFilterType(String filterType) {
+    public void setFilterType(int filterType) {
         this.filterType = filterType;
     }
 
@@ -151,7 +151,7 @@ public class Filter {
     public List<RealEstate> modifyList(List<RealEstate> original) {
 
         List<RealEstate> newList = new ArrayList<>();
-        if (filterType.equals(TYPE_MIN_PRICE)) {
+        if (filterType == (TYPE_MIN_PRICE)) {
             int minPriceUSD = Utils.getPriceInUSD(context,minPrice,moneyKey);
             for (RealEstate realEstate : original) {
                 if (realEstate.getPriceUSD() > minPriceUSD) {
@@ -159,7 +159,7 @@ public class Filter {
                 }
             }
         }
-        else if (filterType.equals(TYPE_MAX_PRICE)) {
+        else if (filterType == (TYPE_MAX_PRICE)) {
             int maxPriceUSD = Utils.getPriceInUSD(context,maxPrice,moneyKey);
             for (RealEstate realEstate : original) {
                 if (realEstate.getPriceUSD() < maxPriceUSD) {
@@ -167,35 +167,35 @@ public class Filter {
                 }
             }
         }
-        else if (filterType.equals(TYPE_TYPE)) {
+        else if (filterType == (TYPE_TYPE)) {
             for (RealEstate realEstate : original) {
                 if (realEstate.getType().equals(type)) {
                     newList.add(realEstate);
                 }
             }
         }
-        else if (filterType.equals(TYPE_ROOM)) {
+        else if (filterType == (TYPE_ROOM)) {
             for (RealEstate realEstate : original) {
                 if (realEstate.getNumberOfRooms() >= minRoom) {
                     newList.add(realEstate);
                 }
             }
         }
-        else if (filterType.equals(TYPE_CREATION)) {
+        else if (filterType == (TYPE_CREATION)) {
             for (RealEstate realEstate : original) {
                 if (Utils.getAgeOfRealEstate(realEstate) <= creationDateLimit) {
                     newList.add(realEstate);
                 }
             }
         }
-        else if (filterType.equals(TYPE_PICTURE)) {
+        else if (filterType == (TYPE_PICTURE)) {
             for (RealEstate realEstate : original) {
                 if (realEstate.getPhotos().size() >= minNbrPicture) {
                     newList.add(realEstate);
                 }
             }
         }
-        else if (filterType.equals(TYPE_SOLD)) {
+        else if (filterType == (TYPE_SOLD)) {
             for (RealEstate realEstate : original) {
                 if (realEstate.isSold()) {
                     if (Utils.getAgeOfSold(realEstate) <= dateSoldLimit || dateSoldLimit == 0) {
@@ -204,14 +204,14 @@ public class Filter {
                 }
             }
         }
-        else if (filterType.equals(TYPE_MINE)) {
+        else if (filterType == (TYPE_MINE)) {
             for (RealEstate realEstate : original) {
                 if (realEstate.getUser().getUid().equals(userId)) {
                     newList.add(realEstate);
                 }
             }
         }
-        else if (filterType.equals(TYPE_LOCATION)) {
+        else if (filterType == (TYPE_LOCATION)) {
 
             for (RealEstate realEstate : original) {
                 if (realEstate.getPlace().getCity().equals(filterCity.getName()) || Utils.getDistanceFromCityInKm(realEstate,filterCity) < distance) {
@@ -225,34 +225,34 @@ public class Filter {
 
     @Override
     public String toString() {
-        if(filterType.equals(TYPE_TYPE)) {
+        if(filterType == (TYPE_TYPE)) {
             return "Type : " +type;
         }
-        else if (filterType.equals(TYPE_MIN_PRICE)) {
+        else if (filterType == (TYPE_MIN_PRICE)) {
             return "min : "+ Utils.getStringOfPrice(minPrice) + " " + moneyKey;
         }
-        else if (filterType.equals(TYPE_MAX_PRICE)) {
+        else if (filterType == (TYPE_MAX_PRICE)) {
             return "max : "+ Utils.getStringOfPrice(maxPrice)+ " " + moneyKey;
         }
-        else if (filterType.equals(TYPE_ROOM)) {
+        else if (filterType == (TYPE_ROOM)) {
             return "more than " + minRoom + " room";
         }
-        else if (filterType.equals(TYPE_MINE)) {
+        else if (filterType == (TYPE_MINE)) {
             return "my real estate";
         }
-        else if (filterType.equals(TYPE_SOLD)) {
+        else if (filterType == (TYPE_SOLD)) {
             if (dateSoldLimit == 0) {
                 return "only sold";
             }
             else return "only sold last " + dateSoldLimit + " months";
         }
-        else if (filterType.equals(TYPE_CREATION)) {
+        else if (filterType == (TYPE_CREATION)) {
             return "only published last " + creationDateLimit + " months";
         }
-        else if (filterType.equals(TYPE_PICTURE)) {
+        else if (filterType == (TYPE_PICTURE)) {
             return "more than " + minNbrPicture + " pictures";
         }
-        else if (filterType.equals(TYPE_LOCATION)) {
+        else if (filterType == (TYPE_LOCATION)) {
             if (distance > 0) {
                 return filterCity.getName() + " + " + distance + " km";
             }

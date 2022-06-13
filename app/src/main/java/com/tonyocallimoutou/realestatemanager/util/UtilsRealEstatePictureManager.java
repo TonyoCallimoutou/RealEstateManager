@@ -46,6 +46,7 @@ public class UtilsRealEstatePictureManager {
             if (data.getClipData() != null) {
                 for (int i=0; i< data.getClipData().getItemCount(); i++) {
                     Uri uri = data.getClipData().getItemAt(i).getUri();
+                    mActivity.getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                     newPicture.add(uri.toString());
                 }
             }
@@ -132,7 +133,7 @@ public class UtilsRealEstatePictureManager {
     }
 
     private static void takePictureIntoFolder() {
-        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        Intent getIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         getIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         getIntent.setType("image/*");
 

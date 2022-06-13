@@ -51,4 +51,21 @@
         android:layout_alignParentEnd="true"
         android:src="@drawable/sold_banner" />
 
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/list_view_image_real_estate"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/error_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/list_view_image_real_estate"
+        android:text="ERROR STRING"
+        android:drawableLeft="@drawable/ic_warning_24dp"/>
+
 </RelativeLayout>

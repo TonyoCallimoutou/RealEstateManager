@@ -1,6 +1,7 @@
 package com.tonyocallimoutou.realestatemanager.ui.listView;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,12 +9,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
+import com.tonyocallimoutou.realestatemanager.util.Utils;
 
 import java.util.List;
 
@@ -62,6 +65,20 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRe
         else {
             holder.soldBanner.setVisibility(View.GONE);
         }
+
+        holder.progressBar.setVisibility(View.GONE);
+        holder.errorProgressBar.setVisibility(View.GONE);
+
+        if (realEstate.getProgressSync() != 100) {
+            if (Utils.isInternetAvailable(mContext)) {
+                holder.progressBar.setVisibility(View.VISIBLE);
+                holder.progressBar.setProgress((int) Math.round(realEstate.getProgressSync()));
+            }
+            else {
+                holder.errorProgressBar.setVisibility(View.VISIBLE);
+            }
+        }
+
     }
 
     @Override
@@ -90,6 +107,10 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRe
         TextView realEstatePrice;
         @BindView(R.id.list_view_image_sold_banner)
         ImageView soldBanner;
+        @BindView(R.id.progressBar)
+        ContentLoadingProgressBar progressBar;
+        @BindView(R.id.error_progress)
+        TextView errorProgressBar;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

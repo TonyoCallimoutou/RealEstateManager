@@ -47,8 +47,24 @@ public class ViewModelRealEstate extends ViewModel {
         return null;
     }
 
+    public LiveData<List<RealEstate>> getAllRealEstatesLiveData() {
+        return realEstateRepository.getAllRealEstate();
+    }
+
+    public LiveData<List<RealEstate>> getDraftRealEstate() {
+        return realEstateRepository.getDraftRealEstate();
+    }
+
+    public void syncInFirebase(RealEstate realEstate) {
+        realEstateRepository.syncInFirebase(realEstate);
+    }
+
     public LiveData<List<RealEstate>> getFilterListLiveData() {
         return realEstateRepository.getListWithFilter();
+    }
+
+    public void setAllRealEstates(List<RealEstate> realEstates) {
+        realEstateRepository.setRealEstatesList(realEstates);
     }
 
     public void setMyRealEstates(User currentUser) {

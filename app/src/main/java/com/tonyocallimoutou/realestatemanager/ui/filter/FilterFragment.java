@@ -188,31 +188,31 @@ public class FilterFragment extends Fragment {
     }
 
     private void setDataVisible(Filter filter) {
-        if (filter.getFilterType().equals(Filter.TYPE_MIN_PRICE)) {
+        if (filter.getFilterType() == (Filter.TYPE_MIN_PRICE)) {
             minPrice.setText("");
         }
-        else if (filter.getFilterType().equals(Filter.TYPE_MAX_PRICE)) {
+        else if (filter.getFilterType() == (Filter.TYPE_MAX_PRICE)) {
             maxPrice.setText("");
         }
-        else if (filter.getFilterType().equals(Filter.TYPE_TYPE)) {
+        else if (filter.getFilterType() == (Filter.TYPE_TYPE)) {
             spinnerType.setSelection(0);
         }
-        else if (filter.getFilterType().equals(Filter.TYPE_ROOM)) {
+        else if (filter.getFilterType() == (Filter.TYPE_ROOM)) {
             spinnerRoom.setSelection(0);
         }
-        else if (filter.getFilterType().equals(Filter.TYPE_CREATION)) {
+        else if (filter.getFilterType() == (Filter.TYPE_CREATION)) {
             spinnerCreationDate.setSelection(0);
         }
-        else if (filter.getFilterType().equals(Filter.TYPE_PICTURE)) {
+        else if (filter.getFilterType() == (Filter.TYPE_PICTURE)) {
             spinnerNbrPicture.setSelection(0);
         }
-        else if (filter.getFilterType().equals(Filter.TYPE_SOLD)) {
+        else if (filter.getFilterType() == (Filter.TYPE_SOLD)) {
             checkBoxIsSold.setChecked(false);
         }
-        else if (filter.getFilterType().equals(Filter.TYPE_MINE)) {
+        else if (filter.getFilterType() == (Filter.TYPE_MINE)) {
             checkBoxIsMine.setChecked(false);
         }
-        else if (filter.getFilterType().equals(Filter.TYPE_LOCATION)) {
+        else if (filter.getFilterType() == (Filter.TYPE_LOCATION)) {
             clearButtonAutocomplete.performClick();
         }
 

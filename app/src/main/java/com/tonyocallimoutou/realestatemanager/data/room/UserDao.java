@@ -24,5 +24,14 @@ public interface UserDao {
     @Query("UPDATE User SET user_name = :name WHERE uid = :id")
     void setNameOfCurrentUser(String id, String name);
 
+    @Query("UPDATE USER SET user_picture = :picture WHERE uid = :id")
+    void setCurrentUserPicture(String id, String picture);
+
+    @Query("UPDATE USER SET user_phone_number = :phoneNumber WHERE uid = :id")
+    void setPhoneNumberOfCurrentUser(String id, String phoneNumber);
+
+    @Query("SELECT * FROM User WHERE uid = :id")
+    User getCurrentUser(String id);
+
 
 }

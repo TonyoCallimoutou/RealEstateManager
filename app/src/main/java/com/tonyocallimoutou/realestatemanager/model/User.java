@@ -16,6 +16,7 @@ import com.tonyocallimoutou.realestatemanager.data.room.StringListConverter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class User implements Serializable {
@@ -25,9 +26,11 @@ public class User implements Serializable {
     private String uid;
     @ColumnInfo(name = "user_name")
     private String username;
+    @ColumnInfo(name = "user_picture")
     private String urlPicture;
     private String email;
     @Nullable
+    @ColumnInfo(name = "user_phone_number")
     private String phoneNumber;
     @TypeConverters({StringListConverter.class})
     private List<String> myRealEstateId = new ArrayList<>();
@@ -96,6 +99,16 @@ public class User implements Serializable {
         myRealEstateId.add(realEstate.getId());
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return uid.equals(user.uid) && Objects.equals(username, user.username) && Objects.equals(urlPicture, user.urlPicture) && Objects.equals(email, user.email) && Objects.equals(phoneNumber, user.phoneNumber) && Objects.equals(myRealEstateId, user.myRealEstateId);
+    }
 
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(uid, username, urlPicture, email, phoneNumber, myRealEstateId);
+    }
 }

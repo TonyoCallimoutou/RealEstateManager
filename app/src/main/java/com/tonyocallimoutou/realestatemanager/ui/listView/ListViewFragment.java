@@ -34,6 +34,8 @@ public class ListViewFragment extends Fragment {
     private static ListViewRecyclerViewAdapter adapter;
 
     private static final List<RealEstate> mRealEstate = new ArrayList<>();
+    private static final List<RealEstate> mRealEstateSync = new ArrayList<>();
+    private static final List<RealEstate> mDraft = new ArrayList<>();
 
     public ListViewFragment() {
     }
@@ -75,6 +77,10 @@ public class ListViewFragment extends Fragment {
     }
 
     private static void initList(){
+        mRealEstate.clear();
+        mRealEstate.addAll(mRealEstateSync);
+        mRealEstate.addAll(mDraft);
+
         if (lblNoRealEstate != null) {
             if (mRealEstate.size() == 0) {
                 lblNoRealEstate.setVisibility(View.VISIBLE);
@@ -87,9 +93,15 @@ public class ListViewFragment extends Fragment {
         }
     }
 
-    public static void initResidenceList(List<RealEstate> result) {
-        mRealEstate.clear();
-        mRealEstate.addAll(result);
+    public static void initRealEstateSyncList(List<RealEstate> result) {
+        mRealEstateSync.clear();
+        mRealEstateSync.addAll(result);
+        initList();
+    }
+
+    public static void initDraftList(List<RealEstate> drafts) {
+        mDraft.clear();
+        mDraft.addAll(drafts);
         initList();
     }
 }

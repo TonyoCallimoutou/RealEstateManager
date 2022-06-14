@@ -77,22 +77,15 @@ public class FirebaseDataRealEstate {
         });
 
 
-        Log.d("TAG", "savePicture: " + realEstate.getId());
-
         for (int i=0; i<realEstate.getPhotos().size(); i++) {
 
             Photo photo = realEstate.getPhotos().get(i);
 
             if ( !photo.isSync()) {
 
-                Log.d("TAG", "savePicture: " + i);
-
                 Uri pictureUri = Uri.parse(photo.getReference());
 
                 StorageReference ref = getFirebaseStorage().getReference(realEstate.getId()).child(pictureUri.getLastPathSegment());
-
-                Log.d("TAG", "savePicture: " + pictureUri);
-                Log.d("TAG","savePicture "+ ref);
 
                 UploadTask uploadTask = ref.putFile(pictureUri);
 
@@ -122,7 +115,6 @@ public class FirebaseDataRealEstate {
                             realEstate.setPhotos(list);
 
                             executor.execute(() -> {
-                                Log.d("TAG", "onComplete: " + finalI);
                                 realEstateDao.createRealEstate(realEstate);
                             });
                         }

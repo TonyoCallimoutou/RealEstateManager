@@ -18,6 +18,7 @@
     <string name="information_no_phone_number">Go to settings to manage your phone number</string>
     <string name="side_view_setting">SETTINGS</string>
     <string name="side_view_LOGOUT">LOGOUT</string>
+    <string name="error_no_connection"> NO INTERNET</string>
 
     <string name="title_alertDialog_google_play_service"> ERROR !!</string>
     <string name="message_alertDialog_google_play_service_download"> Please download the google play service</string>
@@ -29,6 +30,8 @@
     <string name="actionbar_edit"> Edit </string>
     <string name="actionbar_filter"> Filter </string>
     <string name="actionbar_sold"> Sold </string>
+    <string name="actionbar_draft"> Create Draft</string>
+    <string name="actionbar_delete_draft"> Delete Draft</string>
 
     <!-- Alert dialog profile picture -->
     <string name="alert_dialog_choice_files"> Files</string>
@@ -72,6 +75,14 @@
     <string name="new_toast_unable_to_save"> Unable to save </string>
     <string name="new_error_enter_data"> Enter Data</string>
     <string name="new_error_price_format"> Incorrect Format </string>
+
+    <string name="new_title_alert_dialog_draft"> SAVE AS DRAFT !!</string>
+    <string name="new_message_alert_dialog_draft"> Do you really want to save as draft this real estate ?</string>
+    <string name="new_button_alert_dialog_draft"> YES </string>
+
+    <string name="new_title_alert_dialog_delete_draft"> DELETE DRAFT !!</string>
+    <string name="new_message_alert_dialog_delete_draft"> Do you really want to delete this draft ?</string>
+    <string name="new_button_alert_dialog_delete_draft"> YES </string>
 
     <string name="title_message_sold_real_estate"> Caution </string>
     <string name="message_sold_real_estate"> Are you sure you want to mark this property as \"sold\" ?</string>
@@ -157,4 +168,10 @@
     </string-array>
     <string name="money_key_dollar"> USD</string>
     <string name="money_key_euro"> EUR</string>
+
+    <!-- Notification -->
+    <string name="notification_channel_name"> RealEstateManager</string>
+    <string name="notification_channel_description"> Your RealEstate is online </string>
+    <string name="notification_title_finish"> RealEstateManager - Completed </string>
+    <string name="notification_title_unfinish"> RealEstateManager - Upload </string>
 </resources>

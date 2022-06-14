@@ -74,6 +74,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
 
 
     private static List<RealEstate> realEstatesList = new ArrayList<>();
+    private static List<RealEstate> notSyncRealEstatesList = new ArrayList<>();
 
 
     // Bundle
@@ -302,6 +303,24 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
                     .setTag(result);
         }
 
+        for (RealEstate result : notSyncRealEstatesList) {
+            String placeName = result.getPlace().getName();
+            String address = result.getPlace().getAddress();
+            double lat = result.getPlace().getLat();
+            double lng = result.getPlace().getLng();
+            LatLng latLng = new LatLng(lat,lng);
+
+            MarkerOptions markerOptions = new MarkerOptions()
+                    .position(latLng)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                    .title(placeName + " : " + address);
+
+            builder.include(markerOptions.getPosition());
+
+            mGoogleMap.addMarker(markerOptions)
+                    .setTag(result);
+        }
+
         // ZOOM WITH NEARBY PLACE
 
         if (realEstatesList.size() != 0) {
@@ -329,6 +348,15 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
     public static void setRealEstateList(List<RealEstate> results) {
         if (! CompareRealEstate.compareListForMapIsEqual(realEstatesList, results)) {
             realEstatesList = results;
+            if (mGoogleMap != null) {
+                initListForMarker();
+            }
+        }
+    }
+
+    public static void setNotSyncList(List<RealEstate> results) {
+        if (! CompareRealEstate.compareListForMapIsEqual(notSyncRealEstatesList, results)) {
+            notSyncRealEstatesList = results;
             if (mGoogleMap != null) {
                 initListForMarker();
             }

@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -54,6 +55,12 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
 
     @BindView(R.id.lbl_no_information)
     TextView lblNoInformation;
+    @BindView(R.id.progress_bar)
+    ContentLoadingProgressBar progressBar;
+    @BindView(R.id.error_progress)
+    TextView errorProgressBar;
+    @BindView(R.id.progress_bar_percentage)
+    TextView percentageTextView;
     @BindView(R.id.recycler_view_add_picture_real_estate)
     RecyclerView recyclerViewPicture;
     @BindView(R.id.detail_information)
@@ -169,30 +176,14 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
             lblNoInformation.setVisibility(View.GONE);
             relativeLayoutInformation.setVisibility(View.VISIBLE);
 
+            initProgressBar();
+
             MiniMapFragment.initMiniMap(getActivity(),mRealEstate.getPlace());
 
             photos = mRealEstate.getPhotos();
             adapter.initAdapter(mRealEstate.getPhotos());
 
-            textDescription.setText(mRealEstate.getDescription());
-            textType.setText(mRealEstate.getType());
-            textSurface.setText(mRealEstate.getStringSurface());
-            textNumberOfRoom.setText(mRealEstate.getStringNumberOfRooms());
-            textNumberOfBathroom.setText(mRealEstate.getStringNumberOfBathrooms());
-            textNumberOfBedroom.setText(mRealEstate.getStringNumberOfBedrooms());
-            textLocation.setText(mRealEstate.getPlace().getName());
-            textPrice.setText(mRealEstate.getStringPriceUSD(getContext()));
-            String strCreationDate = getString(R.string.detail_date_creation) + " " + mRealEstate.getCreationDate();
-            creationDate.setText(strCreationDate);
-
-            if (mRealEstate.isSold()) {
-                soldBanner.setVisibility(View.VISIBLE);
-                String strSoldDate = getString(R.string.detail_date_sold) + " " + mRealEstate.getSoldDate();
-                soldDate.setText(strSoldDate);
-            }
-            else {
-                soldBanner.setVisibility(View.GONE);
-            }
+            initTextInformation();
 
             userWriter = mRealEstate.getUser();
 
@@ -233,6 +224,48 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
             if (canCloseFragment()) {
                 closeFragment();
             }
+        }
+    }
+
+    private void initProgressBar() {
+        progressBar.setVisibility(View.GONE);
+        errorProgressBar.setVisibility(View.GONE);
+        percentageTextView.setVisibility(View.GONE);
+
+        if (mRealEstate.getProgressSync() != 100) {
+            if (Utils.isInternetAvailable(getContext())) {
+                int percentage = (int) Math.round(mRealEstate.getProgressSync());
+                String percentageStr = percentage + "%";
+                progressBar.setVisibility(View.VISIBLE);
+                progressBar.setProgress(percentage);
+                percentageTextView.setVisibility(View.VISIBLE);
+                percentageTextView.setText(percentageStr);
+            }
+            else {
+                errorProgressBar.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    private void initTextInformation() {
+        textDescription.setText(mRealEstate.getDescription());
+        textType.setText(mRealEstate.getType());
+        textSurface.setText(mRealEstate.getStringSurface());
+        textNumberOfRoom.setText(mRealEstate.getStringNumberOfRooms());
+        textNumberOfBathroom.setText(mRealEstate.getStringNumberOfBathrooms());
+        textNumberOfBedroom.setText(mRealEstate.getStringNumberOfBedrooms());
+        textLocation.setText(mRealEstate.getPlace().getName());
+        textPrice.setText(mRealEstate.getStringPriceUSD(getContext()));
+        String strCreationDate = getString(R.string.detail_date_creation) + " " + mRealEstate.getCreationDate();
+        creationDate.setText(strCreationDate);
+
+        if (mRealEstate.isSold()) {
+            soldBanner.setVisibility(View.VISIBLE);
+            String strSoldDate = getString(R.string.detail_date_sold) + " " + mRealEstate.getSoldDate();
+            soldDate.setText(strSoldDate);
+        }
+        else {
+            soldBanner.setVisibility(View.GONE);
         }
     }
 

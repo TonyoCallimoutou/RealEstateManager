@@ -45,12 +45,15 @@ public class RealEstate implements Serializable {
     private int numberOfBathrooms;
     private int numberOfBedrooms;
     @Embedded(prefix = "place_")
+    @Nullable
     private RealEstateLocation place;
     private boolean isSold;
     @Nullable
     private String soldDate;
     @ColumnInfo(name = "real_estate_is_synchro")
     private boolean isSync;
+    @ColumnInfo(name = "real_estate_is_draft")
+    private boolean isDraft;
 
     @Ignore
     public RealEstate(){}
@@ -65,7 +68,7 @@ public class RealEstate implements Serializable {
                      int numberOfRooms,
                      int numberOfBathrooms,
                      int numberOfBedrooms,
-                     RealEstateLocation place) {
+                     @Nullable RealEstateLocation place) {
         this.id = user.getUid()+"_"+ user.getMyRealEstateId().size();
         this.creationDate = Utils.getTodayDate();
         this.priceUSD = priceUSD;
@@ -81,13 +84,15 @@ public class RealEstate implements Serializable {
         this.place = place;
         this.isSold = false;
         this.isSync = false;
+        this.isDraft = false;
     }
 
+    @NonNull
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(@NonNull String id) {
         this.id = id;
     }
 
@@ -198,12 +203,12 @@ public class RealEstate implements Serializable {
     public void setNumberOfBedrooms(int numberOfBedrooms) {
         this.numberOfBedrooms = numberOfBedrooms;
     }
-
+    @Nullable
     public RealEstateLocation getPlace() {
         return place;
     }
 
-    public void setPlace(RealEstateLocation place) {
+    public void setPlace(@Nullable RealEstateLocation place) {
         this.place = place;
     }
 
@@ -234,6 +239,7 @@ public class RealEstate implements Serializable {
 
     public double getProgressSync() {
         int count =0;
+        assert photos != null;
         for (Photo photo : photos) {
             if (photo.isSync()) {
                 count ++;
@@ -242,16 +248,11 @@ public class RealEstate implements Serializable {
         return (count/(double)photos.size())*100;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        RealEstate that = (RealEstate) o;
-        return priceUSD == that.priceUSD && mainPicturePosition == that.mainPicturePosition && surface == that.surface && numberOfRooms == that.numberOfRooms && numberOfBathrooms == that.numberOfBathrooms && numberOfBedrooms == that.numberOfBedrooms && isSold == that.isSold && id.equals(that.id) && Objects.equals(creationDate, that.creationDate) && Objects.equals(user.getUid(), that.user.getUid()) && Objects.equals(type, that.type) && Objects.equals(photos, that.photos) && Objects.equals(description, that.description) && Objects.equals(place, that.place) && Objects.equals(soldDate, that.soldDate);
+    public boolean isDraft() {
+        return isDraft;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, creationDate, user, priceUSD, type, photos, mainPicturePosition, description, surface, numberOfRooms, numberOfBathrooms, numberOfBedrooms, place, isSold, soldDate);
+    public void setDraft(boolean draft) {
+        isDraft = draft;
     }
 }

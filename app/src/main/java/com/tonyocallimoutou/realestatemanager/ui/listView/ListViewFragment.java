@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.ui.MainActivity;
+import com.tonyocallimoutou.realestatemanager.ui.create.CreateOrEditRealEstateActivity;
 import com.tonyocallimoutou.realestatemanager.ui.detail.DetailFragment;
 
 import java.util.ArrayList;
@@ -35,7 +36,8 @@ public class ListViewFragment extends Fragment {
 
     private static final List<RealEstate> mRealEstate = new ArrayList<>();
     private static final List<RealEstate> mRealEstateSync = new ArrayList<>();
-    private static final List<RealEstate> mDraft = new ArrayList<>();
+    private static final List<RealEstate> mNotSyncList = new ArrayList<>();
+    private static final List<RealEstate> mDrafts = new ArrayList<>();
 
     public ListViewFragment() {
     }
@@ -65,7 +67,12 @@ public class ListViewFragment extends Fragment {
             public void onListItemClick(int position) {
                 RealEstate realEstate = mRealEstate.get(position);
 
-                MainActivity.initDetailFragment(realEstate);
+                if (realEstate.isDraft()) {
+                    CreateOrEditRealEstateActivity.startActivity(getActivity(),realEstate);
+                }
+                else {
+                    MainActivity.initDetailFragment(realEstate);
+                }
             }
         });
 
@@ -79,7 +86,8 @@ public class ListViewFragment extends Fragment {
     private static void initList(){
         mRealEstate.clear();
         mRealEstate.addAll(mRealEstateSync);
-        mRealEstate.addAll(mDraft);
+        mRealEstate.addAll(mNotSyncList);
+        mRealEstate.addAll(mDrafts);
 
         if (lblNoRealEstate != null) {
             if (mRealEstate.size() == 0) {
@@ -99,9 +107,19 @@ public class ListViewFragment extends Fragment {
         initList();
     }
 
+    public static void initNotSyncList(List<RealEstate> notSyncList) {
+        mNotSyncList.clear();
+        mNotSyncList.addAll(notSyncList);
+        initList();
+    }
+
     public static void initDraftList(List<RealEstate> drafts) {
-        mDraft.clear();
-        mDraft.addAll(drafts);
+        mDrafts.clear();
+        mNotSyncList.addAll(drafts);
+        initList();
+    }
+
+    public static void setConnection() {
         initList();
     }
 }

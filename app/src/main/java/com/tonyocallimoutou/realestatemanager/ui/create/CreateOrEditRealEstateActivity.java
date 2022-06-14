@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -40,6 +41,7 @@ import com.tonyocallimoutou.realestatemanager.model.User;
 import com.tonyocallimoutou.realestatemanager.ui.BaseActivity;
 import com.tonyocallimoutou.realestatemanager.ui.MainActivity;
 import com.tonyocallimoutou.realestatemanager.ui.detail.DetailFragment;
+import com.tonyocallimoutou.realestatemanager.ui.filter.FilterFragment;
 import com.tonyocallimoutou.realestatemanager.ui.mapview.MiniMapFragment;
 import com.tonyocallimoutou.realestatemanager.util.Utils;
 import com.tonyocallimoutou.realestatemanager.util.UtilsRealEstatePictureManager;
@@ -95,7 +97,7 @@ public class CreateOrEditRealEstateActivity extends BaseActivity implements List
     private int mainPicturePosition = 0;
     private RealEstateLocation place;
 
-    public static final String BUNDLE_REAL_ESTATE = "BUNDLE_REAL_ESTATE";
+    private static final String BUNDLE_REAL_ESTATE = "BUNDLE_REAL_ESTATE";
     private RealEstate realEstate;
 
     private User currentUser;
@@ -149,6 +151,60 @@ public class CreateOrEditRealEstateActivity extends BaseActivity implements List
             realEstate = (RealEstate) extras.getSerializable(BUNDLE_REAL_ESTATE);
             initInformation();
         }
+    }
+
+    // INIT ACTION BAR
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.actionbar_menu_create_activity, menu);
+        MenuItem deleteItem = menu.findItem(R.id.delete_draft);
+        if (realEstate == null || ! realEstate.isDraft()) {
+            deleteItem.setVisible(false);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.save_draft:
+
+                DialogInterface.OnClickListener listenerDraft = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        createDraft();
+                    }
+                };
+
+                int titleDraft = R.string.new_title_alert_dialog_draft;
+                int messageDraft= R.string.new_message_alert_dialog_draft;
+                int buttonDraft = R.string.new_button_alert_dialog_draft;
+
+                createAlertDialog(titleDraft, messageDraft, buttonDraft, listenerDraft );
+
+
+                return true;
+
+            case R.id.delete_draft:
+
+                DialogInterface.OnClickListener listenerDelete = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        deleteDraft();
+                    }
+                };
+
+                int titleDelete = R.string.new_title_alert_dialog_delete_draft;
+                int messageDelete = R.string.new_message_alert_dialog_delete_draft;
+                int buttonDelete = R.string.new_button_alert_dialog_delete_draft;
+
+                createAlertDialog(titleDelete, messageDelete , buttonDelete, listenerDelete );
+
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     // Init Price
@@ -258,8 +314,10 @@ public class CreateOrEditRealEstateActivity extends BaseActivity implements List
         realEstateRoom.setText(String.valueOf(realEstate.getNumberOfRooms()));
         realEstateBedroom.setText(String.valueOf(realEstate.getNumberOfBedrooms()));
         realEstateBathroom.setText(String.valueOf(realEstate.getNumberOfBathrooms()));
-        place = realEstate.getPlace();
-        initPlaceInformation();
+        if (realEstate.getPlace() != null) {
+            place = realEstate.getPlace();
+            initPlaceInformation();
+        }
 
         if (realEstate.isSold()) {
             soldBanner.setVisibility(View.VISIBLE);
@@ -344,6 +402,7 @@ public class CreateOrEditRealEstateActivity extends BaseActivity implements List
 
 
             RealEstate realEstateToCreate = new RealEstate(priceUsd, currentUser, type, photos, mainPicturePosition, description, surface, room, bathroom, bedroom, place);
+
             if (realEstate == null) {
                 viewModelRealEstate.createRealEstate(realEstateToCreate);
             }
@@ -353,6 +412,69 @@ public class CreateOrEditRealEstateActivity extends BaseActivity implements List
 
             finish();
         }
+    }
+
+    // DRAFT
+
+    private void createAlertDialog(int title, int message, int button, DialogInterface.OnClickListener listener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle(title);
+        builder.setMessage(message);
+
+        builder.setPositiveButton(getString(button), listener);
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void deleteDraft() {
+        viewModelRealEstate.deleteDraft(realEstate);
+        finish();
+    }
+
+    private void createDraft() {
+        if (photos.size() == 0) {
+            photos.add(new Photo("android.resource://com.tonyocallimoutou.realestatemanager/drawable/ic_no_image_available",null));
+        }
+
+        String type = (String) realEstateType.getSelectedItem();
+        String description = realEstateDescription.getText().toString();
+        int surface = 0;
+        int room = 0;
+        int bedroom = 0;
+        int bathroom = 0;
+        int priceUsd = 0;
+        try {
+            surface = Integer.parseInt(realEstateSurface.getText().toString());
+        }
+        catch (Exception ignored) {}
+        try {
+            room = Integer.parseInt(realEstateRoom.getText().toString());
+        }
+        catch (Exception ignored) {}
+        try {
+            bedroom = Integer.parseInt(realEstateBedroom.getText().toString());
+        }
+        catch (Exception ignored) {}
+        try {
+            bathroom = Integer.parseInt(realEstateBathroom.getText().toString());
+        }
+        catch (Exception ignored) {}
+
+        try {
+            int price = Utils.getIntOfStringPrice(realEstatePrice.getText().toString());
+            priceUsd = Utils.getPriceInUSD(this,price, moneyKey);
+        }
+        catch (Exception ignored) {}
+
+
+
+        RealEstate draft = new RealEstate(priceUsd, currentUser, type, photos, mainPicturePosition, description, surface, room, bathroom, bedroom, place);
+
+
+        viewModelRealEstate.saveAsDraft(draft);
+        finish();
     }
 
 
@@ -380,5 +502,15 @@ public class CreateOrEditRealEstateActivity extends BaseActivity implements List
         viewModelUser.getCurrentUserLiveData().observe(this, currentUserLiveData -> {
             currentUser = currentUserLiveData;
         });
+    }
+
+    public static void startActivity(Activity activity, @Nullable RealEstate realEstate) {
+        Intent intent = new Intent(activity, CreateOrEditRealEstateActivity.class);
+        if (realEstate != null) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(BUNDLE_REAL_ESTATE, realEstate);
+            intent.putExtras(bundle);
+        }
+        activity.startActivity(intent);
     }
 }

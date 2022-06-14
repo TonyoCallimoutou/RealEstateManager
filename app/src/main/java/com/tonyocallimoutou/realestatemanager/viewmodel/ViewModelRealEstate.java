@@ -47,24 +47,41 @@ public class ViewModelRealEstate extends ViewModel {
         return null;
     }
 
-    public LiveData<List<RealEstate>> getAllRealEstatesLiveData() {
-        return realEstateRepository.getAllRealEstate();
+    public LiveData<List<RealEstate>> getSyncRealEstatesLiveData() {
+        return realEstateRepository.getSyncRealEstate();
     }
 
-    public LiveData<List<RealEstate>> getDraftRealEstate() {
-        return realEstateRepository.getDraftRealEstate();
+    public void setSyncRealEstates(List<RealEstate> realEstates) {
+        realEstateRepository.setSyncRealEstatesList(realEstates);
     }
 
-    public void syncInFirebase(RealEstate realEstate) {
-        realEstateRepository.syncInFirebase(realEstate);
+    public LiveData<List<RealEstate>> getNotSyncRealEstate() {
+        return realEstateRepository.getNotSyncRealEstate();
+    }
+
+    public void setNotSyncList(List<RealEstate> realEstates) {
+        realEstateRepository.setNotSyncList(realEstates);
+    }
+
+    public void saveAsDraft(RealEstate realEstate) {
+        realEstateRepository.saveAsDraft(realEstate);
+        userRepository.createRealEstate(realEstate);
+    }
+
+    public void deleteDraft(RealEstate realEstate) {
+        realEstateRepository.deleteDraft(realEstate);
+    }
+
+    public LiveData<List<RealEstate>> getDraftList() {
+        return realEstateRepository.getDraftList();
+    }
+
+    public void setDraftList(List<RealEstate> realEstates) {
+        realEstateRepository.setDraftList(realEstates);
     }
 
     public LiveData<List<RealEstate>> getFilterListLiveData() {
         return realEstateRepository.getListWithFilter();
-    }
-
-    public void setAllRealEstates(List<RealEstate> realEstates) {
-        realEstateRepository.setRealEstatesList(realEstates);
     }
 
     public void setMyRealEstates(User currentUser) {

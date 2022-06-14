@@ -3,10 +3,12 @@ package com.tonyocallimoutou.realestatemanager.repository;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -35,6 +37,7 @@ import com.tonyocallimoutou.realestatemanager.model.Photo;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.model.User;
 import com.tonyocallimoutou.realestatemanager.util.Filter;
+import com.tonyocallimoutou.realestatemanager.util.UtilNotification;
 import com.tonyocallimoutou.realestatemanager.util.Utils;
 
 import java.util.ArrayList;
@@ -58,14 +61,18 @@ public class RealEstateRepository {
     private List<Filter> filters = new ArrayList<>();
 
     private final MutableLiveData<List<RealEstate>> realEstateFilterLiveData = new MutableLiveData<>();
-    private final MutableLiveData<List<RealEstate>> allRealEstateSyncLiveData = new MutableLiveData<>();
-    private List<RealEstate> allRealEstates = new ArrayList<>();
+    private final MutableLiveData<List<RealEstate>> syncRealEstateSyncLiveData = new MutableLiveData<>();
+    private final List<RealEstate> syncRealEstates = new ArrayList<>();
+    private final List<RealEstate> notSyncRealEstates = new ArrayList<>();
+    private final List<RealEstate> draftRealEstates = new ArrayList<>();
+    private final Context context;
 
 
     private RealEstateRepository(Context context, RealEstateDao realEstateDao, Executor executor) {
         firebaseDataRealEstate = FirebaseDataRealEstate.getInstance(context);
         this.realEstateDao = realEstateDao;
         this.executor = executor;
+        this.context = context;
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         currentUserId = sharedPreferences.getString(context.getString(R.string.shared_preference_user_uid), "");
@@ -117,21 +124,38 @@ public class RealEstateRepository {
         }
     }
 
-    public LiveData<List<RealEstate>> getAllRealEstate() {
+    public LiveData<List<RealEstate>> getSyncRealEstate() {
         if (isConnected) {
-            firebaseDataRealEstate.getListRealEstates(allRealEstateSyncLiveData);
+            firebaseDataRealEstate.getListRealEstates(syncRealEstateSyncLiveData);
         }
         else {
             executor.execute(() -> {
-                allRealEstateSyncLiveData.postValue(realEstateDao.getRealEstates());
+                syncRealEstateSyncLiveData.postValue(realEstateDao.getSyncRealEstates());
             });
         }
 
-        return allRealEstateSyncLiveData;
+        return syncRealEstateSyncLiveData;
     }
 
-    public LiveData<List<RealEstate>> getDraftRealEstate() {
-        return realEstateDao.getDraftRealEstatesLiveData();
+    public LiveData<List<RealEstate>> getNotSyncRealEstate() {
+        return realEstateDao.getNotSyncRealEstatesLiveData();
+    }
+
+    public void saveAsDraft(RealEstate realEstate) {
+        realEstate.setDraft(true);
+        executor.execute(()-> {
+            realEstateDao.createRealEstate(realEstate);
+        });
+    }
+
+    public void deleteDraft(RealEstate realEstate) {
+        executor.execute(() -> {
+            realEstateDao.deleteDraft(realEstate.getId());
+        });
+    }
+
+    public LiveData<List<RealEstate>> getDraftList() {
+        return realEstateDao.getDraftListLiveData();
     }
 
     public void setFilterList(List<Filter> list) {
@@ -146,7 +170,10 @@ public class RealEstateRepository {
 
     private void initListWithFilter() {
 
-        List<RealEstate> newList = new ArrayList<>(allRealEstates);
+        List<RealEstate> newList = new ArrayList<>();
+        newList.addAll(syncRealEstates);
+        newList.addAll(notSyncRealEstates);
+        newList.addAll(draftRealEstates);
 
         for (int i = 0; i < filters.size(); i++) {
             newList = filters.get(i).modifyList(newList);
@@ -188,29 +215,48 @@ public class RealEstateRepository {
         }
         else {
             executor.execute(() -> {
-                List<RealEstate> realEstates = realEstateDao.getRealEstates();
+                List<RealEstate> realEstates = realEstateDao.getSyncRealEstates();
 
                 for (RealEstate realEstate : realEstates) {
                     if (realEstate.getUser().getUid().equals(user.getUid())) {
                         realEstate.setSync(false);
                         realEstate.setUser(user);
+                        realEstateDao.createRealEstate(realEstate);
                     }
                 }
             });
         }
     }
 
-    public void syncInFirebase(RealEstate realEstate) {
+
+    public void setNotSyncList(List<RealEstate> realEstates) {
         if (isConnected) {
-            Log.d("TAG", "syncInFirebase: ");
-            firebaseDataRealEstate.editRealEstate(realEstate);
+            for (RealEstate realEstate : realEstates) {
+                if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)) {
+                    UtilNotification.createNotification(instance.context, realEstate);
+                }
+                if (realEstate.getProgressSync() ==100) {
+                    firebaseDataRealEstate.editRealEstate(realEstate);
+                }
+            }
         }
+        syncRealEstates.clear();
+        syncRealEstates.addAll(realEstates);
+        initListWithFilter();
+
     }
 
-    public void setRealEstatesList(List<RealEstate> realEstates) {
-        allRealEstates.clear();
-        allRealEstates.addAll(realEstates);
+    public void setDraftList(List<RealEstate> realEstates) {
+        draftRealEstates.clear();
+        draftRealEstates.addAll(realEstates);
         initListWithFilter();
+    }
+
+    public void setSyncRealEstatesList(List<RealEstate> realEstates) {
+        syncRealEstates.clear();
+        syncRealEstates.addAll(realEstates);
+        initListWithFilter();
+
         if (isConnected) {
             for (RealEstate realEstate : realEstates) {
                 executor.execute(() -> {
@@ -223,7 +269,7 @@ public class RealEstateRepository {
     public static void ConnectionChanged(boolean result) {
         if (result && instance!= null) {
             syncFirebase();
-            instance.firebaseDataRealEstate.getListRealEstates(instance.allRealEstateSyncLiveData);
+            instance.firebaseDataRealEstate.getListRealEstates(instance.syncRealEstateSyncLiveData);
         }
         isConnected = result;
     }
@@ -231,9 +277,12 @@ public class RealEstateRepository {
     private static void syncFirebase() {
 
         instance.executor.execute(()-> {
-            List<RealEstate> realEstates = instance.realEstateDao.getDraftRealEstates();
+            List<RealEstate> realEstates = instance.realEstateDao.getNotSyncRealEstates();
 
             for (RealEstate realEstate : realEstates) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    UtilNotification.createNotification(instance.context, realEstate);
+                }
                 if (realEstate.getProgressSync() == 100) {
                     instance.firebaseDataRealEstate.editRealEstate(realEstate);
                 }

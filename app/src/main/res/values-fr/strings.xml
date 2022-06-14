@@ -18,6 +18,7 @@
     <string name="information_no_phone_number">Accédez aux paramètres pour gérer votre numéro de téléphone</string>
     <string name="side_view_setting">PARAMETRES</string>
     <string name="side_view_LOGOUT">DECONNEXION</string>
+    <string name="error_no_connection"> AUCUNE CONNEXION</string>
 
     <string name="title_alertDialog_google_play_service"> ERREUR !!</string>
     <string name="message_alertDialog_google_play_service_download"> Veuillez télécharger le service Google Play</string>
@@ -29,6 +30,8 @@
     <string name="actionbar_edit"> modifier </string>
     <string name="actionbar_filter"> Filtrer </string>
     <string name="actionbar_sold"> Vendre </string>
+    <string name="actionbar_draft"> Créer un brouillon</string>
+    <string name="actionbar_delete_draft"> Supprimer le brouillon</string>
 
     <!-- Alert dialog profile picture -->
     <string name="alert_dialog_choice_files"> Dossier</string>
@@ -72,6 +75,14 @@
     <string name="new_toast_unable_to_save"> Impossible de sauvegarder </string>
     <string name="new_error_enter_data"> Entrer des données</string>
     <string name="new_error_price_format"> Format Incorrect </string>
+
+    <string name="new_title_alert_dialog_draft"> SAUVERGARDER COMME BROUILLON !!</string>
+    <string name="new_message_alert_dialog_draft"> Voulez-vous vraiment créer un brouillon de ce bien immobilier ?</string>
+    <string name="new_button_alert_dialog_draft"> OUI </string>
+
+    <string name="new_title_alert_dialog_delete_draft"> SUPPRIMER LE BROUILLON !!</string>
+    <string name="new_message_alert_dialog_delete_draft"> Voulez-vous vraiment supprimer ce brouillon ?</string>
+    <string name="new_button_alert_dialog_delete_draft"> OUI </string>
 
     <string name="title_message_sold_real_estate"> Attention </string>
     <string name="message_sold_real_estate"> Êtes-vous sûr de vouloir marquer cette propriété comme \"vendue\" ?</string>
@@ -157,4 +168,10 @@
     </string-array>
     <string name="money_key_dollar"> USD</string>
     <string name="money_key_euro"> EUR</string>
+
+    <!-- Notification -->
+    <string name="notification_channel_name"> RealEstateManager</string>
+    <string name="notification_channel_description"> Ton bien immobiler est en ligne </string>
+    <string name="notification_title_finish"> RealEstateManager - Completed </string>
+    <string name="notification_title_unfinish"> RealEstateManager - Téléchargement </string>
 </resources>

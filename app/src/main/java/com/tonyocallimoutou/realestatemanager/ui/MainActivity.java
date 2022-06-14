@@ -47,6 +47,7 @@ import com.tonyocallimoutou.realestatemanager.ui.create.CreateOrEditRealEstateAc
 import com.tonyocallimoutou.realestatemanager.ui.detail.DetailFragment;
 import com.tonyocallimoutou.realestatemanager.ui.listView.ListViewFragment;
 import com.tonyocallimoutou.realestatemanager.ui.mapview.MapViewFragment;
+import com.tonyocallimoutou.realestatemanager.util.UtilNotification;
 import com.tonyocallimoutou.realestatemanager.util.UtilsProfilePictureManager;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelFactory;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelRealEstate;
@@ -274,16 +275,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 }
                 return true;
             case R.id.add_menu:
-                Intent intentNewRealEstate = new Intent(this, CreateOrEditRealEstateActivity.class);
-                startActivity(intentNewRealEstate);
+
+                CreateOrEditRealEstateActivity.startActivity(this,null);
+
                 return true;
             case R.id.go_to_edit:
 
-                Intent intentEditRealEstate = new Intent(this, CreateOrEditRealEstateActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(CreateOrEditRealEstateActivity.BUNDLE_REAL_ESTATE,DetailFragment.getActualRealEstate());
-                intentEditRealEstate.putExtras(bundle);
-                startActivity(intentEditRealEstate);
+                CreateOrEditRealEstateActivity.startActivity(this,DetailFragment.getActualRealEstate());
 
                 DetailFragment.newInstance(null);
 
@@ -446,22 +444,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
         });
 
-        viewModelRealEstate.getAllRealEstatesLiveData().observe(this, list -> {
-            viewModelRealEstate.setAllRealEstates(list);
+        viewModelRealEstate.getSyncRealEstatesLiveData().observe(this, list -> {
+            viewModelRealEstate.setSyncRealEstates(list);
         });
 
-        viewModelRealEstate.getDraftRealEstate().observe(this, list -> {
-            if (list.size() > 0) {
-                Log.d("TAG", "onBindViewHolder: " + list.get(0).getProgressSync());
-                for (RealEstate realEstate : list) {
-                    if (realEstate.getProgressSync() ==100) {
-                        Log.d("TAG", "Start Sync: ");
-                        viewModelRealEstate.syncInFirebase(realEstate);
-                    }
-                }
-            }
-            ListViewFragment.initDraftList(list);
-            //MapViewFragment.setDraftList(listFilter);
+        viewModelRealEstate.getNotSyncRealEstate().observe(this, list -> {
+            Log.d("TAG", "Not Sync List: ");
+            viewModelRealEstate.setNotSyncList(list);
+        });
+
+        viewModelRealEstate.getDraftList().observe(this, list -> {
+            Log.d("TAG", "draft: ");
+            viewModelRealEstate.setDraftList(list);
         });
 
         viewModelRealEstate.getFilterListLiveData().observe(this, listFilter -> {
@@ -472,6 +466,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public static void test(boolean isConnected) {
+        ListViewFragment.setConnection();
         Toast.makeText(context, "connection :" + isConnected, Toast.LENGTH_SHORT).show();
     }
 }

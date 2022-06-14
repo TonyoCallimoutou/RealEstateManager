@@ -48,34 +48,46 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRe
     public void onBindViewHolder(@NonNull ListViewRecyclerViewAdapter.ViewHolder holder, int position) {
         RealEstate realEstate = mRealEstate.get(position);
 
-
         int mainPicturePosition = realEstate.getMainPicturePosition();
         Glide.with(mContext)
                 .load(realEstate.getPhotos().get(mainPicturePosition).getReference())
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.realEstateImage);
 
-        holder.realEstateType.setText(realEstate.getType());
-        holder.realEstateLocation.setText(realEstate.getPlace().getAddress());
-        holder.realEstatePrice.setText(realEstate.getStringPriceUSD(mContext));
-
-        if (realEstate.isSold()) {
-            holder.soldBanner.setVisibility(View.VISIBLE);
-        }
-        else {
-            holder.soldBanner.setVisibility(View.GONE);
-        }
-
+        holder.soldBanner.setVisibility(View.GONE);
         holder.progressBar.setVisibility(View.GONE);
         holder.errorProgressBar.setVisibility(View.GONE);
+        holder.percentage.setVisibility(View.GONE);
+        holder.draftText.setVisibility(View.GONE);
 
-        if (realEstate.getProgressSync() != 100) {
-            if (Utils.isInternetAvailable(mContext)) {
-                holder.progressBar.setVisibility(View.VISIBLE);
-                holder.progressBar.setProgress((int) Math.round(realEstate.getProgressSync()));
+        holder.realEstateType.setText(realEstate.getType());
+        holder.realEstatePrice.setText(realEstate.getStringPriceUSD(mContext));
+
+        if (realEstate.isDraft()) {
+            holder.draftText.setVisibility(View.VISIBLE);
+            if (realEstate.getPlace() != null) {
+                holder.realEstateLocation.setText(realEstate.getPlace().getAddress());
             }
-            else {
-                holder.errorProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        else {
+            holder.realEstateLocation.setText(realEstate.getPlace().getAddress());
+
+            if (realEstate.isSold()) {
+                holder.soldBanner.setVisibility(View.VISIBLE);
+            }
+
+            if (realEstate.getProgressSync() != 100) {
+                if (Utils.isInternetAvailable(mContext)) {
+                    int percentage = (int) Math.round(realEstate.getProgressSync());
+                    String percentageStr = percentage + "%";
+                    holder.progressBar.setVisibility(View.VISIBLE);
+                    holder.progressBar.setProgress(percentage);
+                    holder.percentage.setVisibility(View.VISIBLE);
+                    holder.percentage.setText(percentageStr);
+                } else {
+                    holder.errorProgressBar.setVisibility(View.VISIBLE);
+                }
             }
         }
 
@@ -107,10 +119,15 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRe
         TextView realEstatePrice;
         @BindView(R.id.list_view_image_sold_banner)
         ImageView soldBanner;
-        @BindView(R.id.progressBar)
+        @BindView(R.id.progress_bar)
         ContentLoadingProgressBar progressBar;
         @BindView(R.id.error_progress)
         TextView errorProgressBar;
+        @BindView(R.id.progress_bar_percentage)
+        TextView percentage;
+        @BindView(R.id.list_view_draft)
+        TextView draftText;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

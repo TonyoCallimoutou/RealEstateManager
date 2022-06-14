@@ -64,7 +64,6 @@ public class UtilContactUser {
         phoneChoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("TAG", "onClick: ");
                 callOrPermission();
             }
         });

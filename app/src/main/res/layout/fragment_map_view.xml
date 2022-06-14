@@ -27,4 +27,10 @@
         android:backgroundTint="@color/white"
         app:borderWidth="0dp" />
 
+    <include
+        android:layout_gravity="bottom"
+        layout="@layout/include_map_legend"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content" />
+
 </FrameLayout>

@@ -97,6 +97,10 @@
     <string name="title_alertDialog_error_location"> We are Sorry </string>
     <string name="message_alertDialog_error_location"> We were unable to locate you</string>
 
+    <string name="legend_sync_list"> Sync </string>
+    <string name="legend_no_sync_list"> No Sync</string>
+    <string name="legend_draft_list"> Draft </string>
+
     <!-- Filter -->
     <string name="filter_more_filter">More Filter</string>
     <string name="filter_less_filter">Less Filter</string>
@@ -107,7 +111,8 @@
     <string name="filter_price_max">Max : </string>
     <string name="filter_location_city">City : </string>
     <string name="filter_hint_location"> City </string>
-
+    <string name="filter_without_draft"> Without draft</string>
+    <string name="filter_without_no_sync"> Without no sync</string>
 
     <array name="Spinner_room">
         <item>Room : 1 or more</item>
@@ -134,6 +139,21 @@
         <item>Picture : 2 or more</item>
         <item>Picture : 3 or more</item>
     </array>
+
+    <string name="filter_to_string_type"> Type :</string>
+    <string name="filter_to_string_min"> Min :</string>
+    <string name="filter_to_string_max"> Max :</string>
+    <string name="filter_to_string_more_than"> More than </string>
+    <string name="filter_to_string_room"> Room </string>
+    <string name="filter_to_string_my_real_estates"> My real estates </string>
+    <string name="filter_to_string_only_sold"> Only sold </string>
+    <string name="filter_to_string_only_sold_last"> Only sold last </string>
+    <string name="filter_to_string_months"> months </string>
+    <string name="filter_to_string_only_published_last"> Only published last </string>
+    <string name="filter_to_string_pictures"> pictures </string>
+    <string name="filter_to_string_without_draft"> Without drafts </string>
+    <string name="filter_to_string_without_not_sync"> Without not sync </string>
+
     <!-- Setting -->
     <string name="preferences_general"> General </string>
     <string name="preferences_languages"> Languages </string>

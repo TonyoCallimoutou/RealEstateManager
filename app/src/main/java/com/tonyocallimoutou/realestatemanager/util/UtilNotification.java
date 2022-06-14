@@ -50,7 +50,6 @@ public class UtilNotification {
         String content = realEstate.getType() + " - " + realEstate.getPlace().getAddress();
 
         int progress = (int) Math.round(realEstate.getProgressSync());
-        Log.d("TAG", "initNotification: " + progress);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NotificationReceiver.CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_room)

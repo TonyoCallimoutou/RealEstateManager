@@ -88,13 +88,13 @@ public class RealEstateRepository {
     }
 
     public void createRealEstate(RealEstate realEstate) {
+        realEstate.setSync(false);
 
         if (isConnected) {
             firebaseDataRealEstate.savePicture(realEstate, realEstateDao, executor);
         }
         else {
             executor.execute(() -> {
-                realEstate.setSync(false);
                 realEstateDao.createRealEstate(realEstate);
             });
         }
@@ -237,11 +237,12 @@ public class RealEstateRepository {
                 }
                 if (realEstate.getProgressSync() ==100) {
                     firebaseDataRealEstate.editRealEstate(realEstate);
+                    realEstates.remove(realEstate);
                 }
             }
         }
-        syncRealEstates.clear();
-        syncRealEstates.addAll(realEstates);
+        notSyncRealEstates.clear();
+        notSyncRealEstates.addAll(realEstates);
         initListWithFilter();
 
     }
@@ -267,7 +268,7 @@ public class RealEstateRepository {
     }
 
     public static void ConnectionChanged(boolean result) {
-        if (result && instance!= null) {
+        if (result && instance!= null && !isConnected) {
             syncFirebase();
             instance.firebaseDataRealEstate.getListRealEstates(instance.syncRealEstateSyncLiveData);
         }

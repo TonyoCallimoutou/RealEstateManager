@@ -60,6 +60,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
     LinearLayout message_map_view;
     @BindView(R.id.fab_map_view)
     FloatingActionButton fabMap;
+    @BindView(R.id.map_legend)
+    LinearLayout mapLegend;
 
     private SupportMapFragment mapFragment;
     private static GoogleMap mGoogleMap;
@@ -74,7 +76,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
 
 
     private static List<RealEstate> realEstatesList = new ArrayList<>();
-    private static List<RealEstate> notSyncRealEstatesList = new ArrayList<>();
 
 
     // Bundle
@@ -234,6 +235,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
     public void onMapReady(GoogleMap googleMap) {
         MapsInitializer.initialize(getActivity());
 
+        mapLegend.setVisibility(View.VISIBLE);
+
         // Camera
         if (cameraPosition != null) {
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cameraPosition.target, cameraPosition.zoom));
@@ -287,38 +290,31 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
         for (RealEstate result : realEstatesList) {
-            String placeName = result.getPlace().getName();
-            String address = result.getPlace().getAddress();
-            double lat = result.getPlace().getLat();
-            double lng = result.getPlace().getLng();
-            LatLng latLng = new LatLng(lat,lng);
+            if (result.getPlace() != null) {
+                String placeName = result.getPlace().getName();
+                String address = result.getPlace().getAddress();
+                double lat = result.getPlace().getLat();
+                double lng = result.getPlace().getLng();
+                LatLng latLng = new LatLng(lat,lng);
 
-            MarkerOptions markerOptions = new MarkerOptions()
-                    .position(latLng)
-                    .title(placeName + " : " + address);
 
-            builder.include(markerOptions.getPosition());
+                MarkerOptions markerOptions = new MarkerOptions()
+                        .position(latLng)
+                        .title(placeName + " : " + address);
 
-            mGoogleMap.addMarker(markerOptions)
-                    .setTag(result);
-        }
+                if (result.isDraft()) {
+                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                }
+                else if (! result.isSync()) {
+                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                }
 
-        for (RealEstate result : notSyncRealEstatesList) {
-            String placeName = result.getPlace().getName();
-            String address = result.getPlace().getAddress();
-            double lat = result.getPlace().getLat();
-            double lng = result.getPlace().getLng();
-            LatLng latLng = new LatLng(lat,lng);
+                builder.include(markerOptions.getPosition());
 
-            MarkerOptions markerOptions = new MarkerOptions()
-                    .position(latLng)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                    .title(placeName + " : " + address);
+                mGoogleMap.addMarker(markerOptions)
+                        .setTag(result);
+            }
 
-            builder.include(markerOptions.getPosition());
-
-            mGoogleMap.addMarker(markerOptions)
-                    .setTag(result);
         }
 
         // ZOOM WITH NEARBY PLACE
@@ -348,15 +344,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
     public static void setRealEstateList(List<RealEstate> results) {
         if (! CompareRealEstate.compareListForMapIsEqual(realEstatesList, results)) {
             realEstatesList = results;
-            if (mGoogleMap != null) {
-                initListForMarker();
-            }
-        }
-    }
-
-    public static void setNotSyncList(List<RealEstate> results) {
-        if (! CompareRealEstate.compareListForMapIsEqual(notSyncRealEstatesList, results)) {
-            notSyncRealEstatesList = results;
             if (mGoogleMap != null) {
                 initListForMarker();
             }

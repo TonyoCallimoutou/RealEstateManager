@@ -97,6 +97,10 @@
     <string name="title_alertDialog_error_location"> Nous sommes désolés</string>
     <string name="message_alertDialog_error_location"> Nous n\'avons pas pu vous localiser</string>
 
+    <string name="legend_sync_list"> Sync </string>
+    <string name="legend_no_sync_list"> Pas Sync</string>
+    <string name="legend_draft_list"> Brouillon </string>
+
     <!-- Filter -->
     <string name="filter_more_filter">Plus de filtre</string>
     <string name="filter_less_filter">Moins de filtre</string>
@@ -107,6 +111,8 @@
     <string name="filter_price_max">Max : </string>
     <string name="filter_location_city">Ville : </string>
     <string name="filter_hint_location"> Ville </string>
+    <string name="filter_without_draft"> Sans les brouillons</string>
+    <string name="filter_without_no_sync"> Sans les non-synchronisés </string>
 
 
     <array name="Spinner_room">
@@ -134,6 +140,21 @@
         <item>Photos : 2 ou plus</item>
         <item>Photos : 3 ou plus</item>
     </array>
+
+    <string name="filter_to_string_type"> Type :</string>
+    <string name="filter_to_string_min"> Min :</string>
+    <string name="filter_to_string_max"> Max :</string>
+    <string name="filter_to_string_more_than"> Plus de </string>
+    <string name="filter_to_string_room"> Pièces </string>
+    <string name="filter_to_string_my_real_estates"> Mes biens Immobiliers </string>
+    <string name="filter_to_string_only_sold"> Que les vendus </string>
+    <string name="filter_to_string_only_sold_last"> Que les vendu les </string>
+    <string name="filter_to_string_months"> dernier mois </string>
+    <string name="filter_to_string_only_published_last"> publié les </string>
+    <string name="filter_to_string_pictures"> photos </string>
+    <string name="filter_to_string_without_draft"> Sans les brouillons </string>
+    <string name="filter_to_string_without_not_sync"> Sans les non-synchronisés </string>
+
     <!-- Setting -->
     <string name="preferences_general"> Général </string>
     <string name="preferences_languages"> Langues </string>

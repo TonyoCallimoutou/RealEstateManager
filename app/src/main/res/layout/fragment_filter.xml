@@ -114,6 +114,18 @@
                 android:layout_height="wrap_content"
                 android:text="@string/filter_is_mine" />
 
+            <CheckBox
+                android:id="@+id/filter_checkbox_draft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_without_draft" />
+
+            <CheckBox
+                android:id="@+id/filter_checkbox_not_sync"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_without_no_sync" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

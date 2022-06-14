@@ -49,6 +49,7 @@
     <dimen name="margin_bottom_fab_map"> 40dp </dimen>
     <dimen name="mini_map_height"> 200dp </dimen>
     <dimen name="mini_map_margin"> 12dp</dimen>
+    <dimen name="legend_padding"> 8dp</dimen>
 
     <!-- Filter -->
     <dimen name="filter_margin"> 12dp </dimen>

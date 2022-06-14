@@ -449,12 +449,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         });
 
         viewModelRealEstate.getNotSyncRealEstate().observe(this, list -> {
-            Log.d("TAG", "Not Sync List: ");
             viewModelRealEstate.setNotSyncList(list);
         });
 
         viewModelRealEstate.getDraftList().observe(this, list -> {
-            Log.d("TAG", "draft: ");
             viewModelRealEstate.setDraftList(list);
         });
 

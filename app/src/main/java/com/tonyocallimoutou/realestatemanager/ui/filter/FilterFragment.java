@@ -98,6 +98,10 @@ public class FilterFragment extends Fragment {
     ImageView imageViewMoreFilter;
     @BindView(R.id.filter_recyclerview_list_filter)
     RecyclerView recyclerView;
+    @BindView(R.id.filter_checkbox_draft)
+    CheckBox draftCheckbox;
+    @BindView(R.id.filter_checkbox_not_sync)
+    CheckBox notSyncCheckbox;
 
     private FilterRecyclerViewAdapter adapter;
 
@@ -215,6 +219,12 @@ public class FilterFragment extends Fragment {
         else if (filter.getFilterType() == (Filter.TYPE_LOCATION)) {
             clearButtonAutocomplete.performClick();
         }
+        else if (filter.getFilterType() == (Filter.TYPE_DRAFT)) {
+            checkBoxIsMine.setChecked(false);
+        }
+        else if (filter.getFilterType() == (Filter.TYPE_NOT_SYNC)) {
+            checkBoxIsMine.setChecked(false);
+        }
 
         filters.remove(filter);
         applyFilter();
@@ -231,10 +241,12 @@ public class FilterFragment extends Fragment {
         initPictureSpinner();
         initMineCheckbox();
         initSoldFilter();
+        initDraftFilter();
+        initNotSyncFilter();
     }
 
     private void initPlaceFilter() {
-        Filter filterLocation = new Filter(Filter.TYPE_LOCATION);
+        Filter filterLocation = new Filter(getContext(), Filter.TYPE_LOCATION);
 
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
                 getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
@@ -300,11 +312,11 @@ public class FilterFragment extends Fragment {
     }
 
     private void initPriceFilter() {
-        Filter filterMinPrice = new Filter(Filter.TYPE_MIN_PRICE);
-        Filter filterMaxPrice = new Filter(Filter.TYPE_MAX_PRICE);
+        Filter filterMinPrice = new Filter(getContext(), Filter.TYPE_MIN_PRICE);
+        Filter filterMaxPrice = new Filter(getContext(), Filter.TYPE_MAX_PRICE);
 
-        filterMinPrice.setMoneyKey(getContext(),moneyKey);
-        filterMaxPrice.setMoneyKey(getContext(),moneyKey);
+        filterMinPrice.setMoneyKey(moneyKey);
+        filterMaxPrice.setMoneyKey(moneyKey);
 
         minPrice.addTextChangedListener(new TextWatcher() {
             @Override
@@ -378,7 +390,7 @@ public class FilterFragment extends Fragment {
     }
 
     private void initTypeSpinner() {
-        Filter filterType = new Filter(Filter.TYPE_TYPE);
+        Filter filterType = new Filter(getContext(), Filter.TYPE_TYPE);
 
         String[] brut = getResources().getStringArray(R.array.SpinnerTypeOfResidence);
         String[] type = new String[brut.length+1];
@@ -418,7 +430,7 @@ public class FilterFragment extends Fragment {
     }
 
     private void initRoomSpinner() {
-        Filter filterRoom = new Filter(Filter.TYPE_ROOM);
+        Filter filterRoom = new Filter(getContext(), Filter.TYPE_ROOM);
 
         spinnerRoom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -443,7 +455,7 @@ public class FilterFragment extends Fragment {
     }
 
     private void initCreationDateSpinner() {
-        Filter filterCreationDate = new Filter(Filter.TYPE_CREATION);
+        Filter filterCreationDate = new Filter(getContext(), Filter.TYPE_CREATION);
 
         spinnerCreationDate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -468,7 +480,7 @@ public class FilterFragment extends Fragment {
     }
 
     private void initPictureSpinner() {
-        Filter filterPicture = new Filter(Filter.TYPE_PICTURE);
+        Filter filterPicture = new Filter(getContext(), Filter.TYPE_PICTURE);
 
         spinnerNbrPicture.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -493,7 +505,7 @@ public class FilterFragment extends Fragment {
     }
 
     private void initMineCheckbox() {
-        Filter filterMine = new Filter(Filter.TYPE_MINE);
+        Filter filterMine = new Filter(getContext(), Filter.TYPE_MINE);
 
         checkBoxIsMine.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -516,7 +528,7 @@ public class FilterFragment extends Fragment {
     }
 
     private void initSoldFilter() {
-        Filter filterSold = new Filter(Filter.TYPE_SOLD);
+        Filter filterSold = new Filter(getContext(), Filter.TYPE_SOLD);
 
         checkBoxIsSold.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -560,6 +572,47 @@ public class FilterFragment extends Fragment {
         });
     }
 
+    private void initDraftFilter() {
+        Filter filterDraft = new Filter(getContext(), Filter.TYPE_DRAFT);
+
+        draftCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+
+                    filters.remove(filterDraft);
+                    filters.add(filterDraft);
+
+                }
+                else {
+                    filters.remove(filterDraft);
+                }
+
+                applyFilter();
+            }
+        });
+    }
+
+    private void initNotSyncFilter() {
+        Filter filterNotSync = new Filter(getContext(), Filter.TYPE_NOT_SYNC);
+
+        notSyncCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+
+                    filters.remove(filterNotSync);
+                    filters.add(filterNotSync);
+
+                }
+                else {
+                    filters.remove(filterNotSync);
+                }
+
+                applyFilter();
+            }
+        });
+    }
 
     // STATIC VOID
 

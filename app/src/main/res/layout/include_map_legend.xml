@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/border"
+    android:padding="@dimen/legend_padding"
+    android:visibility="gone"
+    android:id="@+id/map_legend"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:drawableLeftCompat="@drawable/ic_draft_24dp"
+        android:text="@string/legend_sync_list"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:drawableLeftCompat="@drawable/ic_draft_24dp"
+        android:text="@string/legend_no_sync_list"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:drawableLeftCompat="@drawable/ic_draft_24dp"
+        android:text="@string/legend_draft_list"/>
+
+
+</LinearLayout>

@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.google.android.libraries.places.api.model.Place;
+import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ public class Filter {
     public static int TYPE_PICTURE = 7;
     public static int TYPE_MINE = 8;
     public static int TYPE_SOLD = 9;
+    public static int TYPE_DRAFT = 10;
+    public static int TYPE_NOT_SYNC = 11;
     private int filterType;
     private String filterCountry;
     private Place filterCity;
@@ -31,17 +34,20 @@ public class Filter {
     private Integer minPrice;
     private Integer maxPrice;
     private String moneyKey;
-    private Context context;
+    private final Context context;
     private Integer minRoom;
     private String userId;
     private int dateSoldLimit;
     private int creationDateLimit;
     private int minNbrPicture;
 
-    public Filter(int filterType) {
+    // Constructor
+    public Filter(Context context, int filterType) {
+        this.context = context;
         this.filterType = filterType;
     }
 
+    // GETTER & SETTER
     public String getFilterCountry() {
         return filterCountry;
     }
@@ -102,9 +108,8 @@ public class Filter {
         return moneyKey;
     }
 
-    public void setMoneyKey(Context context, String moneyKey) {
+    public void setMoneyKey(String moneyKey) {
         this.moneyKey = moneyKey;
-        this.context = context;
     }
 
     public Integer getMinRoom() {
@@ -219,6 +224,20 @@ public class Filter {
                 }
             }
         }
+        else if (filterType == (TYPE_DRAFT)) {
+            for (RealEstate realEstate : original) {
+                if (! realEstate.isDraft()) {
+                    newList.add(realEstate);
+                }
+            }
+        }
+        else if (filterType == (TYPE_NOT_SYNC)) {
+            for (RealEstate realEstate : original) {
+                if (realEstate.isSync() || realEstate.isDraft()) {
+                    newList.add(realEstate);
+                }
+            }
+        }
 
         return newList;
     }
@@ -226,31 +245,31 @@ public class Filter {
     @Override
     public String toString() {
         if(filterType == (TYPE_TYPE)) {
-            return "Type : " +type;
+            return context.getString(R.string.filter_to_string_type) + " " +type;
         }
         else if (filterType == (TYPE_MIN_PRICE)) {
-            return "min : "+ Utils.getStringOfPrice(minPrice) + " " + moneyKey;
+            return context.getString(R.string.filter_to_string_min) + " "+ Utils.getStringOfPrice(minPrice) + " " + moneyKey;
         }
         else if (filterType == (TYPE_MAX_PRICE)) {
-            return "max : "+ Utils.getStringOfPrice(maxPrice)+ " " + moneyKey;
+            return context.getString(R.string.filter_to_string_max) + " "+ Utils.getStringOfPrice(maxPrice)+ " " + moneyKey;
         }
         else if (filterType == (TYPE_ROOM)) {
-            return "more than " + minRoom + " room";
+            return context.getString(R.string.filter_to_string_more_than) + " " + minRoom + context.getString(R.string.filter_to_string_room) ;
         }
         else if (filterType == (TYPE_MINE)) {
-            return "my real estate";
+            return context.getString(R.string.filter_to_string_my_real_estates) ;
         }
         else if (filterType == (TYPE_SOLD)) {
             if (dateSoldLimit == 0) {
-                return "only sold";
+                return context.getString(R.string.filter_to_string_only_sold);
             }
-            else return "only sold last " + dateSoldLimit + " months";
+            else return context.getString(R.string.filter_to_string_only_sold_last)+" " + dateSoldLimit + " " +context.getString(R.string.filter_to_string_months);
         }
         else if (filterType == (TYPE_CREATION)) {
-            return "only published last " + creationDateLimit + " months";
+            return context.getString(R.string.filter_to_string_only_published_last)+" " + creationDateLimit + " " +context.getString(R.string.filter_to_string_months);
         }
         else if (filterType == (TYPE_PICTURE)) {
-            return "more than " + minNbrPicture + " pictures";
+            return context.getString(R.string.filter_to_string_more_than) +" " + minNbrPicture + context.getString(R.string.filter_to_string_pictures) ;
         }
         else if (filterType == (TYPE_LOCATION)) {
             if (distance > 0) {
@@ -260,7 +279,13 @@ public class Filter {
                 return filterCity.getName();
             }
         }
-        return "none";
+        else if (filterType == (TYPE_DRAFT)) {
+            return context.getString(R.string.filter_to_string_without_draft) ;
+        }
+        else if (filterType == (TYPE_NOT_SYNC)) {
+            return context.getString(R.string.filter_to_string_without_not_sync) ;
+        }
+        return "error";
     }
 
     @Override

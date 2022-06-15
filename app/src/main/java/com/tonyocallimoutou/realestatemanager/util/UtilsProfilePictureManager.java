@@ -48,6 +48,7 @@ public class UtilsProfilePictureManager {
         }
         if (requestCode == REQUEST_IMAGE_FOLDER && resultCode == Activity.RESULT_OK) {
             Uri uri = data.getData();
+            mActivity.getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             newProfilePicture = uri.toString();
             updatePictureInImageView();
         }
@@ -143,7 +144,7 @@ public class UtilsProfilePictureManager {
     }
 
     private static void takePictureIntoFolder() {
-        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        Intent getIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         getIntent.setType("image/*");
 
         Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);

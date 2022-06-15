@@ -214,10 +214,8 @@ public class UserRepository {
 
 
     public static void ConnectionChanged(boolean result) {
-        Log.d("TAG", "ConnectionChanged: " + result);
         if (result && instance!= null && !isConnected) {
             if (instance.currentUser != null) {
-                Log.d("TAG", "ConnectionChanged: ");
                 instance.firebaseDataUser.syncCurrentUser(instance.currentUser);
             }
         }

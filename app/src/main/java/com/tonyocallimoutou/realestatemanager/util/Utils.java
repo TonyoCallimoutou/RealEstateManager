@@ -48,7 +48,7 @@ public class Utils {
      * @return
      */
     public static String getTodayDate() {
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.getDefault());
         return dateFormat.format(new Date());
     }
 
@@ -164,11 +164,13 @@ public class Utils {
         Location realEstateLocation = new Location("");
         Location placeLocation = new Location("");
 
-        realEstateLocation.setLatitude(realEstate.getPlace().getLat());
-        realEstateLocation.setLongitude(realEstate.getPlace().getLng());
+        if (realEstate.getPlace() != null) {
+            realEstateLocation.setLatitude(realEstate.getPlace().getLat());
+            realEstateLocation.setLongitude(realEstate.getPlace().getLng());
 
-        placeLocation.setLatitude(place.getLatLng().latitude);
-        placeLocation.setLongitude(place.getLatLng().longitude);
+            placeLocation.setLatitude(place.getLatLng().latitude);
+            placeLocation.setLongitude(place.getLatLng().longitude);
+        }
 
         return (placeLocation.distanceTo(realEstateLocation) / 1000);
 

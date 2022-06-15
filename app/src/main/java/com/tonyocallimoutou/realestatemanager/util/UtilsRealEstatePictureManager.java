@@ -52,6 +52,7 @@ public class UtilsRealEstatePictureManager {
             }
             else {
                 Uri uri = data.getData();
+                mActivity.getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 newPicture.add(uri.toString());
             }
 

@@ -249,7 +249,7 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
 
     private void initTextInformation() {
         textDescription.setText(mRealEstate.getDescription());
-        textType.setText(mRealEstate.getType());
+        textType.setText(mRealEstate.getStringType(getContext()));
         textSurface.setText(mRealEstate.getStringSurface());
         textNumberOfRoom.setText(mRealEstate.getStringNumberOfRooms());
         textNumberOfBathroom.setText(mRealEstate.getStringNumberOfBathrooms());

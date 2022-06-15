@@ -94,7 +94,9 @@ public class UserRepository {
     }
 
     public void createUser(Activity activity, ViewModelUser viewModelUser) {
-        firebaseDataUser.createUser(activity,viewModelUser, userDao, executor);
+        if (isConnected) {
+            firebaseDataUser.createUser(activity, viewModelUser, userDao, executor);
+        }
     }
 
     public void setCurrentUserPicture(String picture) {
@@ -158,7 +160,6 @@ public class UserRepository {
     public LiveData<User> getCurrentUserLiveData() {
 
 
-
         if (isConnected) {
             firebaseDataUser.setCurrentUserLivedata(currentUserLiveData);
         }
@@ -166,7 +167,6 @@ public class UserRepository {
             initLiveDataUser();
         }
         return currentUserLiveData;
-
     }
 
     private void initLiveDataUser() {
@@ -180,15 +180,12 @@ public class UserRepository {
     public void createRealEstate(RealEstate realEstate) {
 
         if (isConnected) {
-
             firebaseDataUser.createRealEstate(realEstate);
         }
         else {
-
             executor.execute(() -> {
-                User user = getCurrentUser();
-                user.addRealEstateToMyList(realEstate);
-                userDao.createUser(user);
+                currentUser.addRealEstateToMyList(realEstate);
+                userDao.createUser(currentUser);
                 initLiveDataUser();
             });
         }
@@ -203,12 +200,15 @@ public class UserRepository {
     public void setCurrentUser(User user) {
         if (! user.equals(currentUser)) {
             currentUser = user;
+
+            executor.execute(() -> {
+                userDao.createUser(user);
+            });
+
             if (isConnected) {
                 instance.firebaseDataUser.syncCurrentUser(instance.currentUser);
-                executor.execute(() -> {
-                    userDao.createUser(user);
-                });
             }
+
         }
     }
 

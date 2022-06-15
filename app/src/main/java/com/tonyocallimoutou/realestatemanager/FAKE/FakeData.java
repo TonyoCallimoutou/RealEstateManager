@@ -34,8 +34,8 @@ public class FakeData {
     );
 
     private static final List<RealEstate> FAKE_REAL_ESTATE_LIST = Arrays.asList(
-            new RealEstate(100000,FAKE_USER,"Fake Type",null,0,"Fake Description",120,1,1,1,FAKE_LOCATION.get(0)),
-            new RealEstate(250000,FAKE_USER,"Fake Type 2",null,0,"Fake Description 2",360,5,2,3,FAKE_LOCATION.get(1))
+            new RealEstate(100000,FAKE_USER,0,null,0,"Fake Description",120,1,1,1,FAKE_LOCATION.get(0)),
+            new RealEstate(250000,FAKE_USER,1,null,0,"Fake Description 2",360,5,2,3,FAKE_LOCATION.get(1))
     );
 
     public static User getFakeCurrentUser() {

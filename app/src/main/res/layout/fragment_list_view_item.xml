@@ -10,6 +10,7 @@
         android:layout_width="@dimen/list_view_image_real_estate_size"
         android:layout_height="@dimen/list_view_image_real_estate_size"
         android:layout_marginEnd="@dimen/list_view_margin_image_text"
+        android:padding="@dimen/list_view_image_padding"
         android:src="@drawable/ic_no_image_available" />
 
     <LinearLayout
@@ -40,7 +41,15 @@
                 android:id="@+id/list_view_draft"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="STRING DRAFT"
+                android:text="@string/list_view_draft"
+                android:textStyle="bold"
+                android:textColor="@color/warning" />
+
+            <TextView
+                android:id="@+id/list_view_not_sync"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/list_view_not_sync"
                 android:textStyle="bold"
                 android:textColor="@color/warning" />
 

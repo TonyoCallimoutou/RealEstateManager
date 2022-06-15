@@ -40,6 +40,8 @@
 
     <!-- List View -->
     <string name="list_view_no_real_estate">No Real Estate</string>
+    <string name="list_view_draft"> DRAFT</string>
+    <string name="list_view_not_sync"> NOT SYNC</string>
 
     <!--Detail Fragment -->
     <string name="detail_media_category"> Media </string>
@@ -113,6 +115,7 @@
     <string name="filter_hint_location"> City </string>
     <string name="filter_without_draft"> Without draft</string>
     <string name="filter_without_no_sync"> Without no sync</string>
+    <string name="filter_all_type"> All type</string>
 
     <array name="Spinner_room">
         <item>Room : 1 or more</item>

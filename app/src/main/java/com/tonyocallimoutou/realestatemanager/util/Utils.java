@@ -75,18 +75,19 @@ public class Utils {
 
     public static String getKeyMoney(Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String defaultLanguage = sharedPreferences.getString(context.getString(R.string.shared_preference_language),context.getResources().getConfiguration().locale.getDisplayLanguage());
+        String defaultLanguageKey = sharedPreferences.getString(context.getString(R.string.shared_preference_language),context.getResources().getConfiguration().locale.getLanguage());
 
-        String[] lang = context.getResources().getStringArray(R.array.language);
+        String[] languageKey = context.getResources().getStringArray(R.array.language_key);
         String[] moneyStr = context.getResources().getStringArray(R.array.money);
 
         String defaultMoney;
-        if (Arrays.asList(lang).contains(defaultLanguage)) {
-            defaultMoney = moneyStr[Arrays.asList(lang).indexOf(defaultLanguage)];
+        if (Arrays.asList(languageKey).contains(defaultLanguageKey)) {
+            defaultMoney = moneyStr[Arrays.asList(languageKey).indexOf(defaultLanguageKey)];
         }
         else {
             defaultMoney = moneyStr[0];
         }
+
         String money = sharedPreferences.getString(context.getString(R.string.shared_preference_money), defaultMoney);
 
         String[] moneyKey = money.split(" ");
@@ -125,16 +126,6 @@ public class Utils {
         }
 
 
-    }
-
-    public static int getIndexOfSpinner(Spinner spinner, String myValue){
-        for (int i=0;i<spinner.getCount();i++){
-            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myValue)){
-                return i;
-            }
-        }
-
-        return 0;
     }
 
     public static int getAgeOfRealEstate(RealEstate realEstate) {

@@ -160,7 +160,13 @@ public class CreateOrEditRealEstateActivity extends BaseActivity implements List
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.actionbar_menu_create_activity, menu);
         MenuItem deleteItem = menu.findItem(R.id.delete_draft);
-        if (realEstate == null || ! realEstate.isDraft()) {
+        MenuItem draftItem = menu.findItem(R.id.save_draft);
+
+        if (realEstate == null ) {
+            deleteItem.setVisible(false);
+        }
+        else if (!realEstate.isDraft()) {
+            draftItem.setVisible(false);
             deleteItem.setVisible(false);
         }
         return true;
@@ -308,7 +314,7 @@ public class CreateOrEditRealEstateActivity extends BaseActivity implements List
         adapter.initAdapter(photos);
 
         realEstateDescription.setText(realEstate.getDescription());
-        realEstateType.setSelection(Utils.getIndexOfSpinner(realEstateType,realEstate.getType()));
+        realEstateType.setSelection(realEstate.getTypeId());
         realEstatePrice.setText(String.valueOf(realEstate.getPriceUSD()));
         realEstateSurface.setText(String.valueOf(realEstate.getSurface()));
         realEstateRoom.setText(String.valueOf(realEstate.getNumberOfRooms()));
@@ -386,7 +392,7 @@ public class CreateOrEditRealEstateActivity extends BaseActivity implements List
         }
 
         else {
-            String type = (String) realEstateType.getSelectedItem();
+            int type = realEstateType.getSelectedItemPosition();
             if (photos.size() == 0) {
                 photos.add(new Photo("android.resource://com.tonyocallimoutou.realestatemanager/drawable/ic_no_image_available",null));
             }
@@ -403,12 +409,11 @@ public class CreateOrEditRealEstateActivity extends BaseActivity implements List
 
             RealEstate realEstateToCreate = new RealEstate(priceUsd, currentUser, type, photos, mainPicturePosition, description, surface, room, bathroom, bedroom, place);
 
-            if (realEstate == null) {
-                viewModelRealEstate.createRealEstate(realEstateToCreate);
+            if (realEstate != null) {
+                realEstateToCreate.setId(realEstate.getId());
             }
-            else {
-                viewModelRealEstate.editRealEstate(realEstate, realEstateToCreate);
-            }
+
+            viewModelRealEstate.createRealEstate(realEstateToCreate);
 
             finish();
         }
@@ -438,7 +443,7 @@ public class CreateOrEditRealEstateActivity extends BaseActivity implements List
             photos.add(new Photo("android.resource://com.tonyocallimoutou.realestatemanager/drawable/ic_no_image_available",null));
         }
 
-        String type = (String) realEstateType.getSelectedItem();
+        int type = realEstateType.getSelectedItemPosition();
         String description = realEstateDescription.getText().toString();
         int surface = 0;
         int room = 0;
@@ -470,8 +475,12 @@ public class CreateOrEditRealEstateActivity extends BaseActivity implements List
 
 
 
+
         RealEstate draft = new RealEstate(priceUsd, currentUser, type, photos, mainPicturePosition, description, surface, room, bathroom, bedroom, place);
 
+        if (realEstate != null) {
+            draft.setId(realEstate.getId());
+        }
 
         viewModelRealEstate.saveAsDraft(draft);
         finish();
@@ -499,8 +508,9 @@ public class CreateOrEditRealEstateActivity extends BaseActivity implements List
 
     private void initData() {
 
-        viewModelUser.getCurrentUserLiveData().observe(this, currentUserLiveData -> {
-            currentUser = currentUserLiveData;
+        viewModelUser.getCurrentUserLiveData().observe(this, result -> {
+            currentUser = result;
+            viewModelUser.setCurrentUser(result);
         });
     }
 

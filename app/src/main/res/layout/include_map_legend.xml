@@ -13,18 +13,20 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:drawableLeftCompat="@drawable/ic_draft_24dp"
-        android:text="@string/legend_sync_list"/>
+        app:drawableLeftCompat="@drawable/ic_map_marker_24dp"
+        app:drawableTint="@color/marker_red"
+        android:text="@string/legend_sync_list" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        app:drawableLeftCompat="@drawable/ic_draft_24dp"
+        app:drawableLeftCompat="@drawable/ic_map_marker_24dp"
+        app:drawableTint="@color/marker_blue"
         android:text="@string/legend_no_sync_list"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:drawableLeftCompat="@drawable/ic_draft_24dp"
+        app:drawableLeftCompat="@drawable/ic_map_marker_24dp"
+        app:drawableTint="@color/marker_green"
         android:text="@string/legend_draft_list"/>
 
 

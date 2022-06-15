@@ -47,7 +47,7 @@ public class UtilNotification {
         else {
             title = context.getString(R.string.notification_title_unfinish);
         }
-        String content = realEstate.getType() + " - " + realEstate.getPlace().getAddress();
+        String content = realEstate.getStringType(context) + " - " + realEstate.getPlace().getAddress();
 
         int progress = (int) Math.round(realEstate.getProgressSync());
 

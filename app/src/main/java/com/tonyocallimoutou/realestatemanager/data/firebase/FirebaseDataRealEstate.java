@@ -73,9 +73,6 @@ public class FirebaseDataRealEstate {
 
     public void savePicture(RealEstate realEstate, RealEstateDao realEstateDao, Executor executor) {
 
-        Log.d("TAG", "savePicture: " + realEstate.isSync());
-        Log.d("TAG", "savePicture: " + realEstate.getId());
-
         executor.execute(() -> {
             realEstateDao.createRealEstate(realEstate);
         });

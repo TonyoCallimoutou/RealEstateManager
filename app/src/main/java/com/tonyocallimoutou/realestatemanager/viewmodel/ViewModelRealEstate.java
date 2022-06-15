@@ -34,12 +34,6 @@ public class ViewModelRealEstate extends ViewModel {
         userRepository.createRealEstate(realEstate);
     }
 
-    public void editRealEstate(RealEstate actual, RealEstate modify) {
-        if (userRepository.getCurrentUser().getUid().equals(actual.getUser().getUid())) {
-            realEstateRepository.editRealEstate(actual, modify);
-        }
-    }
-
     public RealEstate soldRealEstate(RealEstate realEstate) {
         if (userRepository.getCurrentUser().getUid().equals(realEstate.getUser().getUid())) {
             return realEstateRepository.soldRealEstate(realEstate);
@@ -85,7 +79,9 @@ public class ViewModelRealEstate extends ViewModel {
     }
 
     public void setMyRealEstates(User currentUser) {
-        realEstateRepository.setMyRealEstates(currentUser);
+        if (! userRepository.getCurrentUser().equals(currentUser)) {
+            realEstateRepository.setMyRealEstates(currentUser);
+        }
     }
 
     public void setFilterList(List<Filter> filters) {

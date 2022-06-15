@@ -15,6 +15,7 @@ public class NetworkAvailableReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         boolean isConnected = Utils.isInternetAvailable(context);
 
+        isConnected = false;
         MainActivity.test(isConnected);
         UserRepository.ConnectionChanged(isConnected);
         RealEstateRepository.ConnectionChanged(isConnected);

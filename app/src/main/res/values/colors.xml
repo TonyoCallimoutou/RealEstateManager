@@ -10,4 +10,8 @@
     <color name="white"> #ffff </color>
     <color name="black"> #FF000000 </color>
     <color name="warning"> #B00020</color>
+
+    <color name="marker_red"> #FF0000 </color>
+    <color name="marker_blue"> #00FFFF </color>
+    <color name="marker_green"> #00FF00 </color>
 </resources>

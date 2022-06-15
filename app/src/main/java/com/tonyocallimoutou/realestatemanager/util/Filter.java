@@ -30,7 +30,7 @@ public class Filter {
     private String filterCountry;
     private Place filterCity;
     private float distance;
-    private String type;
+    private int typeId;
     private Integer minPrice;
     private Integer maxPrice;
     private String moneyKey;
@@ -80,12 +80,12 @@ public class Filter {
         this.filterType = filterType;
     }
 
-    public String getType() {
-        return type;
+    public int getTypeId() {
+        return typeId;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTypeId(int typeId) {
+        this.typeId = typeId;
     }
 
     public int getMinPrice() {
@@ -174,7 +174,7 @@ public class Filter {
         }
         else if (filterType == (TYPE_TYPE)) {
             for (RealEstate realEstate : original) {
-                if (realEstate.getType().equals(type)) {
+                if (realEstate.getTypeId() == typeId) {
                     newList.add(realEstate);
                 }
             }
@@ -245,7 +245,8 @@ public class Filter {
     @Override
     public String toString() {
         if(filterType == (TYPE_TYPE)) {
-            return context.getString(R.string.filter_to_string_type) + " " +type;
+            String[] str = context.getResources().getStringArray(R.array.SpinnerTypeOfResidence);
+            return context.getString(R.string.filter_to_string_type) + " " +str[typeId];
         }
         else if (filterType == (TYPE_MIN_PRICE)) {
             return context.getString(R.string.filter_to_string_min) + " "+ Utils.getStringOfPrice(minPrice) + " " + moneyKey;

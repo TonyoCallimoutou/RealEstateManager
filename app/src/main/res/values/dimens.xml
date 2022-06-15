@@ -25,6 +25,7 @@
 
     <!-- List View -->
     <dimen name="list_view_image_real_estate_size"> 100dp </dimen>
+    <dimen name="list_view_image_padding"> 8dp </dimen>
     <dimen name="list_view_margin_image_text"> 12dp </dimen>
     <dimen name="list_view_no_real_estate_text_size"> 22sp</dimen>
     <dimen name="list_view_margin_information"> 8dp</dimen>

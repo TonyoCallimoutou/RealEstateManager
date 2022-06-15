@@ -21,6 +21,9 @@ public interface RealEstateDao {
     @Query("SELECT * FROM RealEstate WHERE real_estate_is_synchro = 1")
     List<RealEstate> getSyncRealEstates();
 
+    @Query("SELECT * FROM RealEstate WHERE real_estate_is_synchro = 1")
+    LiveData<List<RealEstate>> getSyncRealEstatesLiveData();
+
     @Query("SELECT * FROM RealEstate WHERE real_estate_is_synchro = 0 AND real_estate_is_draft = 0")
     List<RealEstate> getNotSyncRealEstates();
 

@@ -426,6 +426,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         viewModelUser.getCurrentUserLiveData().observe(this, currentUserResults -> {
             if (currentUserResults != null) {
 
+
                 viewModelUser.setCurrentUser(currentUserResults);
 
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);

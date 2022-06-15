@@ -59,8 +59,9 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRe
         holder.errorProgressBar.setVisibility(View.GONE);
         holder.percentage.setVisibility(View.GONE);
         holder.draftText.setVisibility(View.GONE);
+        holder.notSync.setVisibility(View.GONE);
 
-        holder.realEstateType.setText(realEstate.getType());
+        holder.realEstateType.setText(realEstate.getStringType(mContext));
         holder.realEstatePrice.setText(realEstate.getStringPriceUSD(mContext));
 
         if (realEstate.isDraft()) {
@@ -72,6 +73,10 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRe
 
         else {
             holder.realEstateLocation.setText(realEstate.getPlace().getAddress());
+
+            if (! realEstate.isSync()) {
+                holder.notSync.setVisibility(View.VISIBLE);
+            }
 
             if (realEstate.isSold()) {
                 holder.soldBanner.setVisibility(View.VISIBLE);
@@ -127,6 +132,8 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRe
         TextView percentage;
         @BindView(R.id.list_view_draft)
         TextView draftText;
+        @BindView(R.id.list_view_not_sync)
+        TextView notSync;
 
 
         public ViewHolder(@NonNull View itemView) {

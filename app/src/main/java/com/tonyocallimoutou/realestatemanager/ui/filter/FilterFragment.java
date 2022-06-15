@@ -395,7 +395,7 @@ public class FilterFragment extends Fragment {
         String[] brut = getResources().getStringArray(R.array.SpinnerTypeOfResidence);
         String[] type = new String[brut.length+1];
 
-        type[0] = "All type";
+        type[0] = getContext().getString(R.string.filter_all_type);
         for (int i=1; i<type.length; i++) {
             type[i] = brut[i-1];
         }
@@ -413,7 +413,7 @@ public class FilterFragment extends Fragment {
                     filters.remove(filterType);
                 }
                 else {
-                    filterType.setType(type[i]);
+                    filterType.setTypeId(i-1);
 
                     filters.remove(filterType);
                     filters.add(filterType);

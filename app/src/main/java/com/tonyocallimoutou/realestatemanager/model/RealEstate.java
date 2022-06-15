@@ -14,6 +14,7 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 import com.google.android.libraries.places.api.model.Place;
+import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.data.room.PhotoConverter;
 import com.tonyocallimoutou.realestatemanager.data.room.StringListConverter;
 import com.tonyocallimoutou.realestatemanager.util.Utils;
@@ -35,7 +36,7 @@ public class RealEstate implements Serializable {
     @Embedded(prefix = "user_")
     private User user;
     private int priceUSD;
-    private String type;
+    private int typeId;
     @TypeConverters({PhotoConverter.class})
     private List<Photo> photos;
     private int mainPicturePosition;
@@ -60,7 +61,7 @@ public class RealEstate implements Serializable {
 
     public RealEstate(int priceUSD,
                      User user,
-                     String type,
+                     int typeId,
                      List<Photo> photos,
                      int mainPicturePosition,
                      String description,
@@ -73,7 +74,7 @@ public class RealEstate implements Serializable {
         this.creationDate = Utils.getTodayDate();
         this.priceUSD = priceUSD;
         this.user = user;
-        this.type = type;
+        this.typeId = typeId;
         this.photos = photos;
         this.mainPicturePosition = mainPicturePosition;
         this.description = description;
@@ -124,12 +125,17 @@ public class RealEstate implements Serializable {
         this.priceUSD = priceUSD;
     }
 
-    public String getType() {
-        return type;
+    public int getTypeId() {
+        return typeId;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTypeId(int typeId) {
+        this.typeId = typeId;
+    }
+
+    public String getStringType(Context context) {
+        String[] str = context.getResources().getStringArray(R.array.SpinnerTypeOfResidence);
+        return str[typeId];
     }
 
     public List<Photo> getPhotos() {

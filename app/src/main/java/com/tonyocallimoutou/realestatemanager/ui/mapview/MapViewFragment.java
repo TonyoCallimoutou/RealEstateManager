@@ -16,6 +16,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,14 +67,17 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
     private SupportMapFragment mapFragment;
     private static GoogleMap mGoogleMap;
     private CameraPosition cameraPosition;
-    private static float cameraZoomDefault = 15;
+    private static final float cameraZoomDefault = 15;
     private View locationButton;
 
-    private static ViewModelRealEstate viewModelRealEstate;
+    private static LatLngBounds.Builder builder;
+
+    private ViewModelRealEstate viewModelRealEstate;
 
     private FusedLocationProviderClient fusedLocationProviderClient;
     private static Location userLocation;
 
+    private Bundle savedState = null;
 
     private static List<RealEstate> realEstatesList = new ArrayList<>();
 
@@ -81,6 +85,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
     // Bundle
     private final String KEY_LOCATION = "KEY_LOCATION";
     private final String KEY_CAMERA_POSITION = "KEY_CAMERA_POSITION";
+    private final String KEY_BUNDLE = "KEY_BUNDLE";
 
     public MapViewFragment() {
     }
@@ -114,10 +119,14 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
         super.onViewCreated(view, savedInstanceState);
 
         // BUNDLE
-        if (savedInstanceState != null) {
-            userLocation = savedInstanceState.getParcelable(KEY_LOCATION);
-            cameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
+        if(savedInstanceState != null && savedState == null) {
+            savedState = savedInstanceState.getBundle(KEY_BUNDLE);
         }
+        if(savedState != null) {
+            userLocation = savedState.getParcelable(KEY_LOCATION);
+            cameraPosition = savedState.getParcelable(KEY_CAMERA_POSITION);
+        }
+        savedState = null;
 
         mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
@@ -127,10 +136,26 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        savedState = saveState();
+
+    }
+
+    private Bundle saveState() { /* called either from onDestroyView() or onSaveInstanceState() */
+        Bundle state = new Bundle();
+        if (mGoogleMap != null) {
+            state.putParcelable(KEY_CAMERA_POSITION, mGoogleMap.getCameraPosition());
+            state.putParcelable(KEY_LOCATION, userLocation);
+        }
+        return state;
+    }
+
+    @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         if (mGoogleMap != null) {
-            outState.putParcelable(KEY_CAMERA_POSITION, mGoogleMap.getCameraPosition());
-            outState.putParcelable(KEY_LOCATION, userLocation);
+            savedState = saveState();
+            outState.putBundle(KEY_BUNDLE, savedState);
         }
         super.onSaveInstanceState(outState);
     }
@@ -150,7 +175,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
 
     @OnClick(R.id.button_message_map_view)
     public void initPermissionManager() {
-        if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) == true) {
+        if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
             showAlertDialog();
         } else {
             askForPermission();
@@ -237,11 +262,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
 
         mapLegend.setVisibility(View.VISIBLE);
 
-        // Camera
-        if (cameraPosition != null) {
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cameraPosition.target, cameraPosition.zoom));
-        }
-
         mGoogleMap = googleMap;
 
         SetupForUserLocation();
@@ -255,6 +275,18 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
     public void onGlobalLayout() {
         mapFragment.getView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
         initListForMarker();
+
+        // ZOOM WITH NEARBY PLACE
+        if (realEstatesList.size() != 0 && builder != null && cameraPosition ==null)  {
+            LatLngBounds bounds = builder.build();
+
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 150);
+            mGoogleMap.moveCamera(cu);
+        }
+        // Camera
+        else if (cameraPosition != null) {
+            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cameraPosition.target, cameraPosition.zoom));
+        }
     }
 
     // SETUP USER LOCATION
@@ -279,15 +311,12 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
 
     private static void initListForMarker() {
         mGoogleMap.clear();
-
-        LatLng latLng = new LatLng(userLocation.getLatitude(), userLocation.getLongitude());
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, cameraZoomDefault));
         addMarker();
     }
 
     private static void addMarker() {
 
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder = new LatLngBounds.Builder();
 
         for (RealEstate result : realEstatesList) {
             if (result.getPlace() != null) {
@@ -306,7 +335,10 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
                     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                 }
                 else if (! result.isSync()) {
-                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
+                }
+                else if (result.isSync()) {
+                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                 }
 
                 builder.include(markerOptions.getPosition());
@@ -315,16 +347,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
                         .setTag(result);
             }
 
-        }
-
-        // ZOOM WITH NEARBY PLACE
-
-        if (realEstatesList.size() != 0) {
-            builder.include(new LatLng(userLocation.getLatitude(), userLocation.getLongitude()));
-            LatLngBounds bounds = builder.build();
-
-            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 50);
-            mGoogleMap.moveCamera(cu);
         }
     }
 

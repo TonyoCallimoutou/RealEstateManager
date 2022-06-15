@@ -100,30 +100,6 @@ public class RealEstateRepository {
         }
     }
 
-    public void editRealEstate(RealEstate actual, RealEstate modify) {
-        actual.setPhotos(modify.getPhotos());
-        actual.setPriceUSD(modify.getPriceUSD());
-        actual.setMainPicturePosition(modify.getMainPicturePosition());
-        actual.setNumberOfBathrooms(modify.getNumberOfBathrooms());
-        actual.setNumberOfRooms(modify.getNumberOfRooms());
-        actual.setNumberOfBedrooms(modify.getNumberOfBedrooms());
-        actual.setSurface(modify.getSurface());
-        actual.setDescription(modify.getDescription());
-        actual.setPlace(modify.getPlace());
-        actual.setType(modify.getType());
-        actual.setSync(false);
-
-
-        if (isConnected) {
-            firebaseDataRealEstate.savePicture(actual, realEstateDao, executor);
-        }
-        else {
-            executor.execute(() -> {
-                realEstateDao.createRealEstate(actual);
-            });
-        }
-    }
-
     public LiveData<List<RealEstate>> getSyncRealEstate() {
         if (isConnected) {
             firebaseDataRealEstate.getListRealEstates(syncRealEstateSyncLiveData);
@@ -231,15 +207,18 @@ public class RealEstateRepository {
 
     public void setNotSyncList(List<RealEstate> realEstates) {
         if (isConnected) {
+            List<RealEstate> toRemove = new ArrayList<>();
             for (RealEstate realEstate : realEstates) {
                 if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)) {
                     UtilNotification.createNotification(instance.context, realEstate);
                 }
                 if (realEstate.getProgressSync() ==100) {
                     firebaseDataRealEstate.editRealEstate(realEstate);
-                    realEstates.remove(realEstate);
+                    toRemove.add(realEstate);
                 }
             }
+
+            realEstates.removeAll(toRemove);
         }
         notSyncRealEstates.clear();
         notSyncRealEstates.addAll(realEstates);

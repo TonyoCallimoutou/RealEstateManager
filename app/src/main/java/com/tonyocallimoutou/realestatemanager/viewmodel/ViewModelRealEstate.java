@@ -49,14 +49,6 @@ public class ViewModelRealEstate extends ViewModel {
         realEstateRepository.setSyncRealEstatesList(realEstates);
     }
 
-    public LiveData<List<RealEstate>> getNotSyncRealEstate() {
-        return realEstateRepository.getNotSyncRealEstate();
-    }
-
-    public void setNotSyncList(List<RealEstate> realEstates) {
-        realEstateRepository.setNotSyncList(realEstates);
-    }
-
     public void saveAsDraft(RealEstate realEstate) {
         realEstateRepository.saveAsDraft(realEstate);
         userRepository.createRealEstate(realEstate);
@@ -64,14 +56,6 @@ public class ViewModelRealEstate extends ViewModel {
 
     public void deleteDraft(RealEstate realEstate) {
         realEstateRepository.deleteDraft(realEstate);
-    }
-
-    public LiveData<List<RealEstate>> getDraftList() {
-        return realEstateRepository.getDraftList();
-    }
-
-    public void setDraftList(List<RealEstate> realEstates) {
-        realEstateRepository.setDraftList(realEstates);
     }
 
     public LiveData<List<RealEstate>> getFilterListLiveData() {

@@ -32,6 +32,7 @@ import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.model.User;
 import com.tonyocallimoutou.realestatemanager.repository.RealEstateRepository;
 import com.tonyocallimoutou.realestatemanager.util.Filter;
+import com.tonyocallimoutou.realestatemanager.util.UtilNotification;
 import com.tonyocallimoutou.realestatemanager.util.Utils;
 
 import java.util.ArrayList;
@@ -71,8 +72,7 @@ public class FirebaseDataRealEstate {
     }
 
 
-    public void savePicture(RealEstate realEstate, RealEstateDao realEstateDao, Executor executor) {
-
+    public void savePicture(Context context, RealEstate realEstate, RealEstateDao realEstateDao, Executor executor) {
 
         for (int i=0; i<realEstate.getPhotos().size(); i++) {
 
@@ -113,7 +113,12 @@ public class FirebaseDataRealEstate {
 
                             executor.execute(() -> {
                                 realEstateDao.createRealEstate(realEstate);
+                                UtilNotification.createNotification(context, realEstate);
                             });
+
+                            if (realEstate.getProgressSync() == 100) {
+                                editRealEstate(realEstate);
+                            }
                         }
                     }
                 });
@@ -126,7 +131,7 @@ public class FirebaseDataRealEstate {
         getRealEstateCollection().document(realEstate.getId()).set(realEstate);
     }
 
-    public void getListRealEstates(MutableLiveData<List<RealEstate>> liveData) {
+    public void setListRealEstates(RealEstateDao realEstateDao, Executor executor) {
         getRealEstateCollection().addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -136,13 +141,14 @@ public class FirebaseDataRealEstate {
                     return;
                 }
 
-                List<RealEstate> realEstates = new ArrayList<>();
                 for (DocumentSnapshot document : value) {
+                    Log.d("TAG", "onEvent: ");
                     RealEstate realEstate = document.toObject(RealEstate.class);
-                    realEstates.add(realEstate);
+                    executor.execute(() -> {
+                        realEstateDao.createRealEstate(realEstate);
+                    });
                 }
 
-                liveData.setValue(realEstates);
             }
         });
     }

@@ -446,15 +446,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         });
 
         viewModelRealEstate.getSyncRealEstatesLiveData().observe(this, list -> {
+            for (RealEstate realEstate : list) {
+                Log.d("TAG", "initData: " + realEstate.getId());
+            }
             viewModelRealEstate.setSyncRealEstates(list);
-        });
-
-        viewModelRealEstate.getNotSyncRealEstate().observe(this, list -> {
-            viewModelRealEstate.setNotSyncList(list);
-        });
-
-        viewModelRealEstate.getDraftList().observe(this, list -> {
-            viewModelRealEstate.setDraftList(list);
         });
 
         viewModelRealEstate.getFilterListLiveData().observe(this, listFilter -> {

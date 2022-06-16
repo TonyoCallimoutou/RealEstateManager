@@ -25,7 +25,7 @@ public class UtilNotification {
 
     private static Notification notification;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
     public static void createNotification(Context context, RealEstate realEstate) {
         initNotification(context,realEstate);
         setNotification(context);
@@ -67,7 +67,7 @@ public class UtilNotification {
         notification = builder.build();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
     private static void setNotification(Context context){
         CharSequence name = context.getString(R.string.notification_channel_name);
         String description = context.getString(R.string.notification_channel_description);
@@ -75,9 +75,11 @@ public class UtilNotification {
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         String CHANNEL_ID = "CHANNEL_1";
-        NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, name, importance);
-        notificationChannel.setDescription(description);
-        notificationManager.createNotificationChannel(notificationChannel) ;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+            notificationChannel.setDescription(description);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
 
         notificationManager.notify(1 , notification) ;
     }

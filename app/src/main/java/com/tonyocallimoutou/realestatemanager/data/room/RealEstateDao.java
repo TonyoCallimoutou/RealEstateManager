@@ -18,20 +18,14 @@ public interface RealEstateDao {
     @Insert (onConflict = REPLACE)
     void createRealEstate(RealEstate realEstate);
 
-    @Query("SELECT * FROM RealEstate WHERE real_estate_is_synchro = 1")
-    List<RealEstate> getSyncRealEstates();
+    @Query("SELECT * FROM RealEstate")
+    List<RealEstate> getRealEstates();
 
-    @Query("SELECT * FROM RealEstate WHERE real_estate_is_synchro = 1")
-    LiveData<List<RealEstate>> getSyncRealEstatesLiveData();
+    @Query("SELECT * FROM RealEstate")
+    LiveData<List<RealEstate>> getRealEstatesLiveData();
 
     @Query("SELECT * FROM RealEstate WHERE real_estate_is_synchro = 0 AND real_estate_is_draft = 0")
     List<RealEstate> getNotSyncRealEstates();
-
-    @Query("SELECT * FROM RealEstate WHERE real_estate_is_synchro = 0 AND real_estate_is_draft = 0")
-    LiveData<List<RealEstate>> getNotSyncRealEstatesLiveData();
-
-    @Query("SELECT * FROM RealEstate WHERE real_estate_is_draft = 1")
-    LiveData<List<RealEstate>> getDraftListLiveData();
 
     @Query("DELETE FROM RealEstate WHERE realEstate_id = :id AND real_estate_is_draft = 1")
     void deleteDraft(String id);

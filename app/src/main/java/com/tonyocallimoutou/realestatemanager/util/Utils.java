@@ -102,6 +102,13 @@ public class Utils {
         return price;
     }
 
+    public static int convertPriceUSDInMoneyKey(Context context, int price, String moneyKey) {
+        if (moneyKey.equals(context.getString(R.string.money_key_euro))) {
+            return convertDollarToEuro(price);
+        }
+        return price;
+    }
+
     public static String getStringOfPrice(int price) {
         return NumberFormat.getNumberInstance(Locale.US).format(price);
     }
@@ -124,8 +131,6 @@ public class Utils {
             String str = price.replaceFirst(".$","");
             return Integer.parseInt(str.replace(",",""));
         }
-
-
     }
 
     public static int getAgeOfRealEstate(RealEstate realEstate) {

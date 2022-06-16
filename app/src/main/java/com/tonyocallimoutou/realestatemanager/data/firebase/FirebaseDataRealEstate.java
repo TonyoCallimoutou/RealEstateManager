@@ -73,10 +73,6 @@ public class FirebaseDataRealEstate {
 
     public void savePicture(RealEstate realEstate, RealEstateDao realEstateDao, Executor executor) {
 
-        executor.execute(() -> {
-            realEstateDao.createRealEstate(realEstate);
-        });
-
 
         for (int i=0; i<realEstate.getPhotos().size(); i++) {
 

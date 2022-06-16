@@ -315,7 +315,8 @@ public class CreateOrEditRealEstateActivity extends BaseActivity implements List
 
         realEstateDescription.setText(realEstate.getDescription());
         realEstateType.setSelection(realEstate.getTypeId());
-        realEstatePrice.setText(String.valueOf(realEstate.getPriceUSD()));
+        int price = Utils.convertPriceUSDInMoneyKey(this,realEstate.getPriceUSD(),moneyKey);
+        realEstatePrice.setText(String.valueOf(price));
         realEstateSurface.setText(String.valueOf(realEstate.getSurface()));
         realEstateRoom.setText(String.valueOf(realEstate.getNumberOfRooms()));
         realEstateBedroom.setText(String.valueOf(realEstate.getNumberOfBedrooms()));
@@ -522,5 +523,11 @@ public class CreateOrEditRealEstateActivity extends BaseActivity implements List
             intent.putExtras(bundle);
         }
         activity.startActivity(intent);
+    }
+
+    @Override
+    public void finish() {
+        Intent intent = new Intent(CreateOrEditRealEstateActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 }

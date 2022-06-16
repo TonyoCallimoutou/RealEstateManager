@@ -90,13 +90,12 @@ public class RealEstateRepository {
     public void createRealEstate(RealEstate realEstate) {
         realEstate.setSync(false);
 
+        executor.execute(() -> {
+            realEstateDao.createRealEstate(realEstate);
+        });
+
         if (isConnected) {
             firebaseDataRealEstate.savePicture(realEstate, realEstateDao, executor);
-        }
-        else {
-            executor.execute(() -> {
-                realEstateDao.createRealEstate(realEstate);
-            });
         }
     }
 
@@ -248,6 +247,7 @@ public class RealEstateRepository {
 
     public static void ConnectionChanged(boolean result) {
         if (result && instance!= null && !isConnected) {
+            Log.d("TAG", "ConnectionChanged: ");
             syncFirebase();
             instance.firebaseDataRealEstate.getListRealEstates(instance.syncRealEstateSyncLiveData);
         }

@@ -153,45 +153,43 @@ public class Filter {
         this.minNbrPicture = minNbrPicture;
     }
 
-    public List<RealEstate> modifyList(List<RealEstate> original) {
 
-        List<RealEstate> newList = new ArrayList<>();
+    public String getQueryStr() {
+
+        String str = "";
+
         if (filterType == (TYPE_MIN_PRICE)) {
-            int minPriceUSD = Utils.getPriceInUSD(context,minPrice,moneyKey);
-            for (RealEstate realEstate : original) {
-                if (realEstate.getPriceUSD() > minPriceUSD) {
-                    newList.add(realEstate);
-                }
-            }
+            str = "priceUSD > " + Utils.getPriceInUSD(context,minPrice,moneyKey);
         }
         else if (filterType == (TYPE_MAX_PRICE)) {
-            int maxPriceUSD = Utils.getPriceInUSD(context,maxPrice,moneyKey);
-            for (RealEstate realEstate : original) {
-                if (realEstate.getPriceUSD() < maxPriceUSD) {
-                    newList.add(realEstate);
-                }
-            }
+            str = "priceUSD < " + Utils.getPriceInUSD(context,maxPrice,moneyKey);
         }
         else if (filterType == (TYPE_TYPE)) {
-            for (RealEstate realEstate : original) {
-                if (realEstate.getTypeId() == typeId) {
-                    newList.add(realEstate);
-                }
-            }
+            str = "typeId = " + typeId;
         }
         else if (filterType == (TYPE_ROOM)) {
-            for (RealEstate realEstate : original) {
-                if (realEstate.getNumberOfRooms() >= minRoom) {
-                    newList.add(realEstate);
-                }
-            }
+            str = "numberOfRooms >= " + minRoom;
         }
+        else if (filterType == (TYPE_MINE)) {
+            str = "user_uid = \"" + userId + "\"";
+        }
+        else if (filterType == (TYPE_DRAFT)) {
+            str = "real_estate_is_draft = 0";
+        }
+        else if (filterType == (TYPE_NOT_SYNC)) {
+            str = "real_estate_is_synchro = 1";
+        }
+        /*
         else if (filterType == (TYPE_CREATION)) {
             for (RealEstate realEstate : original) {
                 if (Utils.getAgeOfRealEstate(realEstate) <= creationDateLimit) {
                     newList.add(realEstate);
                 }
             }
+            Log.d("TAG", "creation Date limit: " + creationDateLimit); {
+
+            }
+            str = "creationDate = ?";
         }
         else if (filterType == (TYPE_PICTURE)) {
             for (RealEstate realEstate : original) {
@@ -199,8 +197,13 @@ public class Filter {
                     newList.add(realEstate);
                 }
             }
+
+            str = "creationDate >= ?";
         }
+
+         */
         else if (filterType == (TYPE_SOLD)) {
+            /*
             for (RealEstate realEstate : original) {
                 if (realEstate.isSold()) {
                     if (Utils.getAgeOfSold(realEstate) <= dateSoldLimit || dateSoldLimit == 0) {
@@ -208,38 +211,26 @@ public class Filter {
                     }
                 }
             }
-        }
-        else if (filterType == (TYPE_MINE)) {
-            for (RealEstate realEstate : original) {
-                if (realEstate.getUser().getUid().equals(userId)) {
-                    newList.add(realEstate);
-                }
-            }
+
+             */
+
+            str = "isSold = 1";
         }
         else if (filterType == (TYPE_LOCATION)) {
-
+/*
             for (RealEstate realEstate : original) {
                 if (realEstate.getPlace().getCity().equals(filterCity.getName()) || Utils.getDistanceFromCityInKm(realEstate,filterCity) < distance) {
                     newList.add(realEstate);
                 }
             }
-        }
-        else if (filterType == (TYPE_DRAFT)) {
-            for (RealEstate realEstate : original) {
-                if (! realEstate.isDraft()) {
-                    newList.add(realEstate);
-                }
-            }
-        }
-        else if (filterType == (TYPE_NOT_SYNC)) {
-            for (RealEstate realEstate : original) {
-                if (realEstate.isSync() || realEstate.isDraft()) {
-                    newList.add(realEstate);
-                }
-            }
+
+ */
+
+            str = "place_city = \"" + filterCity.getName() + "\"";
         }
 
-        return newList;
+
+        return str;
     }
 
     @Override

@@ -12,7 +12,10 @@ import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
+import androidx.sqlite.db.SimpleSQLiteQuery;
+import androidx.sqlite.db.SupportSQLiteQuery;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -56,8 +59,8 @@ public class RealEstateRepository {
 
     private List<Filter> filters = new ArrayList<>();
 
-    private final MutableLiveData<List<RealEstate>> realEstateFilterLiveData = new MutableLiveData<>();
-    private final List<RealEstate> syncRealEstates = new ArrayList<>();
+    private MediatorLiveData<List<RealEstate>> mediatorLiveData = new MediatorLiveData<>();
+    private SupportSQLiteQuery query;
     private final Context context;
 
 
@@ -90,10 +93,6 @@ public class RealEstateRepository {
         }
     }
 
-    public LiveData<List<RealEstate>> getSyncRealEstate() {
-        return realEstateDao.getRealEstatesLiveData();
-    }
-
     public void saveAsDraft(RealEstate realEstate) {
         realEstate.setDraft(true);
         executor.execute(()-> {
@@ -114,18 +113,35 @@ public class RealEstateRepository {
 
     public LiveData<List<RealEstate>> getListWithFilter() {
         initListWithFilter();
-        return realEstateFilterLiveData;
+        return mediatorLiveData;
     }
 
     private void initListWithFilter() {
 
-        List<RealEstate> newList = new ArrayList<>(syncRealEstates);
+
+        StringBuilder strQuery = new StringBuilder("SELECT * FROM RealEstate ");
+
 
         for (int i = 0; i < filters.size(); i++) {
-            newList = filters.get(i).modifyList(newList);
+            if (i==0) {
+                strQuery.append("WHERE ");
+            }
+            else {
+                strQuery.append(" AND ");
+            }
+            strQuery.append(filters.get(i).getQueryStr());
         }
 
-        realEstateFilterLiveData.setValue(newList);
+        query = new SimpleSQLiteQuery(strQuery.toString());
+
+        Log.d("TAG", "initListWithFilter: " + strQuery);
+
+        mediatorLiveData.addSource(realEstateDao.getRealEstatesLiveData(query), new Observer<List<RealEstate>>() {
+                    @Override
+                    public void onChanged(List<RealEstate> realEstates) {
+                        mediatorLiveData.setValue(realEstates);
+                    }
+                });
     }
 
     public RealEstate soldRealEstate(RealEstate realEstate) {
@@ -172,12 +188,6 @@ public class RealEstateRepository {
                 }
             });
         }
-    }
-
-    public void setSyncRealEstatesList(List<RealEstate> realEstates) {
-        syncRealEstates.clear();
-        syncRealEstates.addAll(realEstates);
-        initListWithFilter();
     }
 
     public static void ConnectionChanged(boolean result) {

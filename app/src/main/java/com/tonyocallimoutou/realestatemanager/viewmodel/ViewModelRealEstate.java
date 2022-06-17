@@ -41,14 +41,6 @@ public class ViewModelRealEstate extends ViewModel {
         return null;
     }
 
-    public LiveData<List<RealEstate>> getSyncRealEstatesLiveData() {
-        return realEstateRepository.getSyncRealEstate();
-    }
-
-    public void setSyncRealEstates(List<RealEstate> realEstates) {
-        realEstateRepository.setSyncRealEstatesList(realEstates);
-    }
-
     public void saveAsDraft(RealEstate realEstate) {
         realEstateRepository.saveAsDraft(realEstate);
         userRepository.createRealEstate(realEstate);

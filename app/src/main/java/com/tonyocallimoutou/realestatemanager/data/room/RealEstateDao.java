@@ -8,7 +8,9 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.RawQuery;
 import androidx.room.Update;
+import androidx.sqlite.db.SupportSQLiteQuery;
 
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 
@@ -29,8 +31,8 @@ public interface RealEstateDao {
     @Query("SELECT * FROM RealEstate")
     List<RealEstate> getRealEstates();
 
-    @Query("SELECT * FROM RealEstate")
-    LiveData<List<RealEstate>> getRealEstatesLiveData();
+    @RawQuery(observedEntities = RealEstate.class)
+    LiveData<List<RealEstate>> getRealEstatesLiveData(SupportSQLiteQuery query);
 
     @Query("SELECT * FROM RealEstate WHERE real_estate_is_synchro = 0 AND real_estate_is_draft = 0")
     List<RealEstate> getNotSyncRealEstates();

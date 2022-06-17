@@ -445,13 +445,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
         });
 
-        viewModelRealEstate.getSyncRealEstatesLiveData().observe(this, list -> {
-            for (RealEstate realEstate : list) {
-                Log.d("TAG", "initData: " + realEstate.getId());
-            }
-            viewModelRealEstate.setSyncRealEstates(list);
-        });
-
         viewModelRealEstate.getFilterListLiveData().observe(this, listFilter -> {
             Log.d(this.getClass().getSimpleName(), "");
             ListViewFragment.initRealEstateSyncList(listFilter);

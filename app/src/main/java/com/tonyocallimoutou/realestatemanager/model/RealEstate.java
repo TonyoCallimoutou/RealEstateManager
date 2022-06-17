@@ -1,5 +1,6 @@
 package com.tonyocallimoutou.realestatemanager.model;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.util.Log;
 
@@ -21,6 +22,7 @@ import com.tonyocallimoutou.realestatemanager.util.Utils;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -260,5 +262,160 @@ public class RealEstate implements Serializable {
 
     public void setDraft(boolean draft) {
         isDraft = draft;
+    }
+
+    // Provider
+
+    public static RealEstate fromContentValues(ContentValues values) {
+
+        final RealEstate realEstate = new RealEstate();
+
+
+
+        // REAL ESTATE
+        realEstate.setSync(true);
+        realEstate.setCreationDate(Utils.getTodayDate());
+
+        List<Photo> photos = new ArrayList<>();
+        photos.add(new Photo("android.resource://com.tonyocallimoutou.realestatemanager/drawable/ic_no_image_available",null));
+
+        realEstate.setDescription("");
+
+
+        if (values.containsKey("id")) {
+            realEstate.setId(values.getAsString("id"));
+        }
+
+        if (values.containsKey("creationDate")) {
+            realEstate.setCreationDate(values.getAsString("creationDate"));
+        }
+
+        if (values.containsKey("priceUSD")) {
+            realEstate.setPriceUSD(values.getAsInteger("priceUSD"));
+        }
+
+        if (values.containsKey("description")) {
+            realEstate.setDescription(values.getAsString("description"));
+        }
+
+        if (values.containsKey("mainPicturePosition")) {
+            realEstate.setMainPicturePosition(values.getAsInteger("mainPicturePosition"));
+        }
+
+        if (values.containsKey("surface")) {
+            realEstate.setSurface(values.getAsInteger("surface"));
+        }
+
+        if (values.containsKey("numberOfRooms")) {
+            realEstate.setNumberOfRooms(values.getAsInteger("numberOfRooms"));
+        }
+
+        if (values.containsKey("numberOfBathrooms")) {
+            realEstate.setNumberOfBathrooms(values.getAsInteger("numberOfBathrooms"));
+        }
+
+        if (values.containsKey("numberOfBedrooms")) {
+            realEstate.setNumberOfBedrooms(values.getAsInteger("numberOfBedrooms"));
+        }
+
+        if (values.containsKey("isSold")) {
+            realEstate.setSold(values.getAsBoolean("isSold"));
+        }
+
+        if (values.containsKey("soldDate")) {
+            realEstate.setSoldDate(values.getAsString("soldDate"));
+        }
+        if (values.containsKey("photos")) {
+            photos = (PhotoConverter.fromString(values.getAsString("photos")));
+        }
+
+        for (Photo photo : photos) {
+            photo.setSync(true);
+        }
+
+        realEstate.setPhotos(photos);
+
+        // USER
+
+        User user = new User();
+        user.setUrlPicture("android.resource://com.tonyocallimoutou.realestatemanager/drawable/ic_no_image_available");
+
+        user.setUid("null");
+        user.setUsername("null");
+        user.setPhoneNumber("null");
+        user.setMyRealEstateId(new ArrayList<>());
+
+
+        if (values.containsKey("user_uid")) {
+            user.setUid(values.getAsString("user_uid"));
+        }
+
+        if (values.containsKey("user_user_name")) {
+            user.setUsername(values.getAsString("user_user_name"));
+        }
+
+        if (values.containsKey("user_user_picture")) {
+            user.setUrlPicture(values.getAsString("user_user_picture"));
+        }
+
+        if (values.containsKey("user_user_phone_number")) {
+            user.setPhoneNumber(values.getAsString("user_user_phone_number"));
+        }
+
+        if (values.containsKey("user_email")) {
+            user.setEmail(values.getAsString("user_email"));
+        }
+
+        if (values.containsKey("user_myRealEstateId")) {
+            user.setMyRealEstateId(StringListConverter.fromString(values.getAsString("user_myRealEstateId")));
+        }
+
+
+        realEstate.setUser(user);
+
+
+        // LOCATION
+        RealEstateLocation location = new RealEstateLocation();
+        location.setPlaceId("null");
+        location.setName("null");
+        location.setAddress("null");
+        location.setLng(0);
+        location.setLat(0);
+        location.setCountry("null");
+        location.setCity("null");
+
+
+        if (values.containsKey("place_placeId")) {
+            location.setPlaceId(values.getAsString("place_placeId"));
+        }
+
+        if (values.containsKey("place_name")) {
+            location.setName(values.getAsString("place_name"));
+        }
+
+        if (values.containsKey("place_lat")) {
+            location.setLat(values.getAsDouble("place_lat"));
+        }
+
+        if (values.containsKey("place_lng")) {
+            location.setLng(values.getAsDouble("place_lng"));
+        }
+
+        if (values.containsKey("place_address")) {
+            location.setAddress(values.getAsString("place_address"));
+        }
+
+        if (values.containsKey("place_country")) {
+            location.setCountry(values.getAsString("place_country"));
+        }
+
+        if (values.containsKey("place_city")) {
+            location.setCity(values.getAsString("place_city"));
+        }
+
+        realEstate.setPlace(location);
+
+        return realEstate;
+
     }
 }

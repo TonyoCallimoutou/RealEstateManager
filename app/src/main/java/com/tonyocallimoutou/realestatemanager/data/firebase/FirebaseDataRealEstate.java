@@ -82,7 +82,9 @@ public class FirebaseDataRealEstate {
 
                 Uri pictureUri = Uri.parse(photo.getReference());
 
-                StorageReference ref = getFirebaseStorage().getReference(realEstate.getId()).child(pictureUri.getLastPathSegment());
+                String id = realEstate.getUser().getUid() + " : " + realEstate.getId();
+
+                StorageReference ref = getFirebaseStorage().getReference(id).child(pictureUri.getLastPathSegment());
 
                 UploadTask uploadTask = ref.putFile(pictureUri);
 
@@ -128,7 +130,8 @@ public class FirebaseDataRealEstate {
 
     public void editRealEstate(RealEstate realEstate) {
         realEstate.setSync(true);
-        getRealEstateCollection().document(realEstate.getId()).set(realEstate);
+        String id = realEstate.getUser().getUid() + " : " + realEstate.getId();
+        getRealEstateCollection().document(id).set(realEstate);
     }
 
     public void setListRealEstates(RealEstateDao realEstateDao, Executor executor) {

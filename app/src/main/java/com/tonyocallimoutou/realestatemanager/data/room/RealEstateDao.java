@@ -2,6 +2,8 @@ package com.tonyocallimoutou.realestatemanager.data.room;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 
+import android.database.Cursor;
+
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
@@ -16,7 +18,13 @@ import java.util.List;
 public interface RealEstateDao {
 
     @Insert (onConflict = REPLACE)
-    void createRealEstate(RealEstate realEstate);
+    long createRealEstate(RealEstate realEstate);
+
+    @Update
+    int updateRealEstate(RealEstate realEstate);
+
+    @Query("SELECT * FROM RealEstate WHERE realEstate_id = :id")
+    Cursor getRealEstateWithCursor(String id);
 
     @Query("SELECT * FROM RealEstate")
     List<RealEstate> getRealEstates();

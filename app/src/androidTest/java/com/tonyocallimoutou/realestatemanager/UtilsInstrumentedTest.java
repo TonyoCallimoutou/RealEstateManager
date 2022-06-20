@@ -1,14 +1,20 @@
 package com.tonyocallimoutou.realestatemanager;
 
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import android.app.Activity;
+import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
+import android.telephony.TelephonyManager;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.tonyocallimoutou.realestatemanager.ui.MainActivity;
 import com.tonyocallimoutou.realestatemanager.util.Utils;
@@ -18,7 +24,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.shadows.ShadowNetworkInfo;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Objects;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -47,31 +56,45 @@ public class UtilsInstrumentedTest {
     }
 
     private static void setWifi(boolean enable) {
-        NetworkInfo wifi = ShadowNetworkInfo.newInstance(NetworkInfo.DetailedState.DISCONNECTED, ConnectivityManager.TYPE_WIFI, 0, true, NetworkInfo.State.CONNECTED);
-        NetworkInfo mobile = ShadowNetworkInfo.newInstance(NetworkInfo.DetailedState.CONNECTED, ConnectivityManager.TYPE_MOBILE, 0, true, NetworkInfo.State.CONNECTED);
+        if (enable) {
+            InstrumentationRegistry.getInstrumentation().getUiAutomation().executeShellCommand("svc wifi enable");
+        }
+        else {
+            InstrumentationRegistry.getInstrumentation().getUiAutomation().executeShellCommand("svc wifi disable");
+        }
     }
 
     private static void setMobileInternet(boolean enable) {
+        if (enable) {
+            InstrumentationRegistry.getInstrumentation().getUiAutomation().executeShellCommand("svc data enable");
+        }
+        else {
+            InstrumentationRegistry.getInstrumentation().getUiAutomation().executeShellCommand("svc data disable");
+        }
     }
 
     @Test
-    public void connexionTestWithInternet()  {
+    public void connexionTestWithInternet() throws InterruptedException {
         setWifi(true);
         setMobileInternet(true);
+        Thread.sleep(1000);
         assertTrue(Utils.isInternetAvailable(currentActivity.getApplicationContext()));
 
         setMobileInternet(false);
+        Thread.sleep(1000);
         assertTrue(Utils.isInternetAvailable(currentActivity.getApplicationContext()));
 
         setMobileInternet(true);
         setWifi(false);
+        Thread.sleep(1000);
         assertTrue(Utils.isInternetAvailable(currentActivity.getApplicationContext()));
     }
 
     @Test
-    public void connexionTestWithoutInternet() {
+    public void connexionTestWithoutInternet() throws InterruptedException {
         setWifi(false);
         setMobileInternet(false);
+        Thread.sleep(1000);
         assertFalse(Utils.isInternetAvailable(currentActivity.getApplicationContext()));
     }
 }

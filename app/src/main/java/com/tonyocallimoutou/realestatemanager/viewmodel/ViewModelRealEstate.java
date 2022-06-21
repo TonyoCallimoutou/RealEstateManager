@@ -1,8 +1,6 @@
 package com.tonyocallimoutou.realestatemanager.viewmodel;
 
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
@@ -11,7 +9,6 @@ import com.tonyocallimoutou.realestatemanager.repository.RealEstateRepository;
 import com.tonyocallimoutou.realestatemanager.repository.UserRepository;
 import com.tonyocallimoutou.realestatemanager.util.Filter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ViewModelRealEstate extends ViewModel {

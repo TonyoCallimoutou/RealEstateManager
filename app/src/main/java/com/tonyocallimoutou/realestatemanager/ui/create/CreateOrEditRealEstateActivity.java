@@ -1,13 +1,5 @@
 package com.tonyocallimoutou.realestatemanager.ui.create;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -15,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,6 +18,12 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.libraries.places.api.model.Place;
@@ -40,8 +37,6 @@ import com.tonyocallimoutou.realestatemanager.model.RealEstateLocation;
 import com.tonyocallimoutou.realestatemanager.model.User;
 import com.tonyocallimoutou.realestatemanager.ui.BaseActivity;
 import com.tonyocallimoutou.realestatemanager.ui.MainActivity;
-import com.tonyocallimoutou.realestatemanager.ui.detail.DetailFragment;
-import com.tonyocallimoutou.realestatemanager.ui.filter.FilterFragment;
 import com.tonyocallimoutou.realestatemanager.ui.mapview.MiniMapFragment;
 import com.tonyocallimoutou.realestatemanager.util.Utils;
 import com.tonyocallimoutou.realestatemanager.util.UtilsRealEstatePictureManager;
@@ -49,7 +44,6 @@ import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelFactory;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelRealEstate;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelUser;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -511,7 +505,6 @@ public class CreateOrEditRealEstateActivity extends BaseActivity implements List
 
         viewModelUser.getCurrentUserLiveData().observe(this, result -> {
             currentUser = result;
-            viewModelUser.setCurrentUser(result);
         });
     }
 

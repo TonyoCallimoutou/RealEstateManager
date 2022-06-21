@@ -1,19 +1,13 @@
 package com.tonyocallimoutou.realestatemanager.viewmodel;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.net.Uri;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.tasks.Task;
 import com.tonyocallimoutou.realestatemanager.model.User;
 import com.tonyocallimoutou.realestatemanager.repository.UserRepository;
-
-import java.util.List;
 
 public class ViewModelUser extends ViewModel {
 

@@ -9,7 +9,7 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.tonyocallimoutou.realestatemanager.data.room.LocalDatabase;
+import com.tonyocallimoutou.realestatemanager.data.localDatabase.DatabaseRealEstateHandler;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 
 public class RealEstateContentProvider extends ContentProvider {
@@ -34,7 +34,7 @@ public class RealEstateContentProvider extends ContentProvider {
 
             String id = String.valueOf(ContentUris.parseId(uri));
 
-            final Cursor cursor = LocalDatabase.getInstance(getContext()).realEstateDao().getRealEstateWithCursor(id);
+            final Cursor cursor = DatabaseRealEstateHandler.getInstance(getContext()).getRealEstateWithCursor(id);
 
             cursor.setNotificationUri(getContext().getContentResolver(), uri);
 
@@ -58,7 +58,7 @@ public class RealEstateContentProvider extends ContentProvider {
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
         if (getContext() != null && contentValues != null) {
 
-            final long id = LocalDatabase.getInstance(getContext()).realEstateDao().createRealEstate(RealEstate.fromContentValues(contentValues));
+            final long id = DatabaseRealEstateHandler.getInstance(getContext()).createRealEstate(RealEstate.fromContentValues(contentValues));
 
             if (id != 0) {
 
@@ -84,7 +84,7 @@ public class RealEstateContentProvider extends ContentProvider {
 
         if (getContext() != null && contentValues != null) {
 
-            final int count = LocalDatabase.getInstance(getContext()).realEstateDao().updateRealEstate(RealEstate.fromContentValues(contentValues));
+            final int count = DatabaseRealEstateHandler.getInstance(getContext()).updateRealEstate(RealEstate.fromContentValues(contentValues));
 
             getContext().getContentResolver().notifyChange(uri, null);
 

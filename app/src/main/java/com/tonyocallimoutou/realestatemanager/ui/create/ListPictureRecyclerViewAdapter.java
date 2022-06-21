@@ -1,25 +1,19 @@
 package com.tonyocallimoutou.realestatemanager.ui.create;
 
 import android.content.Context;
-import android.graphics.Picture;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.Photo;
-import com.tonyocallimoutou.realestatemanager.model.RealEstate;
-import com.tonyocallimoutou.realestatemanager.ui.listView.ListViewRecyclerViewAdapter;
 
 import java.util.List;
 

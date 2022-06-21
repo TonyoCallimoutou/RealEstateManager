@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 

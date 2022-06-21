@@ -13,22 +13,10 @@ import android.net.Uri;
 import androidx.room.Room;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.tonyocallimoutou.realestatemanager.FAKE.FakeData;
-import com.tonyocallimoutou.realestatemanager.data.room.LocalDatabase;
-import com.tonyocallimoutou.realestatemanager.data.room.PhotoConverter;
-import com.tonyocallimoutou.realestatemanager.data.room.StringListConverter;
-import com.tonyocallimoutou.realestatemanager.model.Photo;
-import com.tonyocallimoutou.realestatemanager.model.RealEstate;
-import com.tonyocallimoutou.realestatemanager.model.RealEstateLocation;
-import com.tonyocallimoutou.realestatemanager.model.User;
 import com.tonyocallimoutou.realestatemanager.provider.RealEstateContentProvider;
-import com.tonyocallimoutou.realestatemanager.util.Utils;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RealEstateContentProviderTest {
 

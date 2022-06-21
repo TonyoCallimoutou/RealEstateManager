@@ -26,16 +26,14 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.tonyocallimoutou.realestatemanager.R;
-import com.tonyocallimoutou.realestatemanager.data.room.UserDao;
+import com.tonyocallimoutou.realestatemanager.data.localDatabase.DatabaseUserHandler;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.model.User;
-import com.tonyocallimoutou.realestatemanager.repository.UserRepository;
 import com.tonyocallimoutou.realestatemanager.util.Utils;
 import com.tonyocallimoutou.realestatemanager.util.UtilsProfilePictureManager;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelUser;
 
 import java.util.List;
-import java.util.concurrent.Executor;
 
 public class FirebaseDataUser {
 
@@ -79,7 +77,7 @@ public class FirebaseDataUser {
         return this.getCurrentFirebaseUser() != null;
     }
 
-    public void createUser(Activity activity, ViewModelUser viewModelUser, UserDao userDao, Executor executor) {
+    public void createUser(Activity activity, ViewModelUser viewModelUser, DatabaseUserHandler database) {
         FirebaseUser user = getCurrentFirebaseUser();
 
         getUsersCollection().get()
@@ -111,14 +109,12 @@ public class FirebaseDataUser {
                             UtilsProfilePictureManager.createAlertDialog(activity, viewModelUser, currentUser);
                         }
 
-                        executor.execute(() -> {
-                            userDao.createUser(currentUser);
-                        });
+                        database.createUser(currentUser);
                     }
                 });
     }
 
-    public void setCurrentUserPicture(String picture, UserDao userDao, Executor executor) {
+    public void setCurrentUserPicture(String picture, DatabaseUserHandler database) {
 
         Uri pictureUri = Uri.parse(picture);
 
@@ -143,9 +139,7 @@ public class FirebaseDataUser {
                     currentUser.setUrlPicture(downloadUri.toString());
                     getUsersCollection().document(currentUser.getUid()).set(currentUser);
 
-                    executor.execute(() -> {
-                        userDao.setCurrentUserPicture(currentUser.getUid(), downloadUri.toString());
-                    });
+                    database.setCurrentUserPicture(currentUser.getUid(),downloadUri.toString());
                 }
             }
         });

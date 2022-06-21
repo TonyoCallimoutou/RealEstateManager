@@ -3,55 +3,27 @@ package com.tonyocallimoutou.realestatemanager.repository;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
-import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
 
-import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.data.firebase.FirebaseDataUser;
-import com.tonyocallimoutou.realestatemanager.data.room.UserDao;
+import com.tonyocallimoutou.realestatemanager.data.localDatabase.DatabaseUserHandler;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.model.User;
-import com.tonyocallimoutou.realestatemanager.ui.MainActivity;
-import com.tonyocallimoutou.realestatemanager.util.Utils;
-import com.tonyocallimoutou.realestatemanager.util.UtilsProfilePictureManager;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelUser;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Executor;
 
 public class UserRepository {
 
     private static volatile UserRepository instance;
 
     private final FirebaseDataUser firebaseDataUser;
-    private final UserDao userDao;
-    private final Executor executor;
     private final Context context;
+    private final DatabaseUserHandler database;
     private final SharedPreferences sharedPreferences;
 
     private static boolean isConnected;
@@ -64,21 +36,20 @@ public class UserRepository {
     private final String currentUserId;
 
 
-    private UserRepository(Context context, UserDao userDao, Executor executor) {
+    private UserRepository(Context context) {
         firebaseDataUser = FirebaseDataUser.getInstance(context);
         this.context = context;
-        this.userDao = userDao;
-        this.executor = executor;
+        this.database = new DatabaseUserHandler(context);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         currentUserId = sharedPreferences.getString(context.getString(R.string.shared_preference_user_uid), "");
 
     }
 
-    public static UserRepository getInstance(Context context, UserDao userDao, Executor executor) {
+    public static UserRepository getInstance(Context context) {
         synchronized (UserRepository.class) {
             if (instance == null) {
-                instance = new UserRepository(context, userDao, executor);
+                instance = new UserRepository(context);
             }
             return instance;
         }
@@ -95,19 +66,17 @@ public class UserRepository {
 
     public void createUser(Activity activity, ViewModelUser viewModelUser) {
         if (isConnected) {
-            firebaseDataUser.createUser(activity, viewModelUser, userDao, executor);
+            firebaseDataUser.createUser(activity, viewModelUser, database);
         }
     }
 
     public void setCurrentUserPicture(String picture) {
 
         if (isConnected) {
-            firebaseDataUser.setCurrentUserPicture(picture, userDao, executor);
+            firebaseDataUser.setCurrentUserPicture(picture, database);
         }
         else {
-            executor.execute(() -> {
-                userDao.setCurrentUserPicture(currentUserId, picture);
-            });
+            database.setCurrentUserPicture(currentUserId, picture);
         }
     }
 
@@ -126,9 +95,7 @@ public class UserRepository {
                 .putString(context.getString(R.string.shared_preference_user_uid), "")
                 .apply();
 
-        executor.execute(() -> {
-            userDao.deleteUser(currentUserId);
-        });
+        database.deleteUser(currentUserId);
 
         return firebaseDataUser.deleteUser(context);
     }
@@ -138,10 +105,8 @@ public class UserRepository {
             firebaseDataUser.setNameOfCurrentUser(name);
         }
         else {
-            executor.execute(() -> {
-                userDao.setNameOfCurrentUser(currentUserId, name);
-                initLiveDataUser();
-            });
+            database.setNameOfCurrentUser(currentUserId, name);
+            initLiveDataUser();
         }
     }
 
@@ -150,16 +115,12 @@ public class UserRepository {
             firebaseDataUser.setPhoneNumberOfCurrentUser(phoneNumber);
         }
         else {
-            executor.execute(() -> {
-                userDao.setPhoneNumberOfCurrentUser(currentUserId, phoneNumber);
-                initLiveDataUser();
-            });
+            database.setPhoneNumberOfCurrentUser(currentUserId, phoneNumber);
+            initLiveDataUser();
         }
     }
 
     public LiveData<User> getCurrentUserLiveData() {
-
-
         if (isConnected) {
             firebaseDataUser.setCurrentUserLivedata(currentUserLiveData);
         }
@@ -170,9 +131,7 @@ public class UserRepository {
     }
 
     private void initLiveDataUser() {
-        executor.execute(()-> {
-            currentUserLiveData.postValue(userDao.getCurrentUser(currentUserId));
-        });
+        currentUserLiveData.postValue(database.getCurrentUser(currentUserId));
     }
 
     // Real Estate
@@ -183,11 +142,9 @@ public class UserRepository {
             firebaseDataUser.createRealEstate(realEstate);
         }
         else {
-            executor.execute(() -> {
-                currentUser.addRealEstateToMyList(realEstate);
-                userDao.createUser(currentUser);
-                initLiveDataUser();
-            });
+            currentUser.addRealEstateToMyList(realEstate);
+            database.createUser(currentUser);
+            initLiveDataUser();
         }
 
 
@@ -200,10 +157,7 @@ public class UserRepository {
     public void setCurrentUser(User user) {
         if (! user.equals(currentUser)) {
             currentUser = user;
-
-            executor.execute(() -> {
-                userDao.createUser(user);
-            });
+            database.createUser(user);
 
             if (isConnected) {
                 instance.firebaseDataUser.syncCurrentUser(instance.currentUser);

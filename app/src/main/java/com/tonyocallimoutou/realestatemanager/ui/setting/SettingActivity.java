@@ -1,10 +1,9 @@
 package com.tonyocallimoutou.realestatemanager.ui.setting;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.lifecycle.ViewModelProvider;
 
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.ui.BaseActivity;

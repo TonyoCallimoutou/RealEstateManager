@@ -1,21 +1,14 @@
 package com.tonyocallimoutou.realestatemanager.ui.filter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.tonyocallimoutou.realestatemanager.R;
-import com.tonyocallimoutou.realestatemanager.model.RealEstate;
-import com.tonyocallimoutou.realestatemanager.ui.listView.ListViewRecyclerViewAdapter;
 import com.tonyocallimoutou.realestatemanager.util.Filter;
 
 import java.util.List;

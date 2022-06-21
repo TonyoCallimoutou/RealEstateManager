@@ -1,13 +1,16 @@
 package com.tonyocallimoutou.realestatemanager;
 
-import org.junit.Test;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.tonyocallimoutou.realestatemanager.FAKE.FakeData;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.util.CompareRealEstate;
 import com.tonyocallimoutou.realestatemanager.util.Utils;
+
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Calendar;

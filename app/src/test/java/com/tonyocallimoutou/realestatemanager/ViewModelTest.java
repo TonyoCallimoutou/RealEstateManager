@@ -12,22 +12,20 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 import android.app.Activity;
-import android.content.Context;
-import android.location.Location;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.tonyocallimoutou.realestatemanager.FAKE.FakeData;
+import com.tonyocallimoutou.realestatemanager.model.Photo;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.model.RealEstateLocation;
 import com.tonyocallimoutou.realestatemanager.model.User;
 import com.tonyocallimoutou.realestatemanager.repository.RealEstateRepository;
 import com.tonyocallimoutou.realestatemanager.repository.UserRepository;
-import com.tonyocallimoutou.realestatemanager.util.Utils;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelRealEstate;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelUser;
-
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -38,6 +36,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ViewModelTest {
@@ -49,8 +48,6 @@ public class ViewModelTest {
     private ViewModelUser viewModelUser;
     @Mock
     private ViewModelRealEstate viewModelRealEstate;
-    @Mock
-    private Context context;
     @Mock
     private Activity activity;
 
@@ -89,7 +86,7 @@ public class ViewModelTest {
                 fakeWorkmates.remove(currentUser);
                 return null;
             }
-        }).when(userRepository).deleteUser(any(Context.class));
+        }).when(userRepository).deleteUser();
 
         doAnswer(new Answer() {
             @Override
@@ -113,13 +110,12 @@ public class ViewModelTest {
 
         doAnswer(new Answer() {
             @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                Object[] args = invocation.getArguments();
-                MutableLiveData<User> liveData = (MutableLiveData<User>) args[0];
+            public LiveData<User> answer(InvocationOnMock invocation) throws Throwable {
+                MutableLiveData<User> liveData = new MutableLiveData<>();
                 liveData.setValue(currentUser);
-                return null;
+                return liveData;
             }
-        }).when(userRepository).setCurrentUserLivedata(any(MutableLiveData.class));
+        }).when(userRepository).getCurrentUserLiveData();
 
         doAnswer(new Answer() {
             @Override
@@ -146,37 +142,12 @@ public class ViewModelTest {
 
         doAnswer(new Answer() {
             @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                Object[] args = invocation.getArguments();
-                MutableLiveData<List<RealEstate>> liveData = (MutableLiveData<List<RealEstate>>) args[0];
+            public LiveData<List<RealEstate>> answer(InvocationOnMock invocation) throws Throwable {
+                MutableLiveData<List<RealEstate>> liveData = new MutableLiveData<>();
                 liveData.setValue(fakeRealEstates);
-                return null;
+                return liveData;
             }
-        }).when(realEstateRepository).getAllRealEstates(any(MutableLiveData.class));
-
-        doAnswer(new Answer() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                Object[] args = invocation.getArguments();
-                RealEstate actual = (RealEstate) args[0];
-                RealEstate edit = (RealEstate) args[1];
-                for (RealEstate realEstate : fakeRealEstates) {
-                    if (realEstate.getId().equals(actual.getId())) {
-                        realEstate.setPhotos(edit.getPhotos());
-                        realEstate.setPriceUSD(edit.getPriceUSD());
-                        realEstate.setMainPicturePosition(edit.getMainPicturePosition());
-                        realEstate.setNumberOfBathrooms(edit.getNumberOfBathrooms());
-                        realEstate.setNumberOfRooms(edit.getNumberOfRooms());
-                        realEstate.setNumberOfBedrooms(edit.getNumberOfBedrooms());
-                        realEstate.setSurface(edit.getSurface());
-                        realEstate.setDescription(edit.getDescription());
-                        realEstate.setPlace(edit.getPlace());
-                        realEstate.setType(edit.getType());
-                    }
-                }
-                return null;
-            }
-        }).when(realEstateRepository).editRealEstate(any(RealEstate.class),any(RealEstate.class));
+        }).when(realEstateRepository).getListWithFilter();
 
         doAnswer(new Answer() {
             @Override
@@ -191,7 +162,7 @@ public class ViewModelTest {
                         }
                         else {
                             item.setSold(true);
-                            item.setSoldDate(Utils.getTodayDate());
+                            item.setSoldDate(new Date());
                         }
 
                         return item;
@@ -200,18 +171,6 @@ public class ViewModelTest {
                 return null;
             }
         }).when(realEstateRepository).soldRealEstate(any(RealEstate.class));
-    }
-
-
-    @Test
-    public void getCurrentUser() {
-
-        User user = viewModelUser.getCurrentUser();
-
-        assertEquals(currentUser.getUid(), user.getUid());
-        assertEquals(currentUser.getUsername(), user.getUsername());
-        assertEquals(currentUser.getUrlPicture(), user.getUrlPicture());
-        assertEquals(currentUser.getEmail(), user.getEmail());
     }
 
     @Test
@@ -230,7 +189,7 @@ public class ViewModelTest {
         viewModelUser.createUser(activity);
         assertTrue(fakeWorkmates.contains(currentUser));
 
-        viewModelUser.deleteUser(context);
+        viewModelUser.deleteUser();
 
         assertFalse(fakeWorkmates.contains(currentUser));
         for (User user : fakeWorkmates) {
@@ -248,7 +207,6 @@ public class ViewModelTest {
 
     @Test
     public void getLiveDataCurrentUser() {
-        viewModelUser.setCurrentUserLiveData();
         User user = viewModelUser.getCurrentUserLiveData().getValue();
 
         assertEquals(currentUser.getUid(), user.getUid());
@@ -259,67 +217,34 @@ public class ViewModelTest {
 
     @Test
     public void setCurrentUserPicture() {
-        String currentPicture = viewModelUser.getCurrentUser().getUrlPicture();
+        String currentPicture = viewModelUser.getCurrentUserLiveData().getValue().getUrlPicture();
 
         assertEquals(currentPicture, currentUser.getUrlPicture());
 
         String newPicture = "New Picture";
         viewModelUser.setCurrentUserPicture(newPicture);
 
-        assertEquals(newPicture, viewModelUser.getCurrentUser().getUrlPicture());
+        assertEquals(newPicture, viewModelUser.getCurrentUserLiveData().getValue().getUrlPicture());
     }
 
     @Test
     public void createRealEstate() {
-
+        List<Photo> photos = FakeData.getFakePhotos();
         RealEstateLocation location = new RealEstateLocation("test","name",1.0,2.0,"test");
-        RealEstate newRealEstate = new RealEstate(100000,currentUser,"Fake Type",null,0,"Fake Description",120,1,1,1,location);
+        RealEstate newRealEstate = new RealEstate(100000,currentUser,1,photos,0,"Fake Description",120,1,1,1,location);
 
         viewModelRealEstate.createRealEstate(newRealEstate);
 
-        List<String> listRealEstateOfUser = viewModelUser.getCurrentUser().getMyRealEstateId();
+        List<String> listRealEstateOfUser = viewModelUser.getCurrentUserLiveData().getValue().getMyRealEstateId();
 
         assertTrue(listRealEstateOfUser.contains(newRealEstate.getId()));
         assertTrue(fakeRealEstates.contains(newRealEstate));
     }
 
     @Test
-    public void editRealEstate() {
-        RealEstateLocation location = new RealEstateLocation("test","name",1.0,2.0,"test");
-        RealEstate newRealEstate = new RealEstate(100000,currentUser,"Fake Type",null,0,"Fake Description",120,1,1,1,location);
-
-        viewModelRealEstate.createRealEstate(newRealEstate);
-
-        viewModelRealEstate.setListRealEstate();
-        List<RealEstate> list = viewModelRealEstate.getAllRealEstateLiveData().getValue();
-        RealEstate actual = list.get(list.size()-1);
-
-        assertEquals(newRealEstate.getId(), actual.getId());
-        assertEquals(newRealEstate.getPriceUSD(), actual.getPriceUSD());
-        assertEquals(newRealEstate.getSurface(), actual.getSurface());
-
-        RealEstate edit = new RealEstate(200000,currentUser,"Fake Type",null,0,"Fake Description",300,1,1,1,location);
-
-        viewModelRealEstate.editRealEstate(newRealEstate,edit);
-
-        viewModelRealEstate.setListRealEstate();
-        List<RealEstate> list2 = viewModelRealEstate.getAllRealEstateLiveData().getValue();
-        RealEstate modify = list2.get(list2.size()-1);
-
-        assertNotEquals(modify.getId(),edit.getId());
-        assertEquals(modify.getId(), actual.getId());
-        assertEquals(modify.getPriceUSD(), edit.getPriceUSD());
-        assertEquals(modify.getSurface(), edit.getSurface());
-        assertEquals(list.size(),list2.size());
-
-    }
-
-    @Test
     public void getAllRealEstate() {
 
-        viewModelRealEstate.setListRealEstate();
-
-        List<RealEstate> list = viewModelRealEstate.getAllRealEstateLiveData().getValue();
+        List<RealEstate> list = viewModelRealEstate.getFilterListLiveData().getValue();
 
         assertEquals(fakeRealEstates,list);
     }

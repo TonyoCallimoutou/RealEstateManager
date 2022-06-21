@@ -2,63 +2,46 @@ package com.tonyocallimoutou.realestatemanager.model;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.room.ColumnInfo;
-import androidx.room.Embedded;
-import androidx.room.Entity;
-import androidx.room.ForeignKey;
-import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
-import androidx.room.TypeConverters;
 
-import com.google.android.libraries.places.api.model.Place;
 import com.tonyocallimoutou.realestatemanager.R;
-import com.tonyocallimoutou.realestatemanager.data.room.PhotoConverter;
-import com.tonyocallimoutou.realestatemanager.data.room.StringListConverter;
+import com.tonyocallimoutou.realestatemanager.data.localDatabase.PhotoListConverter;
+import com.tonyocallimoutou.realestatemanager.data.localDatabase.StringListConverter;
 import com.tonyocallimoutou.realestatemanager.util.Utils;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
-@Entity
+
 public class RealEstate implements Serializable {
 
-    @PrimaryKey
     @NonNull
-    @ColumnInfo(name = "realEstate_id")
     private String id;
-    private String creationDate;
-    @Embedded(prefix = "user_")
+    private Date creationDate;
     private User user;
     private int priceUSD;
     private int typeId;
-    @TypeConverters({PhotoConverter.class})
     private List<Photo> photos;
+    private int numberOfPhotos;
     private int mainPicturePosition;
     private String description;
     private int surface;
     private int numberOfRooms;
     private int numberOfBathrooms;
     private int numberOfBedrooms;
-    @Embedded(prefix = "place_")
     @Nullable
     private RealEstateLocation place;
     private boolean isSold;
     @Nullable
-    private String soldDate;
-    @ColumnInfo(name = "real_estate_is_synchro")
+    private Date soldDate;
     private boolean isSync;
-    @ColumnInfo(name = "real_estate_is_draft")
     private boolean isDraft;
 
-    @Ignore
+
     public RealEstate(){}
 
     public RealEstate(int priceUSD,
@@ -73,11 +56,12 @@ public class RealEstate implements Serializable {
                      int numberOfBedrooms,
                      @Nullable RealEstateLocation place) {
         this.id = user.getUid()+"_"+ user.getMyRealEstateId().size();
-        this.creationDate = Utils.getTodayDate();
+        this.creationDate = new Date();
         this.priceUSD = priceUSD;
         this.user = user;
         this.typeId = typeId;
         this.photos = photos;
+        this.numberOfPhotos = photos.size();
         this.mainPicturePosition = mainPicturePosition;
         this.description = description;
         this.surface = surface;
@@ -99,12 +83,16 @@ public class RealEstate implements Serializable {
         this.id = id;
     }
 
-    public String getCreationDate() {
+    public Date getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(String creationDate) {
+    public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public String getStringCreationDate() {
+        return Utils.getStringOfDate(creationDate);
     }
 
     public User getUser() {
@@ -146,6 +134,15 @@ public class RealEstate implements Serializable {
 
     public void setPhotos(List<Photo> photos) {
         this.photos = photos;
+        this.numberOfPhotos = photos.size();
+    }
+
+    public int getNumberOfPhotos() {
+        return numberOfPhotos;
+    }
+
+    public void setNumberOfPhotos(int numberOfPhotos) {
+        this.numberOfPhotos = numberOfPhotos;
     }
 
     public int getMainPicturePosition() {
@@ -229,12 +226,16 @@ public class RealEstate implements Serializable {
     }
 
     @Nullable
-    public String getSoldDate() {
+    public Date getSoldDate() {
         return soldDate;
     }
 
-    public void setSoldDate(@Nullable String soldDate) {
+    public void setSoldDate(@Nullable Date soldDate) {
         this.soldDate = soldDate;
+    }
+
+    public String getStringSoldDate() {
+        return Utils.getStringOfDate(soldDate);
     }
 
     public boolean isSync() {
@@ -274,7 +275,7 @@ public class RealEstate implements Serializable {
 
         // REAL ESTATE
         realEstate.setSync(true);
-        realEstate.setCreationDate(Utils.getTodayDate());
+        realEstate.setCreationDate(new Date());
 
         List<Photo> photos = new ArrayList<>();
         photos.add(new Photo("android.resource://com.tonyocallimoutou.realestatemanager/drawable/ic_no_image_available",null));
@@ -284,10 +285,6 @@ public class RealEstate implements Serializable {
 
         if (values.containsKey("id")) {
             realEstate.setId(values.getAsString("id"));
-        }
-
-        if (values.containsKey("creationDate")) {
-            realEstate.setCreationDate(values.getAsString("creationDate"));
         }
 
         if (values.containsKey("priceUSD")) {
@@ -320,13 +317,11 @@ public class RealEstate implements Serializable {
 
         if (values.containsKey("isSold")) {
             realEstate.setSold(values.getAsBoolean("isSold"));
+            realEstate.setSoldDate(new Date());
         }
 
-        if (values.containsKey("soldDate")) {
-            realEstate.setSoldDate(values.getAsString("soldDate"));
-        }
         if (values.containsKey("photos")) {
-            photos = (PhotoConverter.fromString(values.getAsString("photos")));
+            photos = (PhotoListConverter.fromString(values.getAsString("photos")));
         }
 
         for (Photo photo : photos) {
@@ -352,10 +347,6 @@ public class RealEstate implements Serializable {
 
         if (values.containsKey("user_user_name")) {
             user.setUsername(values.getAsString("user_user_name"));
-        }
-
-        if (values.containsKey("user_user_picture")) {
-            user.setUrlPicture(values.getAsString("user_user_picture"));
         }
 
         if (values.containsKey("user_user_phone_number")) {

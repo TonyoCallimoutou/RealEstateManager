@@ -6,12 +6,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -21,23 +18,16 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnPausedListener;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.tonyocallimoutou.realestatemanager.R;
-import com.tonyocallimoutou.realestatemanager.data.room.RealEstateDao;
+import com.tonyocallimoutou.realestatemanager.data.localDatabase.DatabaseRealEstateHandler;
 import com.tonyocallimoutou.realestatemanager.model.Photo;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.model.User;
-import com.tonyocallimoutou.realestatemanager.repository.RealEstateRepository;
-import com.tonyocallimoutou.realestatemanager.util.Filter;
 import com.tonyocallimoutou.realestatemanager.util.UtilNotification;
-import com.tonyocallimoutou.realestatemanager.util.Utils;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
 
 public class FirebaseDataRealEstate {
 
@@ -72,7 +62,7 @@ public class FirebaseDataRealEstate {
     }
 
 
-    public void savePicture(Context context, RealEstate realEstate, RealEstateDao realEstateDao, Executor executor) {
+    public void savePicture(Context context, RealEstate realEstate, DatabaseRealEstateHandler database) {
 
         for (int i=0; i<realEstate.getPhotos().size(); i++) {
 
@@ -113,10 +103,8 @@ public class FirebaseDataRealEstate {
 
                             realEstate.setPhotos(list);
 
-                            executor.execute(() -> {
-                                realEstateDao.createRealEstate(realEstate);
-                                UtilNotification.createNotification(context, realEstate);
-                            });
+                            database.createRealEstate(realEstate);
+                            UtilNotification.createNotification(context, realEstate);
 
                             if (realEstate.getProgressSync() == 100) {
                                 editRealEstate(realEstate);
@@ -134,7 +122,7 @@ public class FirebaseDataRealEstate {
         getRealEstateCollection().document(id).set(realEstate);
     }
 
-    public void setListRealEstates(RealEstateDao realEstateDao, Executor executor) {
+    public void setListRealEstates(DatabaseRealEstateHandler database) {
         getRealEstateCollection().addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -147,9 +135,8 @@ public class FirebaseDataRealEstate {
                 for (DocumentSnapshot document : value) {
                     Log.d("TAG", "onEvent: ");
                     RealEstate realEstate = document.toObject(RealEstate.class);
-                    executor.execute(() -> {
-                        realEstateDao.createRealEstate(realEstate);
-                    });
+
+                    database.createRealEstate(realEstate);
                 }
 
             }

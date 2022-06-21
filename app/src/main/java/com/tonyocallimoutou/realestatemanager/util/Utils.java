@@ -3,24 +3,18 @@ package com.tonyocallimoutou.realestatemanager.util;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.net.wifi.WifiManager;
-import android.util.Log;
-import android.widget.Spinner;
 
 import androidx.preference.PreferenceManager;
 
 import com.google.android.libraries.places.api.model.Place;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
-import com.tonyocallimoutou.realestatemanager.ui.MainActivity;
 
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -63,6 +57,14 @@ public class Utils {
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
         return (networkInfo != null && networkInfo.isConnected());
+    }
+
+    public static String getStringOfDate(Date date) {
+        if (date == null) {
+            return null;
+        }
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.getDefault());
+        return dateFormat.format(date);
     }
 
 
@@ -135,7 +137,7 @@ public class Utils {
 
     public static int getAgeOfRealEstate(RealEstate realEstate) {
         String today = getTodayDate();
-        String creation = realEstate.getCreationDate();
+        String creation = realEstate.getStringCreationDate();
 
         String[] dateToday = today.split("/");
         String[] dateCreation = creation.split("/");
@@ -151,7 +153,7 @@ public class Utils {
 
     public static int getAgeOfSold(RealEstate realEstate) {
         String today = getTodayDate();
-        String sold = realEstate.getSoldDate();
+        String sold = realEstate.getStringSoldDate();
 
         String[] dateToday = today.split("/");
         String[] dateSold = sold.split("/");

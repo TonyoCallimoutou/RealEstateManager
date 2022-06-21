@@ -1,7 +1,5 @@
 package com.tonyocallimoutou.realestatemanager.util;
 
-import android.util.Log;
-
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 
 import java.util.List;

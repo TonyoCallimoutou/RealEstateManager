@@ -1,16 +1,12 @@
 package com.tonyocallimoutou.realestatemanager.util;
 
 import android.content.Context;
-import android.util.Log;
-
-import androidx.annotation.Nullable;
 
 import com.google.android.libraries.places.api.model.Place;
 import com.tonyocallimoutou.realestatemanager.R;
-import com.tonyocallimoutou.realestatemanager.model.RealEstate;
+import com.tonyocallimoutou.realestatemanager.data.localDatabase.DatabaseRealEstateHandler;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 import java.util.Objects;
 
 public class Filter {
@@ -159,74 +155,46 @@ public class Filter {
         String str = "";
 
         if (filterType == (TYPE_MIN_PRICE)) {
-            str = "priceUSD > " + Utils.getPriceInUSD(context,minPrice,moneyKey);
+            str = DatabaseRealEstateHandler.PRICE_USD_COL + " > " + Utils.getPriceInUSD(context,minPrice,moneyKey);
         }
         else if (filterType == (TYPE_MAX_PRICE)) {
-            str = "priceUSD < " + Utils.getPriceInUSD(context,maxPrice,moneyKey);
+            str = DatabaseRealEstateHandler.PRICE_USD_COL + " < " + Utils.getPriceInUSD(context,maxPrice,moneyKey);
         }
         else if (filterType == (TYPE_TYPE)) {
-            str = "typeId = " + typeId;
+            str = DatabaseRealEstateHandler.TYPE_ID_COL + " = " + typeId;
         }
         else if (filterType == (TYPE_ROOM)) {
-            str = "numberOfRooms >= " + minRoom;
+            str = DatabaseRealEstateHandler.NUMBER_OF_ROOM_COL + " >= " + minRoom;
         }
         else if (filterType == (TYPE_MINE)) {
-            str = "user_uid = \"" + userId + "\"";
+            str = DatabaseRealEstateHandler.USER_UID_COL + " = \"" + userId + "\"";
         }
         else if (filterType == (TYPE_DRAFT)) {
-            str = "real_estate_is_draft = 0";
+            str = DatabaseRealEstateHandler.IS_DRAFT_COL + " = 0";
         }
         else if (filterType == (TYPE_NOT_SYNC)) {
-            str = "real_estate_is_synchro = 1";
-        }
-        /*
-        else if (filterType == (TYPE_CREATION)) {
-            for (RealEstate realEstate : original) {
-                if (Utils.getAgeOfRealEstate(realEstate) <= creationDateLimit) {
-                    newList.add(realEstate);
-                }
-            }
-            Log.d("TAG", "creation Date limit: " + creationDateLimit); {
-
-            }
-            str = "creationDate = ?";
+            str = DatabaseRealEstateHandler.IS_SYNC_COL + " = 1";
         }
         else if (filterType == (TYPE_PICTURE)) {
-            for (RealEstate realEstate : original) {
-                if (realEstate.getPhotos().size() >= minNbrPicture) {
-                    newList.add(realEstate);
-                }
-            }
+            str = DatabaseRealEstateHandler.NUMBER_PHOTOS_COL + " >= " + minNbrPicture;
+        }
+        else if (filterType == (TYPE_CREATION)) {
+            Date today = new Date();
+            long limitDate = today.getTime() - ((long) creationDateLimit *31*24*3600*1000);
 
-            str = "creationDate >= ?";
+            str = DatabaseRealEstateHandler.CREATION_COL + " < " + limitDate;
         }
 
-         */
         else if (filterType == (TYPE_SOLD)) {
-            /*
-            for (RealEstate realEstate : original) {
-                if (realEstate.isSold()) {
-                    if (Utils.getAgeOfSold(realEstate) <= dateSoldLimit || dateSoldLimit == 0) {
-                        newList.add(realEstate);
-                    }
-                }
-            }
+            Date today = new Date();
+            long limitDate = today.getTime() - ((long) dateSoldLimit *31*24*3600*1000);
 
-             */
+            str = DatabaseRealEstateHandler.IS_SOLD_COL + " = 1 AND " + DatabaseRealEstateHandler.SOLD_DATE_COL + " < " + limitDate;
 
-            str = "isSold = 1";
         }
         else if (filterType == (TYPE_LOCATION)) {
-/*
-            for (RealEstate realEstate : original) {
-                if (realEstate.getPlace().getCity().equals(filterCity.getName()) || Utils.getDistanceFromCityInKm(realEstate,filterCity) < distance) {
-                    newList.add(realEstate);
-                }
-            }
 
- */
-
-            str = "place_city = \"" + filterCity.getName() + "\"";
+            str = DatabaseRealEstateHandler.conditionDistanceQuery(distance,filterCity);
         }
 
 

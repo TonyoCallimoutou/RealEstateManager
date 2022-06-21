@@ -28,7 +28,7 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "realEstateDatabase";
     private static final int DB_VERSION = 1;
-    private static final String TABLE_REAL_ESTATE_NAME = "realEstate";
+    public static final String TABLE_REAL_ESTATE_NAME = "realEstate";
     public static final String ID_COL = "id";
     public static final String CREATION_COL = "creationDate";
     public static final String USER_UID_COL = "user_uid";
@@ -62,6 +62,14 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
     public static final String SOLD_DATE_COL = "soldDate";
     public static final String IS_SYNC_COL = "isSync";
     public static final String IS_DRAFT_COL = "isDraft";
+
+    public static final String[] ALL_COLUMNS = {
+            ID_COL, CREATION_COL, USER_UID_COL, USER_USERNAME_COL, USER_URL_PICTURE_COL, USER_EMAIL_COL,
+            USER_PHONE_NUMBER_COL, USER_REAL_ESTATE_COL, PRICE_USD_COL, TYPE_ID_COL, PHOTOS_COL, NUMBER_PHOTOS_COL,
+            MAIN_PICTURE_POSITION_COL, DESCRIPTION_COL, SURFACE_COL, NUMBER_OF_ROOM_COL, NUMBER_OF_BATHROOM_COL,
+            NUMBER_OF_BEDROOM_COL, PLACE_PLACE_ID_COL, PLACE_NAME_COL, PLACE_LAT_COL, PLACE_LNG_COL,
+            PLACE_COS_LAT_COL, PLACE_SIN_LAT_COL, PLACE_COS_LNG_COL, PLACE_SIN_LNG_COL, PLACE_ADDRESS_COL,
+            PLACE_COUNTRY_COL, PLACE_CITY_COL, IS_SOLD_COL, SOLD_DATE_COL, IS_SYNC_COL, IS_DRAFT_COL };
 
     private static final int NUM_COL_ID = 0;
     private static final int NUM_COL_CREATION = 1;

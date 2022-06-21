@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.tonyocallimoutou.realestatemanager.R;
+import com.tonyocallimoutou.realestatemanager.data.localDatabase.DateConverter;
 import com.tonyocallimoutou.realestatemanager.data.localDatabase.PhotoListConverter;
 import com.tonyocallimoutou.realestatemanager.data.localDatabase.StringListConverter;
 import com.tonyocallimoutou.realestatemanager.util.Utils;
@@ -271,8 +272,6 @@ public class RealEstate implements Serializable {
 
         final RealEstate realEstate = new RealEstate();
 
-
-
         // REAL ESTATE
         realEstate.setSync(true);
         realEstate.setCreationDate(new Date());
@@ -283,8 +282,23 @@ public class RealEstate implements Serializable {
         realEstate.setDescription("");
 
 
+
+
+
+
+
+
+
+
+
+
+
         if (values.containsKey("id")) {
             realEstate.setId(values.getAsString("id"));
+        }
+
+        if (values.containsKey("creationDate")) {
+            realEstate.setCreationDate(DateConverter.fromString(values.getAsLong("creationDate")));
         }
 
         if (values.containsKey("priceUSD")) {
@@ -293,6 +307,14 @@ public class RealEstate implements Serializable {
 
         if (values.containsKey("description")) {
             realEstate.setDescription(values.getAsString("description"));
+        }
+
+        if (values.containsKey("typeId")) {
+            realEstate.setTypeId(values.getAsInteger("typeId"));
+        }
+
+        if (values.containsKey("numberOfPhotos")) {
+            realEstate.setNumberOfPhotos(values.getAsInteger("numberOfPhotos"));
         }
 
         if (values.containsKey("mainPicturePosition")) {
@@ -318,6 +340,17 @@ public class RealEstate implements Serializable {
         if (values.containsKey("isSold")) {
             realEstate.setSold(values.getAsBoolean("isSold"));
             realEstate.setSoldDate(new Date());
+            if (values.containsKey("soldDate")) {
+                realEstate.setSoldDate(DateConverter.fromString(values.getAsLong("soldDate")));
+            }
+        }
+
+        if (values.containsKey("isSync")) {
+            realEstate.setSync(values.getAsBoolean("isSync"));
+        }
+
+        if (values.containsKey("isDraft")) {
+            realEstate.setDraft(values.getAsBoolean("isDraft"));
         }
 
         if (values.containsKey("photos")) {

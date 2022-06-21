@@ -118,7 +118,7 @@ public class DatabaseUserHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USER_NAME + " WHERE " + UID_COL + " = :" + id, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USER_NAME + " WHERE " + UID_COL + " = \""+ id + "\"", null);
 
         cursor.moveToFirst();
         User user = cursorToUser(cursor);

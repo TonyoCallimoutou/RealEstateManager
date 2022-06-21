@@ -73,15 +73,11 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRe
         else {
             holder.realEstateLocation.setText(realEstate.getPlace().getAddress());
 
-            if (! realEstate.isSync()) {
-                holder.notSync.setVisibility(View.VISIBLE);
-            }
-
             if (realEstate.isSold()) {
                 holder.soldBanner.setVisibility(View.VISIBLE);
             }
 
-            if (realEstate.getProgressSync() != 100) {
+            if (! realEstate.isSync()) {
                 if (Utils.isInternetAvailable(mContext)) {
                     int percentage = (int) Math.round(realEstate.getProgressSync());
                     String percentageStr = percentage + "%";

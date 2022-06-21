@@ -225,7 +225,7 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
         errorProgressBar.setVisibility(View.GONE);
         percentageTextView.setVisibility(View.GONE);
 
-        if (mRealEstate.getProgressSync() != 100) {
+        if (! mRealEstate.isSync()) {
             if (Utils.isInternetAvailable(getContext())) {
                 int percentage = (int) Math.round(mRealEstate.getProgressSync());
                 String percentageStr = percentage + "%";

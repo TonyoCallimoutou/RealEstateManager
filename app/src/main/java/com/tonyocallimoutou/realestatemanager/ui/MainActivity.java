@@ -211,6 +211,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public static void initDetailFragment(@Nullable RealEstate realEstate) {
+        Log.d("TAG", "initDetailFragment: ");
         fragmentActivity.getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.host_detail_fragment, DetailFragment.newInstance(realEstate))
@@ -441,6 +442,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             Log.d(this.getClass().getSimpleName(), "");
             ListViewFragment.initRealEstateSyncList(listFilter);
             MapViewFragment.setRealEstateList(listFilter);
+            if (! DetailFragment.canCloseFragment() && DetailFragment.getActualRealEstate() == null) {
+                Log.d("TAG", "initData: " + listFilter.get(0));
+                initDetailFragment(listFilter.get(0));
+            }
         });
     }
 

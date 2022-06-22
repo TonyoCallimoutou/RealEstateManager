@@ -37,6 +37,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Optional;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -283,6 +284,7 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
         alert.show();
     }
 
+    @Optional
     @OnClick(R.id.detail_close_button)
     public void closeDetailFragment() {
         closeFragment();

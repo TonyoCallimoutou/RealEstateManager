@@ -134,6 +134,7 @@ public class FirebaseDataRealEstate {
 
                 for (DocumentSnapshot document : value) {
                     Log.d("TAG", "onEvent: ");
+                    Log.d("TAG", "onEvent: " + document.getData());
                     RealEstate realEstate = document.toObject(RealEstate.class);
 
                     database.createRealEstate(realEstate);

@@ -90,6 +90,12 @@ public class FilterFragment extends Fragment {
     CheckBox draftCheckbox;
     @BindView(R.id.filter_checkbox_not_sync)
     CheckBox notSyncCheckbox;
+    @BindView(R.id.filter_checkbox_next_school)
+    CheckBox schoolCheckbox;
+    @BindView(R.id.filter_checkbox_next_park)
+    CheckBox parkCheckbox;
+    @BindView(R.id.filter_checkbox_next_store)
+    CheckBox storeCheckbox;
 
     private FilterRecyclerViewAdapter adapter;
 
@@ -213,6 +219,15 @@ public class FilterFragment extends Fragment {
         else if (filter.getFilterType() == (Filter.TYPE_NOT_SYNC)) {
             checkBoxIsMine.setChecked(false);
         }
+        else if (filter.getFilterType() == (Filter.TYPE_NEXT_SCHOOL)) {
+            schoolCheckbox.setChecked(false);
+        }
+        else if (filter.getFilterType() == (Filter.TYPE_NEXT_PARK)) {
+            parkCheckbox.setChecked(false);
+        }
+        else if (filter.getFilterType() == (Filter.TYPE_NEXT_STORE)) {
+            storeCheckbox.setChecked(false);
+        }
 
         filters.remove(filter);
         applyFilter();
@@ -231,6 +246,7 @@ public class FilterFragment extends Fragment {
         initSoldFilter();
         initDraftFilter();
         initNotSyncFilter();
+        initProximityFilter();
     }
 
     private void initPlaceFilter() {
@@ -595,6 +611,61 @@ public class FilterFragment extends Fragment {
                 }
                 else {
                     filters.remove(filterNotSync);
+                }
+
+                applyFilter();
+            }
+        });
+    }
+
+    private void initProximityFilter() {
+        Filter filterSchool = new Filter(getContext(),Filter.TYPE_NEXT_SCHOOL);
+        Filter filterPark = new Filter(getContext(),Filter.TYPE_NEXT_PARK);
+        Filter filterStore = new Filter(getContext(),Filter.TYPE_NEXT_STORE);
+
+        schoolCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+
+                    filters.remove(filterSchool);
+                    filters.add(filterSchool);
+
+                }
+                else {
+                    filters.remove(filterSchool);
+                }
+
+                applyFilter();
+            }
+        });
+        parkCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+
+                    filters.remove(filterPark);
+                    filters.add(filterPark);
+
+                }
+                else {
+                    filters.remove(filterPark);
+                }
+
+                applyFilter();
+            }
+        });
+        storeCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+
+                    filters.remove(filterStore);
+                    filters.add(filterStore);
+
+                }
+                else {
+                    filters.remove(filterStore);
                 }
 
                 applyFilter();

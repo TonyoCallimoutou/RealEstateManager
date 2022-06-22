@@ -22,6 +22,9 @@ public class Filter {
     public static int TYPE_SOLD = 9;
     public static int TYPE_DRAFT = 10;
     public static int TYPE_NOT_SYNC = 11;
+    public static int TYPE_NEXT_SCHOOL = 12;
+    public static int TYPE_NEXT_PARK = 13;
+    public static int TYPE_NEXT_STORE = 14;
     private int filterType;
     private String filterCountry;
     private Place filterCity;
@@ -196,6 +199,15 @@ public class Filter {
 
             str = DatabaseRealEstateHandler.conditionDistanceQuery(distance,filterCity);
         }
+        else if (filterType == (TYPE_NEXT_SCHOOL)) {
+            str = DatabaseRealEstateHandler.PLACE_IS_NEXT_TO_SCHOOL_COL + " = 1";
+        }
+        else if (filterType == (TYPE_NEXT_PARK)) {
+            str = DatabaseRealEstateHandler.PLACE_IS_NEXT_TO_PARK_COL + " = 1";
+        }
+        else if (filterType == (TYPE_NEXT_STORE)) {
+            str = DatabaseRealEstateHandler.PLACE_IS_NEXT_TO_STORE_COL + " = 1";
+        }
 
 
         return str;
@@ -244,6 +256,15 @@ public class Filter {
         }
         else if (filterType == (TYPE_NOT_SYNC)) {
             return context.getString(R.string.filter_to_string_without_not_sync) ;
+        }
+        else if (filterType == (TYPE_NEXT_SCHOOL)) {
+            return context.getString(R.string.filter_is_next_school);
+        }
+        else if (filterType == (TYPE_NEXT_PARK)) {
+            return context.getString(R.string.filter_is_next_park);
+        }
+        else if (filterType == (TYPE_NEXT_STORE)) {
+            return context.getString(R.string.filter_is_next_store);
         }
         return "error";
     }

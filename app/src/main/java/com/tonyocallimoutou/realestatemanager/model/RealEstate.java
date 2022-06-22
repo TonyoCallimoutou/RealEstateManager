@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.tonyocallimoutou.realestatemanager.R;
+import com.tonyocallimoutou.realestatemanager.data.localDatabase.DatabaseRealEstateHandler;
 import com.tonyocallimoutou.realestatemanager.data.localDatabase.DateConverter;
 import com.tonyocallimoutou.realestatemanager.data.localDatabase.PhotoListConverter;
 import com.tonyocallimoutou.realestatemanager.data.localDatabase.StringListConverter;
@@ -282,79 +283,68 @@ public class RealEstate implements Serializable {
         realEstate.setDescription("");
 
 
-
-
-
-
-
-
-
-
-
-
-
-        if (values.containsKey("id")) {
-            realEstate.setId(values.getAsString("id"));
+        if (values.containsKey(DatabaseRealEstateHandler.ID_COL)) {
+            realEstate.setId(values.getAsString(DatabaseRealEstateHandler.ID_COL));
         }
 
-        if (values.containsKey("creationDate")) {
-            realEstate.setCreationDate(DateConverter.fromString(values.getAsLong("creationDate")));
+        if (values.containsKey(DatabaseRealEstateHandler.CREATION_COL)) {
+            realEstate.setCreationDate(DateConverter.fromString(values.getAsLong(DatabaseRealEstateHandler.CREATION_COL)));
         }
 
-        if (values.containsKey("priceUSD")) {
-            realEstate.setPriceUSD(values.getAsInteger("priceUSD"));
+        if (values.containsKey(DatabaseRealEstateHandler.PRICE_USD_COL)) {
+            realEstate.setPriceUSD(values.getAsInteger(DatabaseRealEstateHandler.PRICE_USD_COL));
         }
 
-        if (values.containsKey("description")) {
-            realEstate.setDescription(values.getAsString("description"));
+        if (values.containsKey(DatabaseRealEstateHandler.DESCRIPTION_COL)) {
+            realEstate.setDescription(values.getAsString(DatabaseRealEstateHandler.DESCRIPTION_COL));
         }
 
-        if (values.containsKey("typeId")) {
-            realEstate.setTypeId(values.getAsInteger("typeId"));
+        if (values.containsKey(DatabaseRealEstateHandler.TYPE_ID_COL)) {
+            realEstate.setTypeId(values.getAsInteger(DatabaseRealEstateHandler.TYPE_ID_COL));
         }
 
-        if (values.containsKey("numberOfPhotos")) {
-            realEstate.setNumberOfPhotos(values.getAsInteger("numberOfPhotos"));
+        if (values.containsKey(DatabaseRealEstateHandler.NUMBER_PHOTOS_COL)) {
+            realEstate.setNumberOfPhotos(values.getAsInteger(DatabaseRealEstateHandler.NUMBER_PHOTOS_COL));
         }
 
-        if (values.containsKey("mainPicturePosition")) {
-            realEstate.setMainPicturePosition(values.getAsInteger("mainPicturePosition"));
+        if (values.containsKey(DatabaseRealEstateHandler.MAIN_PICTURE_POSITION_COL)) {
+            realEstate.setMainPicturePosition(values.getAsInteger(DatabaseRealEstateHandler.MAIN_PICTURE_POSITION_COL));
         }
 
-        if (values.containsKey("surface")) {
-            realEstate.setSurface(values.getAsInteger("surface"));
+        if (values.containsKey(DatabaseRealEstateHandler.SURFACE_COL)) {
+            realEstate.setSurface(values.getAsInteger(DatabaseRealEstateHandler.SURFACE_COL));
         }
 
-        if (values.containsKey("numberOfRooms")) {
-            realEstate.setNumberOfRooms(values.getAsInteger("numberOfRooms"));
+        if (values.containsKey(DatabaseRealEstateHandler.NUMBER_OF_ROOM_COL)) {
+            realEstate.setNumberOfRooms(values.getAsInteger(DatabaseRealEstateHandler.NUMBER_OF_ROOM_COL));
         }
 
-        if (values.containsKey("numberOfBathrooms")) {
-            realEstate.setNumberOfBathrooms(values.getAsInteger("numberOfBathrooms"));
+        if (values.containsKey(DatabaseRealEstateHandler.NUMBER_OF_BATHROOM_COL)) {
+            realEstate.setNumberOfBathrooms(values.getAsInteger(DatabaseRealEstateHandler.NUMBER_OF_BATHROOM_COL));
         }
 
-        if (values.containsKey("numberOfBedrooms")) {
-            realEstate.setNumberOfBedrooms(values.getAsInteger("numberOfBedrooms"));
+        if (values.containsKey(DatabaseRealEstateHandler.NUMBER_OF_BEDROOM_COL)) {
+            realEstate.setNumberOfBedrooms(values.getAsInteger(DatabaseRealEstateHandler.NUMBER_OF_BEDROOM_COL));
         }
 
-        if (values.containsKey("isSold")) {
-            realEstate.setSold(values.getAsBoolean("isSold"));
+        if (values.containsKey(DatabaseRealEstateHandler.IS_SOLD_COL)) {
+            realEstate.setSold(values.getAsBoolean(DatabaseRealEstateHandler.IS_SOLD_COL));
             realEstate.setSoldDate(new Date());
-            if (values.containsKey("soldDate")) {
-                realEstate.setSoldDate(DateConverter.fromString(values.getAsLong("soldDate")));
+            if (values.containsKey(DatabaseRealEstateHandler.SOLD_DATE_COL)) {
+                realEstate.setSoldDate(DateConverter.fromString(values.getAsLong(DatabaseRealEstateHandler.SOLD_DATE_COL)));
             }
         }
 
-        if (values.containsKey("isSync")) {
-            realEstate.setSync(values.getAsBoolean("isSync"));
+        if (values.containsKey(DatabaseRealEstateHandler.IS_SYNC_COL)) {
+            realEstate.setSync(values.getAsBoolean(DatabaseRealEstateHandler.IS_SYNC_COL));
         }
 
-        if (values.containsKey("isDraft")) {
-            realEstate.setDraft(values.getAsBoolean("isDraft"));
+        if (values.containsKey(DatabaseRealEstateHandler.IS_DRAFT_COL)) {
+            realEstate.setDraft(values.getAsBoolean(DatabaseRealEstateHandler.IS_DRAFT_COL));
         }
 
-        if (values.containsKey("photos")) {
-            photos = (PhotoListConverter.fromString(values.getAsString("photos")));
+        if (values.containsKey(DatabaseRealEstateHandler.PHOTOS_COL)) {
+            photos = (PhotoListConverter.fromString(values.getAsString(DatabaseRealEstateHandler.PHOTOS_COL)));
         }
 
         for (Photo photo : photos) {
@@ -374,24 +364,28 @@ public class RealEstate implements Serializable {
         user.setMyRealEstateId(new ArrayList<>());
 
 
-        if (values.containsKey("user_uid")) {
-            user.setUid(values.getAsString("user_uid"));
+        if (values.containsKey(DatabaseRealEstateHandler.USER_UID_COL)) {
+            user.setUid(values.getAsString(DatabaseRealEstateHandler.USER_UID_COL));
         }
 
-        if (values.containsKey("user_user_name")) {
-            user.setUsername(values.getAsString("user_user_name"));
+        if (values.containsKey(DatabaseRealEstateHandler.USER_USERNAME_COL)) {
+            user.setUsername(values.getAsString(DatabaseRealEstateHandler.USER_USERNAME_COL));
         }
 
-        if (values.containsKey("user_user_phone_number")) {
-            user.setPhoneNumber(values.getAsString("user_user_phone_number"));
+        if (values.containsKey(DatabaseRealEstateHandler.USER_PHONE_NUMBER_COL)) {
+            user.setPhoneNumber(values.getAsString(DatabaseRealEstateHandler.USER_PHONE_NUMBER_COL));
         }
 
-        if (values.containsKey("user_email")) {
-            user.setEmail(values.getAsString("user_email"));
+        if (values.containsKey(DatabaseRealEstateHandler.USER_EMAIL_COL)) {
+            user.setEmail(values.getAsString(DatabaseRealEstateHandler.USER_EMAIL_COL));
         }
 
-        if (values.containsKey("user_myRealEstateId")) {
-            user.setMyRealEstateId(StringListConverter.fromString(values.getAsString("user_myRealEstateId")));
+        if (values.containsKey(DatabaseRealEstateHandler.USER_URL_PICTURE_COL)) {
+            user.setUrlPicture(values.getAsString(DatabaseRealEstateHandler.USER_URL_PICTURE_COL));
+        }
+
+        if (values.containsKey(DatabaseRealEstateHandler.USER_REAL_ESTATE_COL)) {
+            user.setMyRealEstateId(StringListConverter.fromString(values.getAsString(DatabaseRealEstateHandler.USER_REAL_ESTATE_COL)));
         }
 
 
@@ -409,32 +403,41 @@ public class RealEstate implements Serializable {
         location.setCity("null");
 
 
-        if (values.containsKey("place_placeId")) {
-            location.setPlaceId(values.getAsString("place_placeId"));
+        if (values.containsKey(DatabaseRealEstateHandler.PLACE_PLACE_ID_COL)) {
+            location.setPlaceId(values.getAsString(DatabaseRealEstateHandler.PLACE_PLACE_ID_COL));
         }
 
-        if (values.containsKey("place_name")) {
-            location.setName(values.getAsString("place_name"));
+        if (values.containsKey(DatabaseRealEstateHandler.PLACE_NAME_COL)) {
+            location.setName(values.getAsString(DatabaseRealEstateHandler.PLACE_NAME_COL));
         }
 
-        if (values.containsKey("place_lat")) {
-            location.setLat(values.getAsDouble("place_lat"));
+        if (values.containsKey(DatabaseRealEstateHandler.PLACE_LAT_COL)) {
+            location.setLat(values.getAsDouble(DatabaseRealEstateHandler.PLACE_LAT_COL));
         }
 
-        if (values.containsKey("place_lng")) {
-            location.setLng(values.getAsDouble("place_lng"));
+        if (values.containsKey(DatabaseRealEstateHandler.PLACE_LNG_COL)) {
+            location.setLng(values.getAsDouble(DatabaseRealEstateHandler.PLACE_LNG_COL));
         }
 
-        if (values.containsKey("place_address")) {
-            location.setAddress(values.getAsString("place_address"));
+        if (values.containsKey(DatabaseRealEstateHandler.PLACE_ADDRESS_COL)) {
+            location.setAddress(values.getAsString(DatabaseRealEstateHandler.PLACE_ADDRESS_COL));
         }
 
-        if (values.containsKey("place_country")) {
-            location.setCountry(values.getAsString("place_country"));
+        if (values.containsKey(DatabaseRealEstateHandler.PLACE_COUNTRY_COL)) {
+            location.setCountry(values.getAsString(DatabaseRealEstateHandler.PLACE_COUNTRY_COL));
         }
 
-        if (values.containsKey("place_city")) {
-            location.setCity(values.getAsString("place_city"));
+        if (values.containsKey(DatabaseRealEstateHandler.PLACE_CITY_COL)) {
+            location.setCity(values.getAsString(DatabaseRealEstateHandler.PLACE_CITY_COL));
+        }
+        if (values.containsKey(DatabaseRealEstateHandler.PLACE_IS_NEXT_TO_SCHOOL_COL)) {
+            location.setNextToSchool(values.getAsBoolean(DatabaseRealEstateHandler.PLACE_IS_NEXT_TO_SCHOOL_COL));
+        }
+        if (values.containsKey(DatabaseRealEstateHandler.PLACE_IS_NEXT_TO_PARK_COL)) {
+            location.setNextToSchool(values.getAsBoolean(DatabaseRealEstateHandler.PLACE_IS_NEXT_TO_PARK_COL));
+        }
+        if (values.containsKey(DatabaseRealEstateHandler.PLACE_IS_NEXT_TO_STORE_COL)) {
+            location.setNextToSchool(values.getAsBoolean(DatabaseRealEstateHandler.PLACE_IS_NEXT_TO_STORE_COL));
         }
 
         realEstate.setPlace(location);

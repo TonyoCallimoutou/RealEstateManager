@@ -103,7 +103,6 @@ public class RealEstateContentProviderTest {
         assertThat(cursor.getString(cursor.getColumnIndexOrThrow("place_country")), is("place_country"));
         assertThat(cursor.getString(cursor.getColumnIndexOrThrow("place_city")), is("place_city"));
 
-
     }
 
 

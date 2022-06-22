@@ -106,6 +106,9 @@
     <!-- Filter -->
     <string name="filter_more_filter">Plus de filtre</string>
     <string name="filter_less_filter">Moins de filtre</string>
+    <string name="filter_is_next_school">proche d\'une école </string>
+    <string name="filter_is_next_park">proche d\'un park </string>
+    <string name="filter_is_next_store">proche d\'un commerce </string>
     <string name="filter_is_mine">Mes biens immobiliers </string>
     <string name="filter_is_sold">Les bien immobiliers vendu </string>
     <string name="filter_price_price">Prix : </string>

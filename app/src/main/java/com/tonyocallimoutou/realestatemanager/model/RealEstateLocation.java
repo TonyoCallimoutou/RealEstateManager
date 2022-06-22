@@ -25,6 +25,9 @@ public class RealEstateLocation implements Serializable {
     private String address;
     private String country;
     private String city;
+    private boolean isNextToSchool;
+    private boolean isNextToPark;
+    private boolean isNextToStore;
 
 
     public RealEstateLocation() {
@@ -48,6 +51,9 @@ public class RealEstateLocation implements Serializable {
 
         this.country = address.getCountryName();
         this.city = address.getLocality();
+        this.isNextToSchool = false;
+        this.isNextToPark = false;
+        this.isNextToStore = false;
     }
 
     public RealEstateLocation(String placeId, String name, double lat, double lng, String address) {
@@ -56,6 +62,9 @@ public class RealEstateLocation implements Serializable {
         this.lat = lat;
         this.lng = lng;
         this.address = address;
+        this.isNextToSchool = false;
+        this.isNextToPark = false;
+        this.isNextToStore = false;
     }
 
     public String getPlaceId() {
@@ -112,5 +121,29 @@ public class RealEstateLocation implements Serializable {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public boolean isNextToSchool() {
+        return isNextToSchool;
+    }
+
+    public void setNextToSchool(boolean nextToSchool) {
+        isNextToSchool = nextToSchool;
+    }
+
+    public boolean isNextToPark() {
+        return isNextToPark;
+    }
+
+    public void setNextToPark(boolean nextToPark) {
+        isNextToPark = nextToPark;
+    }
+
+    public boolean isNextToStore() {
+        return isNextToStore;
+    }
+
+    public void setNextToStore(boolean nextToStore) {
+        isNextToStore = nextToStore;
     }
 }

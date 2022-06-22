@@ -58,6 +58,9 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
     public static final String PLACE_ADDRESS_COL = "place_address";
     public static final String PLACE_COUNTRY_COL = "place_country";
     public static final String PLACE_CITY_COL = "place_city";
+    public static final String PLACE_IS_NEXT_TO_SCHOOL_COL = "next_to_school";
+    public static final String PLACE_IS_NEXT_TO_PARK_COL = "next_to_park";
+    public static final String PLACE_IS_NEXT_TO_STORE_COL = "next_to_store";
     public static final String IS_SOLD_COL = "isSold";
     public static final String SOLD_DATE_COL = "soldDate";
     public static final String IS_SYNC_COL = "isSync";
@@ -69,7 +72,8 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
             MAIN_PICTURE_POSITION_COL, DESCRIPTION_COL, SURFACE_COL, NUMBER_OF_ROOM_COL, NUMBER_OF_BATHROOM_COL,
             NUMBER_OF_BEDROOM_COL, PLACE_PLACE_ID_COL, PLACE_NAME_COL, PLACE_LAT_COL, PLACE_LNG_COL,
             PLACE_COS_LAT_COL, PLACE_SIN_LAT_COL, PLACE_COS_LNG_COL, PLACE_SIN_LNG_COL, PLACE_ADDRESS_COL,
-            PLACE_COUNTRY_COL, PLACE_CITY_COL, IS_SOLD_COL, SOLD_DATE_COL, IS_SYNC_COL, IS_DRAFT_COL };
+            PLACE_COUNTRY_COL, PLACE_CITY_COL, PLACE_IS_NEXT_TO_SCHOOL_COL, PLACE_IS_NEXT_TO_PARK_COL,
+            PLACE_IS_NEXT_TO_STORE_COL, IS_SOLD_COL, SOLD_DATE_COL, IS_SYNC_COL, IS_DRAFT_COL };
 
     private static final int NUM_COL_ID = 0;
     private static final int NUM_COL_CREATION = 1;
@@ -100,10 +104,13 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
     private static final int NUM_COL_PLACE_ADDRESS = 26;
     private static final int NUM_COL_PLACE_COUNTRY = 27;
     private static final int NUM_COL_PLACE_CITY = 28;
-    private static final int NUM_COL_IS_SOLD = 29;
-    private static final int NUM_COL_SOLD_DATE = 30;
-    private static final int NUM_COL_IS_SYNC = 31;
-    private static final int NUM_COL_IS_DRAFT = 32;
+    private static final int NUM_COL_PLACE_IS_NEXT_TO_SCHOOL =29;
+    private static final int NUM_COL_PLACE_IS_NEXT_TO_PARK = 30;
+    private static final int NUM_COL_PLACE_IS_NEXT_TO_STORE = 31;
+    private static final int NUM_COL_IS_SOLD = 32;
+    private static final int NUM_COL_SOLD_DATE = 33;
+    private static final int NUM_COL_IS_SYNC = 34;
+    private static final int NUM_COL_IS_DRAFT = 35;
 
     private static DatabaseRealEstateHandler instance;
 
@@ -157,6 +164,9 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
                 + PLACE_ADDRESS_COL + " TEXT,"
                 + PLACE_COUNTRY_COL + " TEXT,"
                 + PLACE_CITY_COL + " TEXT,"
+                + PLACE_IS_NEXT_TO_SCHOOL_COL + " INTEGER,"
+                + PLACE_IS_NEXT_TO_PARK_COL + " INTEGER,"
+                + PLACE_IS_NEXT_TO_STORE_COL + " INTEGER,"
                 + IS_SOLD_COL + " INTEGER NOT NULL,"
                 + SOLD_DATE_COL + " TEXT,"
                 + IS_SYNC_COL + " INTEGER NOT NULL,"
@@ -167,7 +177,7 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(query);
     }
 
-    public long createRealEstate(RealEstate realEstate) {
+    public void createRealEstate(RealEstate realEstate) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -200,6 +210,10 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
             values.put(PLACE_ADDRESS_COL, realEstate.getPlace().getAddress());
             values.put(PLACE_COUNTRY_COL, realEstate.getPlace().getCountry());
             values.put(PLACE_CITY_COL, realEstate.getPlace().getCity());
+            values.put(PLACE_IS_NEXT_TO_SCHOOL_COL, realEstate.getPlace().isNextToSchool());
+            values.put(PLACE_IS_NEXT_TO_PARK_COL, realEstate.getPlace().isNextToPark());
+            values.put(PLACE_IS_NEXT_TO_STORE_COL, realEstate.getPlace().isNextToStore());
+
 
             double latitude = realEstate.getPlace().getLat();
             double longitude = realEstate.getPlace().getLng();
@@ -221,8 +235,6 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
         db.close();
 
         realEstatesLiveData.postValue(getRealEstates());
-
-        return 0;
     }
 
     public LiveData<List<RealEstate>> getRealEstateLiveData(List<Filter> filters) {
@@ -308,6 +320,15 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
             location.setAddress(c.getString(NUM_COL_PLACE_ADDRESS));
             location.setCountry(c.getString(NUM_COL_PLACE_COUNTRY));
             location.setCity(c.getString(NUM_COL_PLACE_CITY));
+            if (c.getInt(NUM_COL_PLACE_IS_NEXT_TO_SCHOOL) == 1) {
+                location.setNextToSchool(true);
+            }
+            if (c.getInt(NUM_COL_PLACE_IS_NEXT_TO_PARK) == 1) {
+                location.setNextToPark(true);
+            }
+            if (c.getInt(NUM_COL_PLACE_IS_NEXT_TO_STORE) == 1) {
+                location.setNextToStore(true);
+            }
         }
         else {
             location.setPlaceId("null");
@@ -372,7 +393,10 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_REAL_ESTATE_NAME + " WHERE isSync = 0", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_REAL_ESTATE_NAME
+                + " WHERE "+ IS_SYNC_COL +" = 0 AND "
+                + IS_DRAFT_COL + " = 0"
+                , null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -385,15 +409,6 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
 
         return realEstates;
     }
-
-    public Cursor getRealEstateWithCursor(String id) {
-        return null;
-    }
-
-    public int updateRealEstate(RealEstate realEstate) {
-        return 0;
-    }
-
 
 
     @Override

@@ -106,6 +106,9 @@
     <!-- Filter -->
     <string name="filter_more_filter">More Filter</string>
     <string name="filter_less_filter">Less Filter</string>
+    <string name="filter_is_next_school">Next to School </string>
+    <string name="filter_is_next_park">Next to Park </string>
+    <string name="filter_is_next_store">Next to Store </string>
     <string name="filter_is_mine">My Real Estate </string>
     <string name="filter_is_sold">Only Sold Real Estate </string>
     <string name="filter_price_price">Price : </string>

@@ -107,6 +107,35 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/filter_checkbox_next_school"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/filter_is_next_school" />
+
+                <CheckBox
+                    android:id="@+id/filter_checkbox_next_park"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/filter_is_next_park" />
+
+                <CheckBox
+                    android:id="@+id/filter_checkbox_next_store"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/filter_is_next_store" />
+
+
+            </LinearLayout>
+
             <CheckBox
                 android:id="@+id/filter_checkbox_is_mine"
                 android:layout_width="wrap_content"

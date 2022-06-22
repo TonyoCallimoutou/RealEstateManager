@@ -160,7 +160,7 @@ public class UserRepository {
             database.createUser(user);
 
             if (isConnected) {
-                instance.firebaseDataUser.syncCurrentUser(instance.currentUser);
+                instance.firebaseDataUser.syncCurrentUser(instance.currentUser, instance.database);
             }
 
         }
@@ -170,7 +170,7 @@ public class UserRepository {
     public static void ConnectionChanged(boolean result) {
         if (result && instance!= null && !isConnected) {
             if (instance.currentUser != null) {
-                instance.firebaseDataUser.syncCurrentUser(instance.currentUser);
+                instance.firebaseDataUser.syncCurrentUser(instance.currentUser, instance.database);
             }
         }
         isConnected = result;

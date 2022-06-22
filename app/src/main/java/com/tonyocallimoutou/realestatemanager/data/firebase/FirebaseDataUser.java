@@ -191,9 +191,15 @@ public class FirebaseDataUser {
         });
     }
 
-    public void syncCurrentUser(User user) {
-        getUsersCollection().document(user.getUid()).set(user);
+    public void syncCurrentUser(User user, DatabaseUserHandler database) {
         currentUser = user;
+
+        if (user.getUrlPicture().contains("content://")) {
+            setCurrentUserPicture(user.getUrlPicture(), database);
+        }
+        else {
+            getUsersCollection().document(user.getUid()).set(user);
+        }
     }
 
     // Real Estate

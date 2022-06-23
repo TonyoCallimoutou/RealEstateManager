@@ -124,6 +124,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
+    @Override
+    protected void onStop() {
+        if (FilterFragment.isOpen) {
+            FilterFragment.closeFragment();
+        }
+
+        super.onStop();
+    }
+
     // error Google PLay Service
 
     private void errorGooglePlayService(int status) {
@@ -268,12 +277,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 }
                 return true;
             case R.id.add_menu:
-
                 CreateOrEditRealEstateActivity.startActivity(this,null);
 
                 return true;
             case R.id.go_to_edit:
-
                 CreateOrEditRealEstateActivity.startActivity(this,DetailFragment.getActualRealEstate());
 
                 DetailFragment.newInstance(null);

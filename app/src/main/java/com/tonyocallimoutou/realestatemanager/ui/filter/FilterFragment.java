@@ -3,6 +3,7 @@ package com.tonyocallimoutou.realestatemanager.ui.filter;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,8 +108,6 @@ public class FilterFragment extends Fragment {
 
     private static List<Filter> filters;
     private static ViewModelRealEstate viewModelRealEstate;
-    private static List<String> countries = new ArrayList<>();
-    private static Map<String,List<String>> mapListCountryCity = new HashMap<>();
 
     private static User currentUser;
 
@@ -676,13 +675,18 @@ public class FilterFragment extends Fragment {
 
     public static void changeVisibilityOfFragment() {
         if (isOpen) {
+            Log.d("TAG", "changeVisibilityOfFragment: ");
             if (mainLayout.getVisibility() == View.VISIBLE) {
+                Log.d("TAG", "main is Visible: ");
                 if (filters.size() != 0) {
+                    Log.d("TAG", "Filter size != 0 ");
                     mainLayout.setVisibility(View.GONE);
                 } else {
+                    Log.d("TAG", "Filter size == 0: ");
                     closeFragment();
                 }
             } else {
+                Log.d("TAG", "MAIN INVISIBLE: ");
                 mainLayout.setVisibility(View.VISIBLE);
             }
         }
@@ -691,8 +695,9 @@ public class FilterFragment extends Fragment {
         }
     }
 
-    private static void closeFragment(){
+    public static void closeFragment(){
         isOpen = false;
+        viewModelRealEstate.setFilterList(new ArrayList<>());
         MainActivity.switchColorOfFilterItem(false);
         activity.getSupportFragmentManager().beginTransaction().remove(fragment).commit();
     }

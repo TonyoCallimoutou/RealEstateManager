@@ -40,7 +40,7 @@ public class RealEstateContentProvider extends ContentProvider {
         if (getContext() != null) {
 
             Cursor cursor = database.query(DatabaseRealEstateHandler.TABLE_REAL_ESTATE_NAME, new String[]{"*"},
-                                           s,null,null,null,null);
+                                           s,null,null,null,DatabaseRealEstateHandler.CREATION_COL + " DESC");
 
             cursor.setNotificationUri(getContext().getContentResolver(), uri);
 

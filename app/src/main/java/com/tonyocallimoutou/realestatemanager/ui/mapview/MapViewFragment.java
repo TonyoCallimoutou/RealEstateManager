@@ -19,7 +19,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -42,7 +41,6 @@ import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.ui.MainActivity;
 import com.tonyocallimoutou.realestatemanager.util.CompareRealEstate;
-import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelRealEstate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,8 +66,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
     private View locationButton;
 
     private static LatLngBounds.Builder builder;
-
-    private ViewModelRealEstate viewModelRealEstate;
 
     private FusedLocationProviderClient fusedLocationProviderClient;
     private static Location userLocation;
@@ -100,8 +96,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
 
         View view = inflater.inflate(R.layout.fragment_map_view, container, false);
         ButterKnife.bind(this, view);
-
-        viewModelRealEstate = new ViewModelProvider(requireActivity()).get(ViewModelRealEstate.class);
 
         mGoogleMap = null;
         fabMap.setVisibility(View.INVISIBLE);
@@ -201,7 +195,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
         requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
     }
 
-    private ActivityResultLauncher<String> requestPermissionLauncher =
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (isGranted) {
                     initFragment();

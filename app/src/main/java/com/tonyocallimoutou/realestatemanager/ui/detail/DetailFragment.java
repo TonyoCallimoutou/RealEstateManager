@@ -207,12 +207,7 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
                 MainActivity.setVisibilityEditMenuItem(true);
             }
 
-            if (mRealEstate.isSold()){
-                MainActivity.setVisibilityGoToEditMenuItem(false);
-            }
-            else {
-                MainActivity.setVisibilityGoToEditMenuItem(true);
-            }
+            MainActivity.setVisibilityGoToEditMenuItem(!mRealEstate.isSold());
 
 
         }

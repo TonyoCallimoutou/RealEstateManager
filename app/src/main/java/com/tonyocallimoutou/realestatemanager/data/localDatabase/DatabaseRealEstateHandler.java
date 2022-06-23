@@ -250,7 +250,6 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         StringBuilder strQuery = new StringBuilder(" ");
-        String distanceQueryStart = "";
 
         for (int i = 0; i < filters.size(); i++) {
             if (i==0) {

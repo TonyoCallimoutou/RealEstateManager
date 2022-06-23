@@ -3,7 +3,6 @@ package com.tonyocallimoutou.realestatemanager.ui.filter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,7 +19,7 @@ import butterknife.ButterKnife;
 public class FilterRecyclerViewAdapter extends RecyclerView.Adapter<FilterRecyclerViewAdapter.ViewHolder> {
 
     private List<Filter> mFilters;
-    private FilterItemClickListener mListener;
+    private final FilterItemClickListener mListener;
 
     public FilterRecyclerViewAdapter(List<Filter> filter,
                                      FilterRecyclerViewAdapter.FilterItemClickListener filterItemClickListener) {

@@ -1,6 +1,5 @@
 package com.tonyocallimoutou.realestatemanager.data;
 
-import com.squareup.okhttp.Request;
 import com.tonyocallimoutou.realestatemanager.BuildConfig;
 
 import retrofit2.Call;
@@ -21,8 +20,8 @@ public interface RetrofitPlace {
     Call<NearbyPlace> getNearbyStore(@Query("location") String location);
 
 
-    public static final String baseUrl = "https://maps.googleapis.com/maps/api/place/";
-    public static final Retrofit retrofit = new Retrofit.Builder()
+    String baseUrl = "https://maps.googleapis.com/maps/api/place/";
+    Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build();

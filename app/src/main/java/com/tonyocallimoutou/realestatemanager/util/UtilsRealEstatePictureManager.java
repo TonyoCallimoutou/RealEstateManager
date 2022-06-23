@@ -112,9 +112,8 @@ public class UtilsRealEstatePictureManager {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String imageFileName = "IMG_" + timeStamp + "_";
         File storageDir = mActivity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = null;
         try {
-            image = File.createTempFile(
+            File image = File.createTempFile(
                     imageFileName,  /* prefix */
                     ".jpg",  /* suffix */
                     storageDir);

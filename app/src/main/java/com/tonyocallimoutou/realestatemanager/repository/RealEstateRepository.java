@@ -1,16 +1,12 @@
 package com.tonyocallimoutou.realestatemanager.repository;
 
 import android.content.Context;
-import android.location.Location;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
-import androidx.sqlite.db.SupportSQLiteQuery;
 
-import com.google.android.libraries.places.api.model.Place;
 import com.tonyocallimoutou.realestatemanager.data.NearbyPlace;
 import com.tonyocallimoutou.realestatemanager.data.RetrofitPlace;
 import com.tonyocallimoutou.realestatemanager.data.firebase.FirebaseDataRealEstate;
@@ -43,7 +39,7 @@ public class RealEstateRepository {
 
     private final Context context;
 
-    private RetrofitPlace retrofitPlace;
+    private final RetrofitPlace retrofitPlace;
 
 
     private RealEstateRepository(Context context) {

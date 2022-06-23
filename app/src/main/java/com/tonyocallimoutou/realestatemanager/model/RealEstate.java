@@ -21,7 +21,6 @@ import java.util.List;
 
 public class RealEstate implements Serializable {
 
-    @NonNull
     private String id;
     private Date creationDate;
     private User user;

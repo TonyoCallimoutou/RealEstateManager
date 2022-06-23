@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 
@@ -28,8 +27,7 @@ public class UserRepository {
 
     private static boolean isConnected;
 
-    private final MediatorLiveData<User> mediator = new MediatorLiveData<>();
-    private MutableLiveData<User> currentUserLiveData = new MutableLiveData<>();
+    private final MutableLiveData<User> currentUserLiveData = new MutableLiveData<>();
 
     private User currentUser;
 

@@ -1,6 +1,5 @@
 package com.tonyocallimoutou.realestatemanager.model;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.io.Serializable;
@@ -11,8 +10,6 @@ import java.util.Objects;
 
 public class User implements Serializable {
 
-
-    @NonNull
     private String uid;
     private String username;
     private String urlPicture;

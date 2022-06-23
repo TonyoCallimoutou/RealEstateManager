@@ -4,8 +4,6 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 
-import androidx.annotation.NonNull;
-
 import com.google.android.libraries.places.api.model.Place;
 
 import java.io.IOException;
@@ -16,8 +14,6 @@ import java.util.Locale;
 
 public class RealEstateLocation implements Serializable {
 
-
-    @NonNull
     private String placeId;
     private String name;
     private double lat;

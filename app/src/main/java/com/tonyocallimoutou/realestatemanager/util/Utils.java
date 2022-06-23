@@ -1,18 +1,16 @@
 package com.tonyocallimoutou.realestatemanager.util;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 
 import androidx.preference.PreferenceManager;
 
-import com.google.android.libraries.places.api.model.Place;
 import com.tonyocallimoutou.realestatemanager.R;
-import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -54,6 +52,8 @@ public class Utils {
      */
     public static Boolean isInternetAvailable(Context context){
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        @SuppressLint("MissingPermission")
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
         return (networkInfo != null && networkInfo.isConnected());
@@ -133,54 +133,6 @@ public class Utils {
             String str = price.replaceFirst(".$","");
             return Integer.parseInt(str.replace(",",""));
         }
-    }
-
-    public static int getAgeOfRealEstate(RealEstate realEstate) {
-        String today = getTodayDate();
-        String creation = realEstate.getStringCreationDate();
-
-        String[] dateToday = today.split("/");
-        String[] dateCreation = creation.split("/");
-
-        int yearsGap = Integer.parseInt(dateToday[2]) - Integer.parseInt(dateCreation[2]);
-        int monthGap = Integer.parseInt(dateToday[1]) - Integer.parseInt(dateCreation[1]);
-        if (Integer.parseInt(dateToday[0]) >= Integer.parseInt(dateCreation[0])) {
-            monthGap ++;
-        }
-
-        return monthGap +yearsGap * 12;
-    }
-
-    public static int getAgeOfSold(RealEstate realEstate) {
-        String today = getTodayDate();
-        String sold = realEstate.getStringSoldDate();
-
-        String[] dateToday = today.split("/");
-        String[] dateSold = sold.split("/");
-
-        int yearsGap = Integer.parseInt(dateToday[2]) - Integer.parseInt(dateSold[2]);
-        int monthGap = Integer.parseInt(dateToday[1]) - Integer.parseInt(dateSold[1]);
-        if (Integer.parseInt(dateToday[0]) >= Integer.parseInt(dateSold[0])) {
-            monthGap ++;
-        }
-
-        return monthGap + yearsGap * 12;
-    }
-
-    public static float getDistanceFromCityInKm(RealEstate realEstate, Place place) {
-        Location realEstateLocation = new Location("");
-        Location placeLocation = new Location("");
-
-        if (realEstate.getPlace() != null) {
-            realEstateLocation.setLatitude(realEstate.getPlace().getLat());
-            realEstateLocation.setLongitude(realEstate.getPlace().getLng());
-
-            placeLocation.setLatitude(place.getLatLng().latitude);
-            placeLocation.setLongitude(place.getLatLng().longitude);
-        }
-
-        return (placeLocation.distanceTo(realEstateLocation) / 1000);
-
     }
 
     public static String getKeyFromLanguage(Context context, String language) {

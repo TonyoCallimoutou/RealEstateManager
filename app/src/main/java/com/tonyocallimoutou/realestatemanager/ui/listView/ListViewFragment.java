@@ -53,7 +53,7 @@ public class ListViewFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_list_view, container, false);
 
-        RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.list_view_recycler_view);
+        RecyclerView mRecyclerView = view.findViewById(R.id.list_view_recycler_view);
         lblNoRealEstate = view.findViewById(R.id.lbl_no_real_estate);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));

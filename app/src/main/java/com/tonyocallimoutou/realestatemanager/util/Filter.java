@@ -25,8 +25,7 @@ public class Filter {
     public static int TYPE_NEXT_SCHOOL = 12;
     public static int TYPE_NEXT_PARK = 13;
     public static int TYPE_NEXT_STORE = 14;
-    private int filterType;
-    private String filterCountry;
+    private final int filterType;
     private Place filterCity;
     private float distance;
     private int typeId;
@@ -46,106 +45,52 @@ public class Filter {
         this.filterType = filterType;
     }
 
-    // GETTER & SETTER
-    public String getFilterCountry() {
-        return filterCountry;
+    // GETTER
+
+    public int getFilterType() {
+        return filterType;
     }
 
-    public void setFilterCountry(String filterCountry) {
-        this.filterCountry = filterCountry;
-    }
-
-    public Place getFilterCity() {
-        return filterCity;
-    }
+    // SETTER
 
     public void setFilterCity(Place filterCity) {
         this.filterCity = filterCity;
-    }
-
-    public float getDistance() {
-        return distance;
     }
 
     public void setDistance(float distance) {
         this.distance = distance;
     }
 
-    public int getFilterType() {
-        return filterType;
-    }
-
-    public void setFilterType(int filterType) {
-        this.filterType = filterType;
-    }
-
-    public int getTypeId() {
-        return typeId;
-    }
-
     public void setTypeId(int typeId) {
         this.typeId = typeId;
-    }
-
-    public int getMinPrice() {
-        return minPrice;
     }
 
     public void setMinPrice(Integer lessPrice) {
         this.minPrice = lessPrice;
     }
 
-    public int getMaxPrice() {
-        return maxPrice;
-    }
-
     public void setMaxPrice(Integer maxPrice) {
         this.maxPrice = maxPrice;
-    }
-
-    public String getMoneyKey() {
-        return moneyKey;
     }
 
     public void setMoneyKey(String moneyKey) {
         this.moneyKey = moneyKey;
     }
 
-    public Integer getMinRoom() {
-        return minRoom;
-    }
-
     public void setMinRoom(Integer minRoom) {
         this.minRoom = minRoom;
-    }
-
-
-    public String getUserId() {
-        return userId;
     }
 
     public void setUserId(String userId) {
         this.userId = userId;
     }
 
-    public int getDateSoldLimit() {
-        return dateSoldLimit;
-    }
-
     public void setDateSoldLimit(int dateSoldLimit) {
         this.dateSoldLimit = dateSoldLimit;
     }
 
-    public int getCreationDateLimit() {
-        return creationDateLimit;
-    }
-
     public void setCreationDateLimit(int creationDateLimit) {
         this.creationDateLimit = creationDateLimit;
-    }
-
-    public int getMinNbrPicture() {
-        return minNbrPicture;
     }
 
     public void setMinNbrPicture(int minNbrPicture) {

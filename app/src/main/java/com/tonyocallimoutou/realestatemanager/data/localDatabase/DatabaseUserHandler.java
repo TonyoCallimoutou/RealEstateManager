@@ -128,25 +128,6 @@ public class DatabaseUserHandler extends SQLiteOpenHelper {
         return user;
     }
 
-    public void signOut(String id) {
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-
-        String listMyRealEstate = StringListConverter.fromList(getCurrentUser(id).getMyRealEstateId());
-
-        values.put(UID_COL, getCurrentUser(id).getUid());
-        values.put(USERNAME_COL, getCurrentUser(id).getUsername());
-        values.put(PICTURE_REFERENCE_COL, getCurrentUser(id).getUrlPicture());
-        values.put(EMAIL_COL, getCurrentUser(id).getEmail());
-        values.put(PHONE_NUMBER_COL, getCurrentUser(id).getPhoneNumber());
-        values.put(MY_REAL_ESTATE_ID_COL, listMyRealEstate);
-
-        db.insertWithOnConflict(TABLE_USER_NAME, null, values,SQLiteDatabase.CONFLICT_REPLACE);
-        db.close();
-    }
-
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_NAME);

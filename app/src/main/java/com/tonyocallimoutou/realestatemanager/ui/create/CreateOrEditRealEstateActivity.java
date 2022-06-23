@@ -33,7 +33,6 @@ import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.tonyocallimoutou.realestatemanager.R;
-import com.tonyocallimoutou.realestatemanager.data.NearbyPlace;
 import com.tonyocallimoutou.realestatemanager.model.Photo;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.model.RealEstateLocation;
@@ -54,9 +53,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class CreateOrEditRealEstateActivity extends BaseActivity implements ListPictureRecyclerViewAdapter.ListPictureClickListener {
 
@@ -384,7 +380,7 @@ public class CreateOrEditRealEstateActivity extends BaseActivity implements List
         }
 
         try {
-            int price = Utils.getIntOfStringPrice(realEstatePrice.getText().toString());
+            Utils.getIntOfStringPrice(realEstatePrice.getText().toString());
         }
         catch (NumberFormatException e) {
             canSave = false;

@@ -15,7 +15,6 @@ public class PhotoListConverter {
     }
     public static String fromList(List<Photo> list) {
         Gson gson = new Gson();
-        String json = gson.toJson(list);
-        return json;
+        return gson.toJson(list);
     }
 }

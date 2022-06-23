@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -136,7 +135,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     // error Google PLay Service
 
     private void errorGooglePlayService(int status) {
-        String message = "";
+        String message;
         if(status == ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED){
             message =  getString(R.string.message_alertDialog_google_play_service_update);
         }
@@ -457,8 +456,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         });
     }
 
-    public static void test(boolean isConnected) {
+    public static void connectionChanged() {
         ListViewFragment.setConnection();
-        Toast.makeText(context, "connection :" + isConnected, Toast.LENGTH_SHORT).show();
     }
 }

@@ -18,7 +18,6 @@ public class StringListConverter {
 
     public static String fromList(List<String> list) {
         Gson gson = new Gson();
-        String json = gson.toJson(list);
-        return json;
+        return gson.toJson(list);
     }
 }

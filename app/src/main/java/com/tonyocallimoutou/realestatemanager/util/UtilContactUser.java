@@ -20,7 +20,6 @@ import com.tonyocallimoutou.realestatemanager.model.User;
 public class UtilContactUser {
 
     private static Activity mActivity;
-    private static final int MY_PERMISSION_REQUEST_CODE_CALL_PHONE = 999;
     private static ActivityResultLauncher<String> mPermission;
 
     private static String phoneNumber;

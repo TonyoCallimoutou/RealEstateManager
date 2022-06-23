@@ -39,8 +39,7 @@ public class RealEstateContentProvider extends ContentProvider {
 
         if (getContext() != null) {
 
-            Cursor cursor = database.query(DatabaseRealEstateHandler.TABLE_REAL_ESTATE_NAME,
-                                           DatabaseRealEstateHandler.ALL_COLUMNS,
+            Cursor cursor = database.query(DatabaseRealEstateHandler.TABLE_REAL_ESTATE_NAME, new String[]{"*"},
                                            s,null,null,null,null);
 
             cursor.setNotificationUri(getContext().getContentResolver(), uri);
@@ -76,7 +75,7 @@ public class RealEstateContentProvider extends ContentProvider {
     @Override
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
         int delCount = 0;
-        delCount = database.delete(DatabaseRealEstateHandler.TABLE_REAL_ESTATE_NAME, s, strings);
+        delCount = database.delete(DatabaseRealEstateHandler.TABLE_REAL_ESTATE_NAME,s,strings);
         getContext().getContentResolver().notifyChange(uri, null);
         return delCount;
     }

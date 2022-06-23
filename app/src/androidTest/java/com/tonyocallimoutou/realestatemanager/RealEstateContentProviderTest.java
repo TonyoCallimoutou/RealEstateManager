@@ -12,6 +12,7 @@ import android.net.Uri;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.tonyocallimoutou.realestatemanager.data.localDatabase.DatabaseRealEstateHandler;
 import com.tonyocallimoutou.realestatemanager.data.localDatabase.DateConverter;
 import com.tonyocallimoutou.realestatemanager.data.localDatabase.PhotoListConverter;
 import com.tonyocallimoutou.realestatemanager.data.localDatabase.StringListConverter;
@@ -74,34 +75,46 @@ public class RealEstateContentProviderTest {
 
         assertThat(cursor, notNullValue());
 
-        assertThat(cursor.getCount(), is(1));
+        assertThat(cursor.moveToLast(), is(true));
 
-        assertThat(cursor.moveToFirst(), is(true));
+        Photo photo = new Photo("android.resource://com.tonyocallimoutou.realestatemanager/drawable/ic_no_image_available",null);
+        List<Photo> photos = new ArrayList<>();
+        photos.add(photo);
+        String photosString = PhotoListConverter.fromList(photos);
 
+        List<String> emptyList = new ArrayList<>();
+        String myRealList = StringListConverter.fromList(emptyList);
 
+        assertThat(cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.ID_COL)), is(REAL_ESTATE_ID));
+        assertThat(cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.CREATION_COL)), is(dateLong));
+        assertThat(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.PRICE_USD_COL)), is(1000));
+        assertThat(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.TYPE_ID_COL)), is(1));
+        assertThat(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.DESCRIPTION_COL)), is("description"));
+        assertThat(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.PHOTOS_COL)), is(photosString));
+        assertThat(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.NUMBER_PHOTOS_COL)), is(2));
+        assertThat(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.MAIN_PICTURE_POSITION_COL)), is(0));
+        assertThat(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.SURFACE_COL)), is(233));
+        assertThat(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.NUMBER_OF_ROOM_COL)), is(2));
+        assertThat(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.NUMBER_OF_BATHROOM_COL)), is(3));
+        assertThat(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.NUMBER_OF_BEDROOM_COL)), is(4));
+        assertThat(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.IS_SYNC_COL)), is(1));
+        assertThat(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.IS_SOLD_COL)), is(1));
+        assertThat(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.IS_DRAFT_COL)), is(0));
+        assertThat(cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.SOLD_DATE_COL)), is(dateLong));
 
-        assertThat(cursor.getString(cursor.getColumnIndexOrThrow("id")), is("1"));
-        assertThat(cursor.getLong(cursor.getColumnIndexOrThrow("creationDate")), is(dateLong));
-        assertThat(cursor.getInt(cursor.getColumnIndexOrThrow("priceUSD")), is(1000));
-        assertThat(cursor.getString(cursor.getColumnIndexOrThrow("description")), is("description"));
-        assertThat(cursor.getInt(cursor.getColumnIndexOrThrow("surface")), is(233));
-        assertThat(cursor.getInt(cursor.getColumnIndexOrThrow("numberOfRooms")), is(2));
-        assertThat(cursor.getInt(cursor.getColumnIndexOrThrow("numberOfBathrooms")), is(3));
-        assertThat(cursor.getInt(cursor.getColumnIndexOrThrow("numberOfBedrooms")), is(4));
-        assertThat(cursor.getInt(cursor.getColumnIndexOrThrow("isSold")), is(1));
-        assertThat(cursor.getLong(cursor.getColumnIndexOrThrow("soldDate")), is(dateLong));
-
-        assertThat(cursor.getString(cursor.getColumnIndexOrThrow("user_uid")), is("uid"));
-        assertThat(cursor.getString(cursor.getColumnIndexOrThrow("user_username")), is("username"));
-        assertThat(cursor.getString(cursor.getColumnIndexOrThrow("user_phoneNumber")), is("phone_number"));
-        assertThat(cursor.getString(cursor.getColumnIndexOrThrow("user_email")), is("user_email"));
-        assertThat(cursor.getString(cursor.getColumnIndexOrThrow("place_placeId")),is("placeId"));
-        assertThat(cursor.getString(cursor.getColumnIndexOrThrow("place_name")), is("place_name"));
-        assertThat(cursor.getInt(cursor.getColumnIndexOrThrow("place_lat")), is(10));
-        assertThat(cursor.getInt(cursor.getColumnIndexOrThrow("place_lng")), is(20));
-        assertThat(cursor.getString(cursor.getColumnIndexOrThrow("place_address")), is("place_address"));
-        assertThat(cursor.getString(cursor.getColumnIndexOrThrow("place_country")), is("place_country"));
-        assertThat(cursor.getString(cursor.getColumnIndexOrThrow("place_city")), is("place_city"));
+        assertThat(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.USER_UID_COL)), is("uid"));
+        assertThat(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.USER_USERNAME_COL)), is("username"));
+        assertThat(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.USER_URL_PICTURE_COL)), is(photo.getReference()));
+        assertThat(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.USER_PHONE_NUMBER_COL)), is("phone_number"));
+        assertThat(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.USER_EMAIL_COL)), is("user_email"));
+        assertThat(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.USER_REAL_ESTATE_COL)), is(myRealList));
+        assertThat(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.PLACE_PLACE_ID_COL)), is("placeId"));
+        assertThat(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.PLACE_NAME_COL)), is("place_name"));
+        assertThat(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.PLACE_LAT_COL)), is(10));
+        assertThat(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.PLACE_LNG_COL)), is(20));
+        assertThat(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.PLACE_ADDRESS_COL)), is("place_address"));
+        assertThat(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.PLACE_COUNTRY_COL)), is("place_country"));
+        assertThat(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseRealEstateHandler.PLACE_CITY_COL)), is("place_city"));
 
     }
 
@@ -119,36 +132,36 @@ public class RealEstateContentProviderTest {
         List<String> emptyList = new ArrayList<>();
         String myRealList = StringListConverter.fromList(emptyList);
 
-        values.put("id", REAL_ESTATE_ID);
-        values.put("creationDate", dateLong);
-        values.put("priceUSD", 1000);
-        values.put("typeId", 1);
-        values.put("description", "description");
-        values.put("photos_reference", photosString);
-        values.put("numberOfPhotos", 2);
-        values.put("mainPicturePosition", 0);
-        values.put("surface", 233);
-        values.put("numberOfRooms", 2);
-        values.put("numberOfBathrooms", 3);
-        values.put("numberOfBedrooms", 4);
-        values.put("isSync", true);
-        values.put("isSold", true);
-        values.put("isDraft", false);
-        values.put("soldDate", dateLong);
+        values.put(DatabaseRealEstateHandler.ID_COL, REAL_ESTATE_ID);
+        values.put(DatabaseRealEstateHandler.CREATION_COL, dateLong);
+        values.put(DatabaseRealEstateHandler.PRICE_USD_COL, 1000);
+        values.put(DatabaseRealEstateHandler.TYPE_ID_COL, 1);
+        values.put(DatabaseRealEstateHandler.DESCRIPTION_COL, "description");
+        values.put(DatabaseRealEstateHandler.PHOTOS_COL, photosString);
+        values.put(DatabaseRealEstateHandler.NUMBER_PHOTOS_COL, 2);
+        values.put(DatabaseRealEstateHandler.MAIN_PICTURE_POSITION_COL, 0);
+        values.put(DatabaseRealEstateHandler.SURFACE_COL, 233);
+        values.put(DatabaseRealEstateHandler.NUMBER_OF_ROOM_COL, 2);
+        values.put(DatabaseRealEstateHandler.NUMBER_OF_BATHROOM_COL, 3);
+        values.put(DatabaseRealEstateHandler.NUMBER_OF_BEDROOM_COL, 4);
+        values.put(DatabaseRealEstateHandler.IS_SYNC_COL, true);
+        values.put(DatabaseRealEstateHandler.IS_SOLD_COL, true);
+        values.put(DatabaseRealEstateHandler.IS_DRAFT_COL, false);
+        values.put(DatabaseRealEstateHandler.SOLD_DATE_COL, dateLong);
 
-        values.put("user_uid", "uid");
-        values.put("user_username", "username");
-        values.put("user_urlPicture", photo.getReference());
-        values.put("user_phoneNumber", "phone_number");
-        values.put("user_email", "user_email");
-        values.put("user_myRealEstateId", myRealList);
-        values.put("place_placeId","placeId");
-        values.put("place_name", "place_name");
-        values.put("place_lat", 10);
-        values.put("place_lng", 20);
-        values.put("place_address", "place_address");
-        values.put("place_country", "place_country");
-        values.put("place_city", "place_city");
+        values.put(DatabaseRealEstateHandler.USER_UID_COL, "uid");
+        values.put(DatabaseRealEstateHandler.USER_USERNAME_COL, "username");
+        values.put(DatabaseRealEstateHandler.USER_URL_PICTURE_COL, photo.getReference());
+        values.put(DatabaseRealEstateHandler.USER_PHONE_NUMBER_COL, "phone_number");
+        values.put(DatabaseRealEstateHandler.USER_EMAIL_COL, "user_email");
+        values.put(DatabaseRealEstateHandler.USER_REAL_ESTATE_COL, myRealList);
+        values.put(DatabaseRealEstateHandler.PLACE_PLACE_ID_COL,"placeId");
+        values.put(DatabaseRealEstateHandler.PLACE_NAME_COL, "place_name");
+        values.put(DatabaseRealEstateHandler.PLACE_LAT_COL, 10);
+        values.put(DatabaseRealEstateHandler.PLACE_LNG_COL, 20);
+        values.put(DatabaseRealEstateHandler.PLACE_ADDRESS_COL, "place_address");
+        values.put(DatabaseRealEstateHandler.PLACE_COUNTRY_COL, "place_country");
+        values.put(DatabaseRealEstateHandler.PLACE_CITY_COL, "place_city");
 
         return values;
 

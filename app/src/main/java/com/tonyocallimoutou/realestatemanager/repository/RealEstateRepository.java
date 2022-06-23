@@ -198,7 +198,7 @@ public class RealEstateRepository {
 
     public void firstConnection() {
         if (isConnected) {
-            syncFirebase();
+            firebaseDataRealEstate.setListRealEstates(database);
         }
     }
 

@@ -267,7 +267,6 @@ public class RealEstate implements Serializable {
     }
 
     // Provider
-
     public static RealEstate fromContentValues(ContentValues values) {
 
         final RealEstate realEstate = new RealEstate();
@@ -442,6 +441,5 @@ public class RealEstate implements Serializable {
         realEstate.setPlace(location);
 
         return realEstate;
-
     }
 }

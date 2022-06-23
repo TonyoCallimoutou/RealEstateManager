@@ -15,6 +15,7 @@ import com.tonyocallimoutou.realestatemanager.model.Photo;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.model.RealEstateLocation;
 import com.tonyocallimoutou.realestatemanager.model.User;
+import com.tonyocallimoutou.realestatemanager.provider.RealEstateContentProvider;
 import com.tonyocallimoutou.realestatemanager.repository.RealEstateRepository;
 import com.tonyocallimoutou.realestatemanager.util.Filter;
 import com.tonyocallimoutou.realestatemanager.util.MathUtil;
@@ -66,15 +67,6 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
     public static final String IS_SYNC_COL = "isSync";
     public static final String IS_DRAFT_COL = "isDraft";
 
-    public static final String[] ALL_COLUMNS = {
-            ID_COL, CREATION_COL, USER_UID_COL, USER_USERNAME_COL, USER_URL_PICTURE_COL, USER_EMAIL_COL,
-            USER_PHONE_NUMBER_COL, USER_REAL_ESTATE_COL, PRICE_USD_COL, TYPE_ID_COL, PHOTOS_COL, NUMBER_PHOTOS_COL,
-            MAIN_PICTURE_POSITION_COL, DESCRIPTION_COL, SURFACE_COL, NUMBER_OF_ROOM_COL, NUMBER_OF_BATHROOM_COL,
-            NUMBER_OF_BEDROOM_COL, PLACE_PLACE_ID_COL, PLACE_NAME_COL, PLACE_LAT_COL, PLACE_LNG_COL,
-            PLACE_COS_LAT_COL, PLACE_SIN_LAT_COL, PLACE_COS_LNG_COL, PLACE_SIN_LNG_COL, PLACE_ADDRESS_COL,
-            PLACE_COUNTRY_COL, PLACE_CITY_COL, PLACE_IS_NEXT_TO_SCHOOL_COL, PLACE_IS_NEXT_TO_PARK_COL,
-            PLACE_IS_NEXT_TO_STORE_COL, IS_SOLD_COL, SOLD_DATE_COL, IS_SYNC_COL, IS_DRAFT_COL };
-
     private static final int NUM_COL_ID = 0;
     private static final int NUM_COL_CREATION = 1;
     private static final int NUM_COL_USER_UID = 2;
@@ -114,6 +106,8 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
 
     private static DatabaseRealEstateHandler instance;
 
+    private final Context context;
+
 
     private final MutableLiveData<List<RealEstate>> realEstatesLiveData = new MutableLiveData<>();
 
@@ -121,6 +115,7 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
 
     public DatabaseRealEstateHandler(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
+        this.context = context;
     }
 
     public static DatabaseRealEstateHandler getInstance(Context context) {
@@ -179,8 +174,6 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
 
     public void createRealEstate(RealEstate realEstate) {
 
-        SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues values = new ContentValues();
 
         String listPhoto = PhotoListConverter.fromList(realEstate.getPhotos());
@@ -231,8 +224,7 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
         values.put(IS_SYNC_COL, realEstate.isSync());
         values.put(IS_DRAFT_COL, realEstate.isDraft());
 
-        db.insertWithOnConflict(TABLE_REAL_ESTATE_NAME, null, values,SQLiteDatabase.CONFLICT_REPLACE);
-        db.close();
+        context.getContentResolver().insert(RealEstateContentProvider.URI_REAL_ESTATE,values);
 
         realEstatesLiveData.postValue(getRealEstates());
     }
@@ -247,22 +239,22 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
 
         List<RealEstate> realEstates = new ArrayList<>();
 
-        SQLiteDatabase db = this.getReadableDatabase();
+        String strQuery = null;
+        if (! filters.isEmpty()) {
+            strQuery = " ";
 
-        StringBuilder strQuery = new StringBuilder(" ");
-
-        for (int i = 0; i < filters.size(); i++) {
-            if (i==0) {
-                strQuery.append("WHERE ");
+            for (int i = 0; i < filters.size(); i++) {
+                if (i != 0) {
+                    strQuery += " AND ";
+                }
+                strQuery += filters.get(i).getQueryStr();
             }
-            else {
-                strQuery.append(" AND ");
-            }
-            strQuery.append(filters.get(i).getQueryStr());
-
         }
 
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_REAL_ESTATE_NAME + strQuery, null);
+        Cursor cursor = context.getContentResolver().query(
+                RealEstateContentProvider.URI_REAL_ESTATE,
+                null,strQuery,
+                null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -378,24 +370,18 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
     public void deleteDraft(RealEstate realEstate) {
         if (realEstate.isDraft()) {
             Log.d("TAG", "deleteDraft: ");
-            SQLiteDatabase db = this.getWritableDatabase();
 
             String query = ID_COL + " = " + "\"" + realEstate.getId() + "\"";
 
-            db.delete(TABLE_REAL_ESTATE_NAME, query,null);
-            db.close();
+            context.getContentResolver().delete(RealEstateContentProvider.URI_REAL_ESTATE,query,null);
         }
     }
 
     public List<RealEstate> getNotSyncRealEstates () {
         List<RealEstate> realEstates = new ArrayList<>();
 
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_REAL_ESTATE_NAME
-                + " WHERE "+ IS_SYNC_COL +" = 0 AND "
-                + IS_DRAFT_COL + " = 0"
-                , null);
+        String query = IS_SYNC_COL +" = 0 AND " + IS_DRAFT_COL + " = 0";
+        Cursor cursor = context.getContentResolver().query(RealEstateContentProvider.URI_REAL_ESTATE,null, query, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {

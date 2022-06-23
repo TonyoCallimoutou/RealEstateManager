@@ -226,7 +226,7 @@ public class Filter {
             return context.getString(R.string.filter_to_string_max) + " "+ Utils.getStringOfPrice(maxPrice)+ " " + moneyKey;
         }
         else if (filterType == (TYPE_ROOM)) {
-            return context.getString(R.string.filter_to_string_more_than) + " " + minRoom + context.getString(R.string.filter_to_string_room) ;
+            return context.getString(R.string.filter_to_string_more_than) + " " + minRoom +" " + context.getString(R.string.filter_to_string_room) ;
         }
         else if (filterType == (TYPE_MINE)) {
             return context.getString(R.string.filter_to_string_my_real_estates) ;
@@ -241,7 +241,7 @@ public class Filter {
             return context.getString(R.string.filter_to_string_only_published_last)+" " + creationDateLimit + " " +context.getString(R.string.filter_to_string_months);
         }
         else if (filterType == (TYPE_PICTURE)) {
-            return context.getString(R.string.filter_to_string_more_than) +" " + minNbrPicture + context.getString(R.string.filter_to_string_pictures) ;
+            return context.getString(R.string.filter_to_string_more_than) +" " + minNbrPicture + " " + context.getString(R.string.filter_to_string_pictures) ;
         }
         else if (filterType == (TYPE_LOCATION)) {
             if (distance > 0) {

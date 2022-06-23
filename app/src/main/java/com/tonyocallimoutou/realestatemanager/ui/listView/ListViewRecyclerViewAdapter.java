@@ -1,13 +1,17 @@
 package com.tonyocallimoutou.realestatemanager.ui.listView;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,6 +31,7 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRe
     private List<RealEstate> mRealEstate;
     private final ListItemClickListener mListItemClickListener;
     private final Context mContext;
+    private static Integer positionDetail;
 
     public ListViewRecyclerViewAdapter(Context context, List<RealEstate> realEstate,
                                        ListItemClickListener listItemClickListener) {
@@ -46,6 +51,13 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRe
     @Override
     public void onBindViewHolder(@NonNull ListViewRecyclerViewAdapter.ViewHolder holder, int position) {
         RealEstate realEstate = mRealEstate.get(position);
+
+        if (positionDetail != null && position == positionDetail) {
+            holder.layout.setBackgroundColor(ContextCompat.getColor(mContext,R.color.grey_light));
+        }
+        else {
+            holder.layout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
+        }
 
         int mainPicturePosition = realEstate.getMainPicturePosition();
         Glide.with(mContext)
@@ -107,8 +119,15 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRe
         notifyDataSetChanged();
     }
 
+    public void setBackgroundOf(int position) {
+        positionDetail = position;
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        @BindView(R.id.list_item_layout)
+        RelativeLayout layout;
         @BindView(R.id.list_view_image_real_estate)
         ImageView realEstateImage;
         @BindView(R.id.list_view_type_real_estate)

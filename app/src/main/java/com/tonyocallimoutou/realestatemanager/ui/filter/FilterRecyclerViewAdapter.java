@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,13 +41,6 @@ public class FilterRecyclerViewAdapter extends RecyclerView.Adapter<FilterRecycl
         Filter filter = mFilters.get(position);
 
         holder.filterTitle.setText(filter.toString());
-
-        holder.filterTitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListener.onListItemClick(position);
-            }
-        });
     }
 
     @Override
@@ -66,7 +60,7 @@ public class FilterRecyclerViewAdapter extends RecyclerView.Adapter<FilterRecycl
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.filter_text_recycler)
-        Button filterTitle;
+        TextView filterTitle;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -76,6 +70,7 @@ public class FilterRecyclerViewAdapter extends RecyclerView.Adapter<FilterRecycl
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
+                    mListener.onListItemClick(position);
                 }
             });
         }

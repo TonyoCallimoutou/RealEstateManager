@@ -1,6 +1,7 @@
 package com.tonyocallimoutou.realestatemanager.ui.listView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.ui.MainActivity;
 import com.tonyocallimoutou.realestatemanager.ui.create.CreateOrEditRealEstateActivity;
+import com.tonyocallimoutou.realestatemanager.ui.detail.DetailFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,14 +30,10 @@ import java.util.List;
 public class ListViewFragment extends Fragment {
 
     private static TextView lblNoRealEstate;
-    private RecyclerView mRecyclerView;
 
     private static ListViewRecyclerViewAdapter adapter;
 
     private static final List<RealEstate> mRealEstate = new ArrayList<>();
-    private static final List<RealEstate> mRealEstateSync = new ArrayList<>();
-    private static final List<RealEstate> mNotSyncList = new ArrayList<>();
-    private static final List<RealEstate> mDrafts = new ArrayList<>();
 
     public ListViewFragment() {
     }
@@ -55,7 +53,7 @@ public class ListViewFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_list_view, container, false);
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.list_view_recycler_view);
+        RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.list_view_recycler_view);
         lblNoRealEstate = view.findViewById(R.id.lbl_no_real_estate);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -82,10 +80,6 @@ public class ListViewFragment extends Fragment {
     }
 
     private static void initList(){
-        mRealEstate.clear();
-        mRealEstate.addAll(mRealEstateSync);
-        mRealEstate.addAll(mNotSyncList);
-        mRealEstate.addAll(mDrafts);
 
         if (lblNoRealEstate != null) {
             if (mRealEstate.size() == 0) {
@@ -100,24 +94,21 @@ public class ListViewFragment extends Fragment {
     }
 
     public static void initRealEstateSyncList(List<RealEstate> result) {
-        mRealEstateSync.clear();
-        mRealEstateSync.addAll(result);
-        initList();
-    }
-
-    public static void initNotSyncList(List<RealEstate> notSyncList) {
-        mNotSyncList.clear();
-        mNotSyncList.addAll(notSyncList);
-        initList();
-    }
-
-    public static void initDraftList(List<RealEstate> drafts) {
-        mDrafts.clear();
-        mNotSyncList.addAll(drafts);
+        mRealEstate.clear();
+        mRealEstate.addAll(result);
         initList();
     }
 
     public static void setConnection() {
         initList();
+    }
+
+    public static void detailOf(RealEstate detail) {
+        if (!DetailFragment.canCloseFragment()) {
+            if (mRealEstate.contains(detail)) {
+                Log.d("TAG", "detailOf: ");
+                adapter.setBackgroundOf(mRealEstate.indexOf(detail));
+            }
+        }
     }
 }

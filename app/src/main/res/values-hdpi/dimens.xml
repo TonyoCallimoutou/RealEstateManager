@@ -4,8 +4,8 @@
     <dimen name="border_width"> 2dp</dimen>
 
     <!--Side View -->
-    <dimen name="logo_header_side_view_size">100dp</dimen>
-    <dimen name="profile_picture_header_side_view_size">60dp</dimen>
+    <dimen name="logo_header_side_view_size">80dp</dimen>
+    <dimen name="profile_picture_header_side_view_size">48dp</dimen>
     <dimen name="margin_information_header">16dp</dimen>
     <dimen name="margin_text_information_start">16dp</dimen>
     <dimen name="margin_text_information_top">8dp</dimen>
@@ -19,7 +19,7 @@
     <dimen name="alert_dialog_margin_button_save"> 24dp </dimen>
 
     <!-- Main Activity -->
-    <dimen name="switch_margin"> 12dp</dimen>
+    <dimen name="switch_margin"> 8dp</dimen>
 
     <!-- List View -->
     <dimen name="list_view_image_real_estate_size"> 100dp </dimen>
@@ -52,10 +52,10 @@
     <dimen name="legend_padding"> 8dp</dimen>
 
     <!-- Filter -->
-    <dimen name="filter_margin"> 12dp </dimen>
-    <dimen name="filter_height_category"> 48dp</dimen>
-    <dimen name="filter_place_margin"> 16dp</dimen>
-    <dimen name="filter_item_margin"> 4dp</dimen>
-    <dimen name="filter_item_padding"> 8dp</dimen>
+    <dimen name="filter_margin"> 8dp </dimen>
+    <dimen name="filter_height_category"> 40dp</dimen>
+    <dimen name="filter_place_margin"> 8dp</dimen>
+    <dimen name="filter_item_margin"> 2dp</dimen>
+    <dimen name="filter_item_padding"> 4dp</dimen>
 
 </resources>

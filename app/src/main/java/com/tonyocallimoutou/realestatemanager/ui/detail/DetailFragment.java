@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,6 +28,7 @@ import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.model.User;
 import com.tonyocallimoutou.realestatemanager.ui.MainActivity;
 import com.tonyocallimoutou.realestatemanager.ui.create.ListPictureRecyclerViewAdapter;
+import com.tonyocallimoutou.realestatemanager.ui.listView.ListViewFragment;
 import com.tonyocallimoutou.realestatemanager.ui.mapview.MiniMapFragment;
 import com.tonyocallimoutou.realestatemanager.util.UtilContactUser;
 import com.tonyocallimoutou.realestatemanager.util.Utils;
@@ -151,8 +153,9 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
 
         recyclerViewPicture.setLayoutManager(new LinearLayoutManager(getContext()));
         LinearLayoutManager horizontalLayoutManager
-                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true);
+                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewPicture.setLayoutManager(horizontalLayoutManager);
+        recyclerViewPicture.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.HORIZONTAL));
         adapter = new ListPictureRecyclerViewAdapter(getContext(), photos,this, null);
 
         recyclerViewPicture.setAdapter(adapter);
@@ -167,6 +170,7 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
         }
 
         if (mRealEstate != null) {
+            ListViewFragment.detailOf(mRealEstate);
             lblNoInformation.setVisibility(View.GONE);
             relativeLayoutInformation.setVisibility(View.VISIBLE);
 
@@ -250,7 +254,7 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
         textNumberOfBedroom.setText(mRealEstate.getStringNumberOfBedrooms());
         textLocation.setText(mRealEstate.getPlace().getName());
         textPrice.setText(mRealEstate.getStringPriceUSD(getContext()));
-        String strCreationDate = getString(R.string.detail_date_creation) + " " + mRealEstate.getCreationDate();
+        String strCreationDate = getString(R.string.detail_date_creation) + " " + mRealEstate.getStringCreationDate();
         creationDate.setText(strCreationDate);
 
         if (mRealEstate.isSold()) {

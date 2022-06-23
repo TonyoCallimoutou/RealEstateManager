@@ -23,6 +23,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -227,8 +228,9 @@ public class CreateOrEditRealEstateActivity extends BaseActivity implements List
     private void initPhotoManager() {
 
         LinearLayoutManager horizontalLayoutManager
-                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
+                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(horizontalLayoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));
         adapter = new ListPictureRecyclerViewAdapter(this, photos, this, new ListPictureRecyclerViewAdapter.ListRemoveClickListener() {
             @Override
             public void onClick(int position) {

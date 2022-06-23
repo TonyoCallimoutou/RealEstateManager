@@ -13,13 +13,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <FrameLayout
-            android:id="@+id/host_detail_fragment"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </FrameLayout>
-
         <RelativeLayout
             android:layout_weight="1"
             android:id="@+id/layout_switch"
@@ -50,6 +43,13 @@
             </FrameLayout>
 
         </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/host_detail_fragment"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </FrameLayout>
 
     </LinearLayout>
 

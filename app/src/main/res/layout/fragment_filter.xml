@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -7,210 +8,215 @@
     android:orientation="vertical"
     tools:context=".ui.filter.FilterFragment">
 
-    <LinearLayout
-        android:id="@+id/filter_main_layout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content">
 
-        <androidx.cardview.widget.CardView
+        <LinearLayout
+            android:id="@+id/filter_main_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            >
+            android:orientation="vertical" >
 
-            <fragment
-                android:id="@+id/autocomplete_fragment"
-                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
+                android:layout_marginTop="@dimen/filter_place_margin"
+                android:layout_marginBottom="@dimen/filter_place_margin"
+                >
 
-        </androidx.cardview.widget.CardView>
+                <fragment
+                    android:id="@+id/autocomplete_fragment"
+                    android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
 
-        <com.google.android.material.slider.RangeSlider
-            android:id="@+id/filter_range_distance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:valueFrom="0"
-            android:valueTo="50.0"
-            android:stepSize="5.0"  />
+            </androidx.cardview.widget.CardView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/filter_height_category"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:layout_weight="1"
-                android:text="@string/filter_price_price" />
-
-
-            <TextView
+            <com.google.android.material.slider.RangeSlider
+                android:id="@+id/filter_range_distance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="@string/filter_price_min" />
-
-            <EditText
-                android:id="@+id/filter_min_price"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="number" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="@string/filter_price_max" />
-
-            <EditText
-                android:id="@+id/filter_max_price"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="number" />
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/filter_height_category"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <Spinner
-                android:id="@+id/filter_spinner_type"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
-
-            <Spinner
-                android:id="@+id/filter_spinner_room"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:entries="@array/Spinner_room"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/filter_more"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+                android:visibility="gone"
+                android:valueFrom="0"
+                android:valueTo="50.0"
+                android:stepSize="5.0"  />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/filter_height_category"
                 android:orientation="horizontal">
 
-                <CheckBox
-                    android:id="@+id/filter_checkbox_next_school"
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:layout_weight="1"
+                    android:text="@string/filter_price_price" />
+
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/filter_is_next_school" />
+                    android:textColor="@color/black"
+                    android:text="@string/filter_price_min" />
 
-                <CheckBox
-                    android:id="@+id/filter_checkbox_next_park"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/filter_is_next_park" />
-
-                <CheckBox
-                    android:id="@+id/filter_checkbox_next_store"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/filter_is_next_store" />
-
-
-            </LinearLayout>
-
-            <CheckBox
-                android:id="@+id/filter_checkbox_is_mine"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/filter_is_mine" />
-
-            <CheckBox
-                android:id="@+id/filter_checkbox_draft"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/filter_without_draft" />
-
-            <CheckBox
-                android:id="@+id/filter_checkbox_not_sync"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/filter_without_no_sync" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <CheckBox
-                    android:id="@+id/filter_checkbox_is_sold"
+                <EditText
+                    android:id="@+id/filter_min_price"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/filter_is_sold" />
+                    android:inputType="number" />
 
-                <Spinner
-                    android:id="@+id/filter_spinner_sold_date"
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:entries="@array/Spinner_sold_date" />
+                    android:textColor="@color/black"
+                    android:text="@string/filter_price_max" />
+
+                <EditText
+                    android:id="@+id/filter_max_price"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:inputType="number" />
 
             </LinearLayout>
 
-            <Spinner
-                android:id="@+id/filter_spinner_creation_date"
-                android:layout_width="wrap_content"
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/filter_height_category"
-                android:entries="@array/Spinner_creation_date" />
+                android:gravity="center"
+                android:orientation="horizontal">
 
-            <Spinner
-                android:id="@+id/filter_spinner_nbr_picture"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/filter_height_category"
-                android:entries="@array/Spinner_picture" />
+                <Spinner
+                    android:id="@+id/filter_spinner_type"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
 
-        </LinearLayout>
+                <Spinner
+                    android:id="@+id/filter_spinner_room"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:entries="@array/Spinner_room"
+                    />
+            </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/filter_more_or_less"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:orientation="horizontal">
+            <LinearLayout
+                android:id="@+id/filter_more"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/filter_text_more_or_less"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/filter_checkbox_next_school"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/filter_is_next_school" />
+
+                    <CheckBox
+                        android:id="@+id/filter_checkbox_next_park"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/filter_is_next_park" />
+
+                    <CheckBox
+                        android:id="@+id/filter_checkbox_next_store"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/filter_is_next_store" />
+
+
+                </LinearLayout>
+
+                <CheckBox
+                    android:id="@+id/filter_checkbox_is_mine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/filter_is_mine" />
+
+                <CheckBox
+                    android:id="@+id/filter_checkbox_draft"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/filter_without_draft" />
+
+                <CheckBox
+                    android:id="@+id/filter_checkbox_not_sync"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/filter_without_no_sync" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/filter_checkbox_is_sold"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/filter_is_sold" />
+
+                    <Spinner
+                        android:id="@+id/filter_spinner_sold_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:entries="@array/Spinner_sold_date" />
+
+                </LinearLayout>
+
+                <Spinner
+                    android:id="@+id/filter_spinner_creation_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/filter_height_category"
+                    android:entries="@array/Spinner_creation_date" />
+
+                <Spinner
+                    android:id="@+id/filter_spinner_nbr_picture"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/filter_height_category"
+                    android:entries="@array/Spinner_picture" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/filter_more_or_less"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="@string/filter_more_filter" />
+                android:layout_gravity="end"
+                android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/filter_img_more_or_less"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_black_24dp" />
+                <TextView
+                    android:id="@+id/filter_text_more_or_less"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="@string/filter_more_filter" />
+
+                <ImageView
+                    android:id="@+id/filter_img_more_or_less"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_add_black_24dp" />
+            </LinearLayout>
+
         </LinearLayout>
-
-    </LinearLayout>
+    </ScrollView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/filter_recyclerview_list_filter"

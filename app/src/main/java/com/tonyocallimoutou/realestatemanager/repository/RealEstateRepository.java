@@ -200,6 +200,12 @@ public class RealEstateRepository {
 
     }
 
+    public void firstConnection() {
+        if (isConnected) {
+            syncFirebase();
+        }
+    }
+
     public static void ConnectionChanged(boolean result) {
         if (result && instance!= null && !isConnected) {
             Log.d("TAG", "ConnectionChanged: ");
@@ -208,7 +214,7 @@ public class RealEstateRepository {
         isConnected = result;
     }
 
-    private static void syncFirebase() {
+    public static void syncFirebase() {
         instance.firebaseDataRealEstate.setListRealEstates(instance.database);
 
         List<RealEstate> realEstates = instance.database.getNotSyncRealEstates();

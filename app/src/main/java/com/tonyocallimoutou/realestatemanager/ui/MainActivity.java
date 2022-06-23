@@ -422,6 +422,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public void initData() {
 
         viewModelUser.createUser(this);
+        viewModelRealEstate.syncFirebase();
 
         viewModelUser.getCurrentUserLiveData().observe(this, currentUserResults -> {
             if (currentUserResults != null) {

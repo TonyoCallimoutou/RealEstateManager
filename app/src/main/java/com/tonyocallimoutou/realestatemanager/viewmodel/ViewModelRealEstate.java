@@ -69,4 +69,8 @@ public class ViewModelRealEstate extends ViewModel {
     public void setFilterList(List<Filter> filters) {
         realEstateRepository.setFilterList(filters);
     }
+
+    public void syncFirebase() {
+        realEstateRepository.firstConnection();
+    }
 }

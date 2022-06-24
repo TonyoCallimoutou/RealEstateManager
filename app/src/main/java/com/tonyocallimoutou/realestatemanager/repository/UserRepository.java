@@ -3,11 +3,9 @@ package com.tonyocallimoutou.realestatemanager.repository;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
 
@@ -112,7 +110,6 @@ public class UserRepository {
         mediator.addSource(database.getCurrentUserLiveData(), new Observer<User>() {
             @Override
             public void onChanged(User user) {
-                Log.d("TAG", "onChanged: " + user.getUrlPicture());
                 if (isConnected) {
                     instance.firebaseDataUser.syncCurrentUser(user, database );
                 }

@@ -378,15 +378,18 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
 
     public User getUserWithUid(String uid) {
 
+        User user = null;
         SQLiteDatabase db = this.getReadableDatabase();
 
         String[] str = new String[] {"*"};
 
         Cursor cursor = db.query(TABLE_REAL_ESTATE_NAME,str,USER_UID_COL + " = \"" + uid + "\"",null,null,null,null);
 
-        cursor.moveToFirst();
+        if (cursor.moveToFirst()) {
+            user = cursorToUser(cursor);
+        }
 
-        User user = cursorToUser(cursor);
+
 
         cursor.close();
 
@@ -412,6 +415,7 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_REAL_ESTATE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_PLACE_NAME);
         onCreate(sqLiteDatabase);
     }
 }

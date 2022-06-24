@@ -3,6 +3,7 @@ package com.tonyocallimoutou.realestatemanager.repository;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
@@ -32,8 +33,6 @@ public class UserRepository {
 
     private User currentUser;
 
-    private final String currentUserId;
-
 
     private UserRepository(Context context) {
         firebaseDataUser = FirebaseDataUser.getInstance(context);
@@ -41,7 +40,6 @@ public class UserRepository {
         this.database = new DatabaseUserHandler(context);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        currentUserId = sharedPreferences.getString(context.getString(R.string.shared_preference_user_uid), "");
 
     }
 
@@ -54,27 +52,32 @@ public class UserRepository {
         }
     }
 
+    private String getCurrentUserId () {
+        return sharedPreferences.getString(context.getString(R.string.shared_preference_user_uid), "");
+    }
+
     public boolean isCurrentLogged() {
         if (isConnected) {
             return firebaseDataUser.isCurrentLogged();
         } else {
-            return !currentUserId.isEmpty();
+            return !getCurrentUserId().isEmpty();
         }
     }
 
     public void createUser(Activity activity, ViewModelUser viewModelUser) {
-        if (currentUserId.isEmpty()) {
+        if (getCurrentUserId().isEmpty()) {
             firebaseDataUser.createUser(activity, viewModelUser, database);
         }
         else {
             if (currentUser == null) {
-                database.initLiveData(currentUserId);
+                database.initLiveData(getCurrentUserId());
             }
         }
     }
 
     public void setCurrentUserPicture(String picture) {
-        database.setCurrentUserPicture(currentUserId, picture);
+        Log.d("TAG", "Repo: " + getCurrentUserId());
+        database.setCurrentUserPicture(getCurrentUserId(), picture);
     }
 
     public void signOut() {
@@ -92,17 +95,17 @@ public class UserRepository {
                 .putString(context.getString(R.string.shared_preference_user_uid), "")
                 .apply();
 
-        database.deleteUser(currentUserId);
+        database.deleteUser(getCurrentUserId());
 
         return firebaseDataUser.deleteUser(context);
     }
 
     public void setNameOfCurrentUser(String name) {
-        database.setNameOfCurrentUser(currentUserId, name);
+        database.setNameOfCurrentUser(getCurrentUserId(), name);
     }
 
     public void setPhoneNumberOfCurrentUser(String phoneNumber) {
-        database.setPhoneNumberOfCurrentUser(currentUserId, phoneNumber);
+        database.setPhoneNumberOfCurrentUser(getCurrentUserId(), phoneNumber);
     }
 
     public LiveData<User> getCurrentUserLiveData() {

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -110,6 +111,7 @@ public class DatabaseUserHandler extends SQLiteOpenHelper {
 
     }
     public void setCurrentUserPicture(String id, String picture) {
+        Log.d("TAG", "setCurrentUserPicture: " + id);
         User user = getCurrentUser(id);
         user.setUrlPicture(picture);
 

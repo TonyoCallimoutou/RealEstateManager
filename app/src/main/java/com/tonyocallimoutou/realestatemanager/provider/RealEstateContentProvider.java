@@ -39,8 +39,18 @@ public class RealEstateContentProvider extends ContentProvider {
 
         if (getContext() != null) {
 
-            Cursor cursor = database.query(DatabaseRealEstateHandler.TABLE_REAL_ESTATE_NAME, new String[]{"*"},
-                                           s,null,null,null,DatabaseRealEstateHandler.CREATION_COL + " DESC");
+            String sql = "SELECT * from " +  DatabaseRealEstateHandler.TABLE_REAL_ESTATE_NAME +
+                    " LEFT JOIN " + DatabaseRealEstateHandler.TABLE_PLACE_NAME +
+                    " ON " + DatabaseRealEstateHandler.PLACE_KEY + " = " + DatabaseRealEstateHandler.PLACE_PLACE_ID_COL;
+
+            if (s != null) {
+                sql += " WHERE " + s;
+            }
+
+
+            sql += " ORDER BY " +  DatabaseRealEstateHandler.CREATION_COL + " DESC";
+
+            Cursor cursor = database.rawQuery(sql, null);
 
             cursor.setNotificationUri(getContext().getContentResolver(), uri);
 

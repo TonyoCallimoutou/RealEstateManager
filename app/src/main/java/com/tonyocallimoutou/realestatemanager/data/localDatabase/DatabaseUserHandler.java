@@ -41,7 +41,7 @@ public class DatabaseUserHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String query = "CREATE TABLE " + TABLE_USER_NAME + " ("
-                + UID_COL + " TEXT PRIMARY KEY,"
+                + UID_COL + " TEXT PRIMARY KEY NOT NULL,"
                 + USERNAME_COL + " TEXT NOT NULL,"
                 + PICTURE_REFERENCE_COL + " TEXT NOT NULL,"
                 + EMAIL_COL + " TEXT NOT NULL,"

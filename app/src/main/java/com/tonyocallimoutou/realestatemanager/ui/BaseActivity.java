@@ -3,7 +3,10 @@ package com.tonyocallimoutou.realestatemanager.ui;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.os.Bundle;
+import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.tonyocallimoutou.realestatemanager.util.LocaleHelper;
@@ -20,16 +23,15 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        super.onResume();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(networkAvailableReceiver, intentFilter);
+        super.onResume();
     }
 
     @Override
     protected void onPause() {
-        super.onPause();
-
         unregisterReceiver(networkAvailableReceiver);
+        super.onPause();
     }
 }

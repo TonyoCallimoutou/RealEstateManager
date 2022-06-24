@@ -672,18 +672,13 @@ public class FilterFragment extends Fragment {
 
     public static void changeVisibilityOfFragment() {
         if (isOpen) {
-            Log.d("TAG", "changeVisibilityOfFragment: ");
             if (mainLayout.getVisibility() == View.VISIBLE) {
-                Log.d("TAG", "main is Visible: ");
                 if (filters.size() != 0) {
-                    Log.d("TAG", "Filter size != 0 ");
                     mainLayout.setVisibility(View.GONE);
                 } else {
-                    Log.d("TAG", "Filter size == 0: ");
                     closeFragment();
                 }
             } else {
-                Log.d("TAG", "MAIN INVISIBLE: ");
                 mainLayout.setVisibility(View.VISIBLE);
             }
         }

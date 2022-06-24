@@ -258,7 +258,6 @@ public class CreateOrEditRealEstateActivity extends BaseActivity implements List
 
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE && resultCode == RESULT_OK) {
             place = new RealEstateLocation(this,Autocomplete.getPlaceFromIntent(data));
-            Log.d("TAG", "onActivityResult: ");
             viewModelRealEstate.verifyNearbyPlace(place);
 
             initPlaceInformation();

@@ -110,6 +110,7 @@ public class FirebaseDataUser {
                         }
 
                         database.createUser(currentUser);
+                        Log.d("TAG", "creation OK: ");
                     }
                 });
     }
@@ -137,9 +138,7 @@ public class FirebaseDataUser {
                 if (task.isSuccessful()) {
                     Uri downloadUri = task.getResult();
                     currentUser.setUrlPicture(downloadUri.toString());
-                    getUsersCollection().document(currentUser.getUid()).set(currentUser);
-
-                    database.setCurrentUserPicture(currentUser.getUid(),downloadUri.toString());
+                    database.setCurrentUserPicture(currentUser.getUid(), downloadUri.toString());
                 }
             }
         });
@@ -157,40 +156,6 @@ public class FirebaseDataUser {
         return signOut(context);
     }
 
-    public void setNameOfCurrentUser(String name) {
-        currentUser.setUsername(name);
-        getUsersCollection().document(currentUser.getUid()).set(currentUser);
-    }
-
-    public void setPhoneNumberOfCurrentUser(String phoneNumber) {
-        currentUser.setPhoneNumber(phoneNumber);
-        getUsersCollection().document(currentUser.getUid()).set(currentUser);
-    }
-
-    public void setCurrentUserLivedata(MutableLiveData<User> liveData) {
-        getUsersCollection().addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-
-                if (error != null) {
-                    Log.w("TAG", "Listen failed.", error);
-                    return;
-                }
-
-                for (DocumentSnapshot document : value) {
-                    User user = document.toObject(User.class);
-                    if (getCurrentFirebaseUser()!= null) {
-                        if (user.getUid().equals(getCurrentFirebaseUser().getUid())) {
-                            currentUser = user;
-                            liveData.setValue(user);
-                        }
-                    }
-
-                }
-            }
-        });
-    }
-
     public void syncCurrentUser(User user, DatabaseUserHandler database) {
         currentUser = user;
 
@@ -200,12 +165,5 @@ public class FirebaseDataUser {
         else {
             getUsersCollection().document(user.getUid()).set(user);
         }
-    }
-
-    // Real Estate
-
-    public void createRealEstate(RealEstate realEstate) {
-        currentUser.addRealEstateToMyList(realEstate);
-        getUsersCollection().document(currentUser.getUid()).set(currentUser);
     }
 }

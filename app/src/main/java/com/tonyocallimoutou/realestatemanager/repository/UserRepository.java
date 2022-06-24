@@ -3,9 +3,12 @@ package com.tonyocallimoutou.realestatemanager.repository;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.gms.tasks.Task;
@@ -27,7 +30,7 @@ public class UserRepository {
 
     private static boolean isConnected;
 
-    private final MutableLiveData<User> currentUserLiveData = new MutableLiveData<>();
+    private final MediatorLiveData<User> mediator = new MediatorLiveData<>();
 
     private User currentUser;
 
@@ -57,25 +60,23 @@ public class UserRepository {
         if (isConnected) {
             return firebaseDataUser.isCurrentLogged();
         } else {
-            // WARNING Auth without connection
             return !currentUserId.isEmpty();
         }
     }
 
     public void createUser(Activity activity, ViewModelUser viewModelUser) {
-        if (isConnected) {
+        if (currentUserId.isEmpty()) {
             firebaseDataUser.createUser(activity, viewModelUser, database);
+        }
+        else {
+            if (currentUser == null) {
+                database.initLiveData(currentUserId);
+            }
         }
     }
 
     public void setCurrentUserPicture(String picture) {
-
-        if (isConnected) {
-            firebaseDataUser.setCurrentUserPicture(picture, database);
-        }
-        else {
-            database.setCurrentUserPicture(currentUserId, picture);
-        }
+        database.setCurrentUserPicture(currentUserId, picture);
     }
 
     public void signOut() {
@@ -99,70 +100,42 @@ public class UserRepository {
     }
 
     public void setNameOfCurrentUser(String name) {
-        if (isConnected) {
-            firebaseDataUser.setNameOfCurrentUser(name);
-        }
-        else {
-            database.setNameOfCurrentUser(currentUserId, name);
-            initLiveDataUser();
-        }
+        database.setNameOfCurrentUser(currentUserId, name);
     }
 
     public void setPhoneNumberOfCurrentUser(String phoneNumber) {
-        if (isConnected) {
-            firebaseDataUser.setPhoneNumberOfCurrentUser(phoneNumber);
-        }
-        else {
-            database.setPhoneNumberOfCurrentUser(currentUserId, phoneNumber);
-            initLiveDataUser();
-        }
+        database.setPhoneNumberOfCurrentUser(currentUserId, phoneNumber);
     }
 
     public LiveData<User> getCurrentUserLiveData() {
-        if (isConnected) {
-            firebaseDataUser.setCurrentUserLivedata(currentUserLiveData);
-        }
-        else {
-            initLiveDataUser();
-        }
-        return currentUserLiveData;
-    }
+        mediator.removeSource(database.getCurrentUserLiveData());
+        mediator.addSource(database.getCurrentUserLiveData(), new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                Log.d("TAG", "onChanged: " + user.getUrlPicture());
+                if (isConnected) {
+                    instance.firebaseDataUser.syncCurrentUser(user, database );
+                }
 
-    private void initLiveDataUser() {
-        currentUserLiveData.postValue(database.getCurrentUser(currentUserId));
+                currentUser = user;
+                mediator.postValue(user);
+            }
+        });
+
+        return mediator;
     }
 
     // Real Estate
 
     public void createRealEstate(RealEstate realEstate) {
-
-        if (isConnected) {
-            firebaseDataUser.createRealEstate(realEstate);
-        }
-        else {
-            currentUser.addRealEstateToMyList(realEstate);
-            database.createUser(currentUser);
-            initLiveDataUser();
-        }
-
-
+        currentUser.addRealEstateToMyList(realEstate);
+        database.createUser(currentUser);
     }
 
     public User getCurrentUser() {
         return currentUser;
     }
 
-    public void setCurrentUser(User user) {
-        if (! user.equals(currentUser)) {
-            currentUser = user;
-            database.createUser(user);
-
-            if (isConnected) {
-                instance.firebaseDataUser.syncCurrentUser(instance.currentUser, instance.database);
-            }
-
-        }
-    }
 
 
     public static void ConnectionChanged(boolean result) {

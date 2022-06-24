@@ -106,7 +106,6 @@ public class ListViewFragment extends Fragment {
     public static void detailOf(RealEstate detail) {
         if (!DetailFragment.canCloseFragment()) {
             if (mRealEstate.contains(detail)) {
-                Log.d("TAG", "detailOf: ");
                 adapter.setBackgroundOf(mRealEstate.indexOf(detail));
             }
         }

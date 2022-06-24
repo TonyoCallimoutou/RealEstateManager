@@ -278,16 +278,7 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
         realEstate.setId(c.getString(NUM_COL_ID));
         realEstate.setCreationDate(new Date(c.getLong(NUM_COL_CREATION)));
 
-        User user = new User();
-        user.setUid(c.getString(NUM_COL_USER_UID));
-        user.setUsername(c.getString(NUM_COL_USER_USERNAME));
-        user.setUrlPicture(c.getString(NUM_COL_USER_URL_PICTURE));
-        user.setEmail(c.getString(NUM_COL_USER_EMAIL));
-        user.setPhoneNumber(c.getString(NUM_COL_USER_PHONE_NUMBER));
-        List<String> myRealEstateId = StringListConverter.fromString(c.getString(NUM_COL_USER_REAL_ESTATE));
-        user.setMyRealEstateId(myRealEstateId);
-
-        realEstate.setUser(user);
+        realEstate.setUser(cursorToUser(c));
 
         realEstate.setPriceUSD(c.getInt(NUM_COL_PRICE_USD));
         realEstate.setTypeId(c.getInt(NUM_COL_TYPE_ID));
@@ -369,7 +360,6 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
 
     public void deleteDraft(RealEstate realEstate) {
         if (realEstate.isDraft()) {
-            Log.d("TAG", "deleteDraft: ");
 
             String query = ID_COL + " = " + "\"" + realEstate.getId() + "\"";
 
@@ -393,6 +383,37 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
         cursor.close();
 
         return realEstates;
+    }
+
+    public User getUserWithUid(String uid) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] str = new String[] {"*"};
+
+        Cursor cursor = db.query(TABLE_REAL_ESTATE_NAME,str,USER_UID_COL + " = \"" + uid + "\"",null,null,null,null);
+
+        cursor.moveToFirst();
+
+        User user = cursorToUser(cursor);
+
+        cursor.close();
+
+        return user;
+    }
+
+    private User cursorToUser(Cursor cursor) {
+        User user = new User();
+
+        user.setUid(cursor.getString(NUM_COL_USER_UID));
+        user.setUsername(cursor.getString(NUM_COL_USER_USERNAME));
+        user.setUrlPicture(cursor.getString(NUM_COL_USER_URL_PICTURE));
+        user.setEmail(cursor.getString(NUM_COL_USER_EMAIL));
+        user.setPhoneNumber(cursor.getString(NUM_COL_USER_PHONE_NUMBER));
+        List<String> myRealEstateId = StringListConverter.fromString(cursor.getString(NUM_COL_USER_REAL_ESTATE));
+        user.setMyRealEstateId(myRealEstateId);
+
+        return user;
     }
 
 

@@ -5,6 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.tonyocallimoutou.realestatemanager.model.User;
 
@@ -28,6 +32,8 @@ public class DatabaseUserHandler extends SQLiteOpenHelper {
     private static final int NUM_COL_EMAIL = 3;
     private static final int NUM_COL_PHONE_NUMBER_ = 4;
     private static final int NUM_COL_MY_REAL_ESTATE_ID = 5;
+
+    private final MutableLiveData<User> currentUserLiveData = new MutableLiveData<>();
 
     public DatabaseUserHandler(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -67,6 +73,8 @@ public class DatabaseUserHandler extends SQLiteOpenHelper {
 
         db.insertWithOnConflict(TABLE_USER_NAME, null, values,SQLiteDatabase.CONFLICT_REPLACE);
         db.close();
+
+        currentUserLiveData.postValue(getCurrentUser(user.getUid()));
     }
 
 
@@ -100,6 +108,7 @@ public class DatabaseUserHandler extends SQLiteOpenHelper {
         user.setUsername(name);
 
         createUser(user);
+
     }
     public void setCurrentUserPicture(String id, String picture) {
         User user = getCurrentUser(id);
@@ -112,6 +121,14 @@ public class DatabaseUserHandler extends SQLiteOpenHelper {
         user.setPhoneNumber(phoneNumber);
 
         createUser(user);
+    }
+
+    public LiveData<User> getCurrentUserLiveData() {
+        return currentUserLiveData;
+    }
+
+    public void initLiveData(String id) {
+        currentUserLiveData.postValue(getCurrentUser(id));
     }
 
     public User getCurrentUser(String id) {

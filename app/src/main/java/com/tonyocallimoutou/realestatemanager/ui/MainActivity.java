@@ -219,7 +219,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public static void initDetailFragment(@Nullable RealEstate realEstate) {
-        Log.d("TAG", "initDetailFragment: ");
         fragmentActivity.getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.host_detail_fragment, DetailFragment.newInstance(realEstate))
@@ -426,9 +425,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         viewModelUser.getCurrentUserLiveData().observe(this, currentUserResults -> {
             if (currentUserResults != null) {
 
-
-                viewModelUser.setCurrentUser(currentUserResults);
-
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
                 sharedPreferences
                         .edit()
@@ -437,6 +433,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         .putString(getString(R.string.shared_preference_phone_number), currentUserResults.getPhoneNumber())
                         .apply();
 
+                Log.d("TAG", "initData: " + currentUserResults.getUrlPicture());
                 viewModelRealEstate.setMyRealEstates(currentUserResults);
 
                 initSideView(currentUserResults);
@@ -450,7 +447,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             ListViewFragment.initRealEstateSyncList(listFilter);
             MapViewFragment.setRealEstateList(listFilter);
             if (! DetailFragment.canCloseFragment() && DetailFragment.getActualRealEstate() == null) {
-                Log.d("TAG", "initData: " + listFilter.get(0));
                 initDetailFragment(listFilter.get(0));
             }
         });

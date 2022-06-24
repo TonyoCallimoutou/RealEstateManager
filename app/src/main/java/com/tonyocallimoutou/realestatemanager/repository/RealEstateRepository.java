@@ -97,7 +97,6 @@ public class RealEstateRepository {
         mediatorLiveData.addSource(database.getRealEstateLiveData(filters), new Observer<List<RealEstate>>() {
             @Override
             public void onChanged(List<RealEstate> realEstates) {
-                Log.d("TAG", "onChanged: MEDIATOR ");
                 mediatorLiveData.setValue(realEstates);
             }
         });
@@ -126,6 +125,10 @@ public class RealEstateRepository {
 
         return realEstate;
 
+    }
+
+    public User getUserOfRealEstate(User user) {
+        return database.getUserWithUid(user.getUid());
     }
 
     public void setMyRealEstates(User user) {
@@ -204,7 +207,6 @@ public class RealEstateRepository {
 
     public static void ConnectionChanged(boolean result) {
         if (result && instance!= null && !isConnected) {
-            Log.d("TAG", "ConnectionChanged: ");
             syncFirebase();
         }
         isConnected = result;

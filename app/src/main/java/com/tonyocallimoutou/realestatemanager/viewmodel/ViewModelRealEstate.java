@@ -1,5 +1,7 @@
 package com.tonyocallimoutou.realestatemanager.viewmodel;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -53,7 +55,9 @@ public class ViewModelRealEstate extends ViewModel {
     }
 
     public void setMyRealEstates(User currentUser) {
-        if (! userRepository.getCurrentUser().equals(currentUser)) {
+        if (! currentUser.equals(realEstateRepository.getUserOfRealEstate(currentUser))) {
+            Log.d("TAG", "setMyRealEstates: " + currentUser.getUsername());
+            Log.d("TAG", "setMyRealEstates: " + realEstateRepository.getUserOfRealEstate(currentUser).getUsername());
             realEstateRepository.setMyRealEstates(currentUser);
         }
     }

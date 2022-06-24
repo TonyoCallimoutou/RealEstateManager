@@ -53,8 +53,4 @@ public class ViewModelUser extends ViewModel {
         return userRepository.getCurrentUserLiveData();
     }
 
-    public void setCurrentUser(User user) {
-        userRepository.setCurrentUser(user);
-    }
-
 }

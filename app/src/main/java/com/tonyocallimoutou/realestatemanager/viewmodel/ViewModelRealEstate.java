@@ -33,7 +33,7 @@ public class ViewModelRealEstate extends ViewModel {
     }
 
     public RealEstate soldRealEstate(RealEstate realEstate) {
-        if (userRepository.getCurrentUser().getUid().equals(realEstate.getUser().getUid())) {
+        if (userRepository.getCurrentUser().getEmail().equals(realEstate.getUser().getEmail())) {
             return realEstateRepository.soldRealEstate(realEstate);
         }
         return null;

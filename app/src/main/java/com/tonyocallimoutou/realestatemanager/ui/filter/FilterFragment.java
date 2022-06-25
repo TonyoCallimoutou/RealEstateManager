@@ -510,7 +510,7 @@ public class FilterFragment extends Fragment {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
 
-                    filterMine.setUserId(currentUser.getUid());
+                    filterMine.setUserEmail(currentUser.getEmail());
 
                     filters.remove(filterMine);
                     filters.add(filterMine);

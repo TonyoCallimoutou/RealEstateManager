@@ -32,10 +32,9 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
     public static final String TABLE_REAL_ESTATE_NAME = "realEstate";
     public static final String ID_COL = "id";
     public static final String CREATION_COL = "creationDate";
-    public static final String USER_UID_COL = "user_uid";
+    public static final String USER_EMAIL_COL = "user_email";
     public static final String USER_USERNAME_COL = "user_username";
     public static final String USER_URL_PICTURE_COL = "user_urlPicture";
-    public static final String USER_EMAIL_COL = "user_email";
     public static final String USER_PHONE_NUMBER_COL = "user_phoneNumber";
     public static final String USER_REAL_ESTATE_COL = "user_myRealEstateId";
     public static final String PRICE_USD_COL = "priceUSD";
@@ -107,10 +106,9 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
         String queryEstate = "CREATE TABLE " + TABLE_REAL_ESTATE_NAME + " ("
                 + ID_COL + " TEXT PRIMARY KEY,"
                 + CREATION_COL + " TEXT NOT NULL,"
-                + USER_UID_COL + " TEXT NOT NULL,"
+                + USER_EMAIL_COL + " TEXT NOT NULL,"
                 + USER_USERNAME_COL + " TEXT NOT NULL,"
                 + USER_URL_PICTURE_COL + " TEXT NOT NULL,"
-                + USER_EMAIL_COL + " TEXT NOT NULL,"
                 + USER_PHONE_NUMBER_COL + " TEXT,"
                 + USER_REAL_ESTATE_COL + " TEXT NOT NULL,"
                 + PRICE_USD_COL + " INTEGER NOT NULL,"
@@ -191,10 +189,9 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
 
         values.put(ID_COL, realEstate.getId());
         values.put(CREATION_COL, realEstate.getCreationDate().getTime());
-        values.put(USER_UID_COL, realEstate.getUser().getUid());
+        values.put(USER_EMAIL_COL, realEstate.getUser().getEmail());
         values.put(USER_USERNAME_COL, realEstate.getUser().getUsername());
         values.put(USER_URL_PICTURE_COL, realEstate.getUser().getUrlPicture());
-        values.put(USER_EMAIL_COL, realEstate.getUser().getEmail());
         values.put(USER_PHONE_NUMBER_COL, realEstate.getUser().getPhoneNumber());
         values.put(USER_REAL_ESTATE_COL, listMyRealEstate);
         values.put(PRICE_USD_COL, realEstate.getPriceUSD());
@@ -376,14 +373,14 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
         return realEstates;
     }
 
-    public User getUserWithUid(String uid) {
+    public User getUserWithEmail(String email) {
 
         User user = null;
         SQLiteDatabase db = this.getReadableDatabase();
 
         String[] str = new String[] {"*"};
 
-        Cursor cursor = db.query(TABLE_REAL_ESTATE_NAME,str,USER_UID_COL + " = \"" + uid + "\"",null,null,null,null);
+        Cursor cursor = db.query(TABLE_REAL_ESTATE_NAME,str,USER_EMAIL_COL + " = \"" + email + "\"",null,null,null,null);
 
         if (cursor.moveToFirst()) {
             user = cursorToUser(cursor);
@@ -400,10 +397,9 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
     private User cursorToUser(Cursor cursor) {
         User user = new User();
 
-        user.setUid(cursor.getString(cursor.getColumnIndex(USER_UID_COL)));
+        user.setEmail(cursor.getString(cursor.getColumnIndex(USER_EMAIL_COL)));
         user.setUsername(cursor.getString(cursor.getColumnIndex(USER_USERNAME_COL)));
         user.setUrlPicture(cursor.getString(cursor.getColumnIndex(USER_URL_PICTURE_COL)));
-        user.setEmail(cursor.getString(cursor.getColumnIndex(USER_EMAIL_COL)));
         user.setPhoneNumber(cursor.getString(cursor.getColumnIndex(USER_PHONE_NUMBER_COL)));
         List<String> myRealEstateId = StringListConverter.fromString(cursor.getString(cursor.getColumnIndex(USER_REAL_ESTATE_COL)));
         user.setMyRealEstateId(myRealEstateId);

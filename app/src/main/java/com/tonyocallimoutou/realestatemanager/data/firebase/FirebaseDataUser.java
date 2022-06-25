@@ -84,7 +84,7 @@ public class FirebaseDataUser {
                             List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
                             for (DocumentSnapshot document : list) {
                                 User workmate = document.toObject(User.class);
-                                if (workmate.getUid().equals(user.getUid())) {
+                                if (workmate.getEmail().equals(user.getEmail())) {
                                     isAlreadyExisting = true;
                                     currentUser = workmate;
                                 }
@@ -95,11 +95,10 @@ public class FirebaseDataUser {
                             String picture = Utils.convertDrawableResourcesToUri(activity.getApplicationContext(), R.drawable.ic_no_image_available).toString();
 
                             String username = user.getDisplayName();
-                            String uid = user.getUid();
                             String email = user.getEmail();
 
-                            currentUser = new User(uid, username, picture,email);
-                            getUsersCollection().document(currentUser.getUid()).set(currentUser);
+                            currentUser = new User(username, picture,email);
+                            getUsersCollection().document(currentUser.getEmail()).set(currentUser);
 
                             UtilsProfilePictureManager.createAlertDialog(activity, viewModelUser, currentUser);
                         }
@@ -113,7 +112,7 @@ public class FirebaseDataUser {
 
         Uri pictureUri = Uri.parse(picture);
 
-        StorageReference ref = getFirebaseStorage().getReference(currentUser.getUid()).child(pictureUri.getLastPathSegment());
+        StorageReference ref = getFirebaseStorage().getReference(currentUser.getEmail()).child(pictureUri.getLastPathSegment());
         UploadTask uploadTask = ref.putFile(pictureUri);
 
         uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
@@ -132,7 +131,7 @@ public class FirebaseDataUser {
                 if (task.isSuccessful()) {
                     Uri downloadUri = task.getResult();
                     currentUser.setUrlPicture(downloadUri.toString());
-                    database.setCurrentUserPicture(currentUser.getUid(), downloadUri.toString());
+                    database.setCurrentUserPicture(currentUser.getEmail(), downloadUri.toString());
                 }
             }
         });
@@ -145,7 +144,7 @@ public class FirebaseDataUser {
 
 
     public Task<Void> deleteUser() {
-        getUsersCollection().document(currentUser.getUid()).delete();
+        getUsersCollection().document(currentUser.getEmail()).delete();
         currentUser = null;
         Log.d("TAG", "deleteUser: ");
         return getCurrentFirebaseUser().delete();
@@ -158,7 +157,7 @@ public class FirebaseDataUser {
             setCurrentUserPicture(user.getUrlPicture(), database);
         }
         else {
-            getUsersCollection().document(user.getUid()).set(user);
+            getUsersCollection().document(user.getEmail()).set(user);
         }
     }
 }

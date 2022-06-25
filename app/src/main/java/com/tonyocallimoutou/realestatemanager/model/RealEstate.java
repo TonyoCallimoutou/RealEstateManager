@@ -57,7 +57,7 @@ public class RealEstate implements Serializable {
                      int numberOfBathrooms,
                      int numberOfBedrooms,
                      @Nullable RealEstateLocation place) {
-        this.id = user.getUid()+"_"+ user.getMyRealEstateId().size();
+        this.id = user.getEmail()+"_"+ user.getMyRealEstateId().size();
         this.creationDate = new Date();
         this.priceUSD = priceUSD;
         this.user = user;

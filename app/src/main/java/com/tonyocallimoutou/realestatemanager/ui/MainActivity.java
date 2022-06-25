@@ -428,7 +428,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
                 sharedPreferences
                         .edit()
-                        .putString(getString(R.string.shared_preference_user_uid), currentUserResults.getUid())
+                        .putString(getString(R.string.shared_preference_user_email), currentUserResults.getEmail())
                         .putString(getString(R.string.shared_preference_username), currentUserResults.getUsername())
                         .putString(getString(R.string.shared_preference_phone_number), currentUserResults.getPhoneNumber())
                         .apply();

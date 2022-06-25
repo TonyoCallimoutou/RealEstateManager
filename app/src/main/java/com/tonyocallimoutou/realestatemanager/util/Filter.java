@@ -34,7 +34,7 @@ public class Filter {
     private String moneyKey;
     private final Context context;
     private Integer minRoom;
-    private String userId;
+    private String userEmail;
     private int dateSoldLimit;
     private int creationDateLimit;
     private int minNbrPicture;
@@ -81,8 +81,8 @@ public class Filter {
         this.minRoom = minRoom;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public void setDateSoldLimit(int dateSoldLimit) {
@@ -115,7 +115,7 @@ public class Filter {
             str = DatabaseRealEstateHandler.NUMBER_OF_ROOM_COL + " >= " + minRoom;
         }
         else if (filterType == (TYPE_MINE)) {
-            str = DatabaseRealEstateHandler.USER_UID_COL + " = \"" + userId + "\"";
+            str = DatabaseRealEstateHandler.USER_EMAIL_COL + " = \"" + userEmail + "\"";
         }
         else if (filterType == (TYPE_DRAFT)) {
             str = DatabaseRealEstateHandler.IS_DRAFT_COL + " = 0";

@@ -19,19 +19,18 @@ public class DatabaseUserHandler extends SQLiteOpenHelper {
     private static final String DB_NAME = "userDatabase";
     private static final int DB_VERSION = 1;
     private static final String TABLE_USER_NAME = "users";
-    public static final String UID_COL = "uid";
+    public static final String EMAIL_COL = "email";
     public static final String USERNAME_COL = "username";
     public static final String PICTURE_REFERENCE_COL = "picture_reference";
-    public static final String EMAIL_COL = "email";
     public static final String PHONE_NUMBER_COL = "phoneNumber";
     public static final String MY_REAL_ESTATE_ID_COL = "myRealEstateId";
 
-    private static final int NUM_COL_UID = 0;
+
+    private static final int NUM_COL_EMAIL = 0;
     private static final int NUM_COL_USERNAME = 1;
     private static final int NUM_COL_URL_PICTURE = 2;
-    private static final int NUM_COL_EMAIL = 3;
-    private static final int NUM_COL_PHONE_NUMBER_ = 4;
-    private static final int NUM_COL_MY_REAL_ESTATE_ID = 5;
+    private static final int NUM_COL_PHONE_NUMBER_ = 3;
+    private static final int NUM_COL_MY_REAL_ESTATE_ID = 4;
 
     private final MutableLiveData<User> currentUserLiveData = new MutableLiveData<>();
 
@@ -42,10 +41,9 @@ public class DatabaseUserHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String query = "CREATE TABLE " + TABLE_USER_NAME + " ("
-                + UID_COL + " TEXT PRIMARY KEY NOT NULL,"
+                + EMAIL_COL + " TEXT PRIMARY KEY NOT NULL,"
                 + USERNAME_COL + " TEXT NOT NULL,"
                 + PICTURE_REFERENCE_COL + " TEXT NOT NULL,"
-                + EMAIL_COL + " TEXT NOT NULL,"
                 + PHONE_NUMBER_COL + " TEXT,"
                 + MY_REAL_ESTATE_ID_COL + " TEXT NOT NULL)";
 
@@ -64,17 +62,17 @@ public class DatabaseUserHandler extends SQLiteOpenHelper {
         String listMyRealEstate = StringListConverter.fromList(user.getMyRealEstateId());
 
 
-        values.put(UID_COL, user.getUid());
+
+        values.put(EMAIL_COL, user.getEmail());
         values.put(USERNAME_COL, user.getUsername());
         values.put(PICTURE_REFERENCE_COL, user.getUrlPicture());
-        values.put(EMAIL_COL, user.getEmail());
         values.put(PHONE_NUMBER_COL, user.getPhoneNumber());
         values.put(MY_REAL_ESTATE_ID_COL, listMyRealEstate);
 
         db.insertWithOnConflict(TABLE_USER_NAME, null, values,SQLiteDatabase.CONFLICT_REPLACE);
         db.close();
 
-        currentUserLiveData.postValue(getCurrentUser(user.getUid()));
+        currentUserLiveData.postValue(getCurrentUser(user.getEmail()));
     }
 
 
@@ -85,10 +83,10 @@ public class DatabaseUserHandler extends SQLiteOpenHelper {
         User user = new User();
         List<String> myRealEstateId = StringListConverter.fromString(c.getString(NUM_COL_MY_REAL_ESTATE_ID));
 
-        user.setUid(c.getString(NUM_COL_UID));
+
+        user.setEmail(c.getString(NUM_COL_EMAIL));
         user.setUsername(c.getString(NUM_COL_USERNAME));
         user.setUrlPicture(c.getString(NUM_COL_URL_PICTURE));
-        user.setEmail(c.getString(NUM_COL_EMAIL));
         user.setPhoneNumber(c.getString(NUM_COL_PHONE_NUMBER_));
         user.setMyRealEstateId(myRealEstateId);
 
@@ -98,7 +96,7 @@ public class DatabaseUserHandler extends SQLiteOpenHelper {
     public void deleteUser(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String query = UID_COL + " = " + "\"" + getCurrentUser(id).getUid() + "\"";
+        String query = EMAIL_COL + " = " + "\"" + getCurrentUser(id).getEmail() + "\"";
         db.delete(TABLE_USER_NAME, query,null);
         db.close();
     }
@@ -135,7 +133,7 @@ public class DatabaseUserHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USER_NAME + " WHERE " + UID_COL + " = \""+ id + "\"", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USER_NAME + " WHERE " + EMAIL_COL + " = \""+ id + "\"", null);
 
         cursor.moveToFirst();
         User user = cursorToUser(cursor);

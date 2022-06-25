@@ -52,48 +52,48 @@ public class UserRepository {
         }
     }
 
-    private String getCurrentUserId () {
-        return sharedPreferences.getString(context.getString(R.string.shared_preference_user_uid), "");
+    private String getCurrentUserEmail () {
+        return sharedPreferences.getString(context.getString(R.string.shared_preference_user_email), "");
     }
 
     public boolean isCurrentLogged() {
         if (isConnected) {
             return firebaseDataUser.isCurrentLogged();
         } else {
-            return !getCurrentUserId().isEmpty();
+            return !getCurrentUserEmail().isEmpty();
         }
     }
 
     public void createUser(Activity activity, ViewModelUser viewModelUser) {
-        if (getCurrentUserId().isEmpty()) {
+        if (getCurrentUserEmail().isEmpty()) {
             firebaseDataUser.createUser(activity, viewModelUser, database);
         }
         else {
             if (currentUser == null) {
-                database.initLiveData(getCurrentUserId());
+                database.initLiveData(getCurrentUserEmail());
             }
         }
     }
 
     public void setCurrentUserPicture(String picture) {
-        database.setCurrentUserPicture(getCurrentUserId(), picture);
+        database.setCurrentUserPicture(getCurrentUserEmail(), picture);
     }
 
     public void signOut() {
         sharedPreferences
                 .edit()
-                .putString(context.getString(R.string.shared_preference_user_uid), "")
+                .putString(context.getString(R.string.shared_preference_user_email), "")
                 .apply();
         firebaseDataUser.signOut(context);
     }
 
 
     public Task<Void> deleteUser() {
-        database.deleteUser(getCurrentUserId());
+        database.deleteUser(getCurrentUserEmail());
 
         sharedPreferences
                 .edit()
-                .putString(context.getString(R.string.shared_preference_user_uid), "")
+                .putString(context.getString(R.string.shared_preference_user_email), "")
                 .apply();
 
 
@@ -102,11 +102,11 @@ public class UserRepository {
     }
 
     public void setNameOfCurrentUser(String name) {
-        database.setNameOfCurrentUser(getCurrentUserId(), name);
+        database.setNameOfCurrentUser(getCurrentUserEmail(), name);
     }
 
     public void setPhoneNumberOfCurrentUser(String phoneNumber) {
-        database.setPhoneNumberOfCurrentUser(getCurrentUserId(), phoneNumber);
+        database.setPhoneNumberOfCurrentUser(getCurrentUserEmail(), phoneNumber);
     }
 
     public LiveData<User> getCurrentUserLiveData() {

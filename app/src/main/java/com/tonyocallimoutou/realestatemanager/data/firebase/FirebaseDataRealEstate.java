@@ -72,7 +72,7 @@ public class FirebaseDataRealEstate {
 
                 Uri pictureUri = Uri.parse(photo.getReference());
 
-                String id = realEstate.getUser().getUid() + " : " + realEstate.getId();
+                String id = realEstate.getUser().getEmail() + " : " + realEstate.getId();
 
                 StorageReference ref = getFirebaseStorage().getReference(id).child(pictureUri.getLastPathSegment());
 
@@ -118,7 +118,7 @@ public class FirebaseDataRealEstate {
 
     public void editRealEstate(RealEstate realEstate) {
         realEstate.setSync(true);
-        String id = realEstate.getUser().getUid() + " : " + realEstate.getId();
+        String id = realEstate.getUser().getEmail() + " : " + realEstate.getId();
         getRealEstateCollection().document(id).set(realEstate);
     }
 
@@ -154,7 +154,7 @@ public class FirebaseDataRealEstate {
                     for (DocumentSnapshot document : list) {
                         RealEstate realEstates = document.toObject(RealEstate.class);
 
-                        if (realEstates.getUser().getUid().equals(user.getUid())) {
+                        if (realEstates.getUser().getEmail().equals(user.getEmail())) {
                             realEstates.setUser(user);
                             editRealEstate(realEstates);
                         }

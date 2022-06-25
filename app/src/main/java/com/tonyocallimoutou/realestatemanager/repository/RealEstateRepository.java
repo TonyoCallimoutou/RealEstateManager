@@ -128,7 +128,7 @@ public class RealEstateRepository {
     }
 
     public User getUserOfRealEstate(User user) {
-        return database.getUserWithUid(user.getUid());
+        return database.getUserWithEmail(user.getEmail());
     }
 
     public void setMyRealEstates(User user) {
@@ -140,7 +140,7 @@ public class RealEstateRepository {
             List<RealEstate> realEstates = database.getRealEstates();
 
             for (RealEstate realEstate : realEstates) {
-                if (realEstate.getUser().getUid().equals(user.getUid())) {
+                if (realEstate.getUser().getEmail().equals(user.getEmail())) {
                     realEstate.setSync(false);
                     realEstate.setUser(user);
                     database.createRealEstate(realEstate);

@@ -194,7 +194,7 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
             userName.setText(userWriter.getUsername());
             userPhone.setText(userWriter.getPhoneNumber());
 
-            if (! currentUser.getUid().equals(userWriter.getUid())) {
+            if (! currentUser.getEmail().equals(userWriter.getEmail())) {
                 informationUserLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -203,7 +203,7 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
                 });
             }
 
-            if (mRealEstate.getUser().getUid().equals(currentUser.getUid())) {
+            if (mRealEstate.getUser().getEmail().equals(currentUser.getEmail())) {
                 MainActivity.setVisibilityEditMenuItem(true);
             }
 

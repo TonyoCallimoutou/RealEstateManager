@@ -10,10 +10,9 @@ import java.util.Objects;
 
 public class User implements Serializable {
 
-    private String uid;
+    private String email;
     private String username;
     private String urlPicture;
-    private String email;
     @Nullable
     private String phoneNumber;
     private List<String> myRealEstateId = new ArrayList<>();
@@ -21,20 +20,19 @@ public class User implements Serializable {
 
     public User() {}
 
-    public User(String uid, String username, String urlPicture, String email) {
-        this.uid = uid;
+    public User(String username, String urlPicture, String email) {
         this.username = username;
         this.urlPicture = urlPicture;
         this.email = email;
         this.myRealEstateId = new ArrayList<>();
     }
 
-    public String getUid() {
-        return uid;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getUsername() {
@@ -51,14 +49,6 @@ public class User implements Serializable {
 
     public void setUrlPicture(String urlPicture) {
         this.urlPicture = urlPicture;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     @Nullable
@@ -87,11 +77,11 @@ public class User implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return uid.equals(user.uid) && Objects.equals(username, user.username) && Objects.equals(urlPicture, user.urlPicture) && Objects.equals(email, user.email) && Objects.equals(phoneNumber, user.phoneNumber);
+        return Objects.equals(username, user.username) && Objects.equals(urlPicture, user.urlPicture) && Objects.equals(email, user.email) && Objects.equals(phoneNumber, user.phoneNumber);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uid, username, urlPicture, email, phoneNumber);
+        return Objects.hash(username, urlPicture, email, phoneNumber);
     }
 }

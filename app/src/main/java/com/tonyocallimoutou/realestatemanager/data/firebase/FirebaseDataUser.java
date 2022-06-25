@@ -144,10 +144,11 @@ public class FirebaseDataUser {
     }
 
 
-    public Task<Void> deleteUser(Context context) {
+    public Task<Void> deleteUser() {
         getUsersCollection().document(currentUser.getUid()).delete();
         currentUser = null;
-        return signOut(context);
+        Log.d("TAG", "deleteUser: ");
+        return getCurrentFirebaseUser().delete();
     }
 
     public void syncCurrentUser(User user, DatabaseUserHandler database) {

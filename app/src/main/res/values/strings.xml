@@ -179,6 +179,7 @@
     <string name="setting_account_title_alert"> Remove Account </string>
     <string name="setting_account_message_alert"> Are you sure you want to delete your account ? </string>
     <string name="setting_account_button_alert"> remove </string>
+    <string name="toast_need_connection"> Sorry we need internet for that </string>
 
     <string-array name="language">
         <item>English</item>

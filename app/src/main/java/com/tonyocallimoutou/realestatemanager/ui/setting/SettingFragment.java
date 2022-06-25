@@ -5,7 +5,9 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -176,9 +178,15 @@ public class SettingFragment extends PreferenceFragmentCompat {
         builder.setPositiveButton(getContext().getResources().getString(R.string.setting_account_button_alert), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                viewModelUser.deleteUser().addOnCompleteListener(task -> {
-                    getActivity().finish();
-                });
+                if (Utils.isInternetAvailable(getContext())) {
+                    viewModelUser.deleteUser().addOnCompleteListener(task -> {
+                        Log.d("TAG", "DELETE: ");
+                        getActivity().finish();
+                    });
+                }
+                else {
+                    Toast.makeText(getContext(), getContext().getString(R.string.toast_need_connection), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

@@ -76,7 +76,6 @@ public class UserRepository {
     }
 
     public void setCurrentUserPicture(String picture) {
-        Log.d("TAG", "Repo: " + getCurrentUserId());
         database.setCurrentUserPicture(getCurrentUserId(), picture);
     }
 
@@ -90,14 +89,16 @@ public class UserRepository {
 
 
     public Task<Void> deleteUser() {
+        database.deleteUser(getCurrentUserId());
+
         sharedPreferences
                 .edit()
                 .putString(context.getString(R.string.shared_preference_user_uid), "")
                 .apply();
 
-        database.deleteUser(getCurrentUserId());
 
-        return firebaseDataUser.deleteUser(context);
+        return firebaseDataUser.deleteUser();
+
     }
 
     public void setNameOfCurrentUser(String name) {

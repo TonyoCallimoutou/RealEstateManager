@@ -111,7 +111,6 @@ public class DatabaseUserHandler extends SQLiteOpenHelper {
 
     }
     public void setCurrentUserPicture(String id, String picture) {
-        Log.d("TAG", "setCurrentUserPicture: " + id);
         User user = getCurrentUser(id);
         user.setUrlPicture(picture);
 

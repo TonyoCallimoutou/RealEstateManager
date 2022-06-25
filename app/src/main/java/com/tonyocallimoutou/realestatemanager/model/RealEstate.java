@@ -17,6 +17,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 
 public class RealEstate implements Serializable {
@@ -75,12 +76,12 @@ public class RealEstate implements Serializable {
         this.isDraft = false;
     }
 
-    @NonNull
+
     public String getId() {
         return id;
     }
 
-    public void setId(@NonNull String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -264,5 +265,18 @@ public class RealEstate implements Serializable {
 
     public void setDraft(boolean draft) {
         isDraft = draft;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RealEstate that = (RealEstate) o;
+        return priceUSD == that.priceUSD && typeId == that.typeId && numberOfPhotos == that.numberOfPhotos && mainPicturePosition == that.mainPicturePosition && surface == that.surface && numberOfRooms == that.numberOfRooms && numberOfBathrooms == that.numberOfBathrooms && numberOfBedrooms == that.numberOfBedrooms && isSold == that.isSold && isSync == that.isSync && isDraft == that.isDraft && id.equals(that.id) && Objects.equals(creationDate, that.creationDate) && Objects.equals(user, that.user) && Objects.equals(photos, that.photos) && Objects.equals(description, that.description) && Objects.equals(place, that.place) && Objects.equals(soldDate, that.soldDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, creationDate, user, priceUSD, typeId, photos, numberOfPhotos, mainPicturePosition, description, surface, numberOfRooms, numberOfBathrooms, numberOfBedrooms, place, isSold, soldDate, isSync, isDraft);
     }
 }

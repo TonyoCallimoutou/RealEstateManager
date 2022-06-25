@@ -13,7 +13,7 @@ public class CompareRealEstate {
 
         for (int i=0; i< expected.size();  i++) {
             if (expected.get(i).getPlace() != null && actual.get(i).getPlace() != null) {
-                if (!(expected.get(i).getPlace().getPlaceId().equals(actual.get(i).getPlace().getPlaceId()))) {
+                if (!(expected.get(i).equals(actual.get(i)))) {
                     return false;
                 }
             }

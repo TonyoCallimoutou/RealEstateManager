@@ -443,7 +443,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     // InitData
 
     public void initData() {
-        Log.d("TAG", "initData: ");
         viewModelUser.createUser(this);
         viewModelRealEstate.syncFirebase();
 

@@ -50,7 +50,6 @@ public class RealEstateContentProviderTest {
     @Test
 
     public void insertAndGetItem() {
-
         // BEFORE : Adding demo item
 
         final Uri userUri = mContentResolver.insert(RealEstateContentProvider.URI_REAL_ESTATE, generateRealEstate());

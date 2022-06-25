@@ -17,7 +17,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
-import com.tonyocallimoutou.realestatemanager.util.Utils;
 
 import java.util.List;
 
@@ -30,6 +29,7 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRe
     private final ListItemClickListener mListItemClickListener;
     private final Context mContext;
     private static Integer positionDetail;
+    private boolean isConnected;
 
     public ListViewRecyclerViewAdapter(Context context, List<RealEstate> realEstate,
                                        ListItemClickListener listItemClickListener) {
@@ -88,7 +88,7 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRe
             }
 
             if (! realEstate.isSync()) {
-                if (Utils.isInternetAvailable(mContext)) {
+                if (isConnected) {
                     int percentage = (int) Math.round(realEstate.getProgressSync());
                     String percentageStr = percentage + "%";
                     holder.progressBar.setVisibility(View.VISIBLE);
@@ -114,6 +114,11 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRe
 
     public void initAdapter(List<RealEstate> residences) {
         mRealEstate = residences;
+        notifyDataSetChanged();
+    }
+
+    public void initConnection(boolean isConnected) {
+        this.isConnected = isConnected;
         notifyDataSetChanged();
     }
 

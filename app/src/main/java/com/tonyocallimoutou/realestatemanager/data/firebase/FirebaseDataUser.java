@@ -3,7 +3,6 @@ package com.tonyocallimoutou.realestatemanager.data.firebase;
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -75,6 +74,7 @@ public class FirebaseDataUser {
     public void createUser(Activity activity, ViewModelUser viewModelUser, DatabaseUserHandler database) {
         FirebaseUser user = getCurrentFirebaseUser();
 
+
         getUsersCollection().get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -90,22 +90,54 @@ public class FirebaseDataUser {
                                 }
                             }
                         }
-                        if ( ! isAlreadyExisting) {
+                        if (!isAlreadyExisting) {
 
                             String picture = Utils.convertDrawableResourcesToUri(activity.getApplicationContext(), R.drawable.ic_no_image_available).toString();
 
                             String username = user.getDisplayName();
                             String email = user.getEmail();
 
-                            currentUser = new User(username, picture,email);
+                            if (database.getCurrentUser(user.getEmail()) != null) {
+                                currentUser = database.getCurrentUser(user.getEmail());
+                            }
+                            else {
+                                currentUser = new User(username, picture, email);
+                                UtilsProfilePictureManager.createAlertDialog(activity, viewModelUser, currentUser);
+                            }
+                            currentUser.setEmailVerify(user.isEmailVerified());
+
                             getUsersCollection().document(currentUser.getEmail()).set(currentUser);
 
-                            UtilsProfilePictureManager.createAlertDialog(activity, viewModelUser, currentUser);
                         }
 
                         database.createUser(currentUser);
                     }
                 });
+    }
+
+    public void sendVerifyEmail(Context context, OnCompleteListener<Void> listener) {
+        FirebaseUser user = getCurrentFirebaseUser();
+
+        user.sendEmailVerification()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            AuthUI.getInstance().signOut(context).addOnCompleteListener(listener);
+                        }
+                    }
+                });
+    }
+
+    public void checkIfEmailVerify(DatabaseUserHandler database) {
+        FirebaseUser user = getCurrentFirebaseUser();
+
+
+        if (user.isEmailVerified()) {
+            currentUser.setEmailVerify(true);
+            getUsersCollection().document(currentUser.getEmail()).set(currentUser);
+            database.createUser(currentUser);
+        }
     }
 
     public void setCurrentUserPicture(String picture, DatabaseUserHandler database) {
@@ -146,7 +178,6 @@ public class FirebaseDataUser {
     public Task<Void> deleteUser() {
         getUsersCollection().document(currentUser.getEmail()).delete();
         currentUser = null;
-        Log.d("TAG", "deleteUser: ");
         return getCurrentFirebaseUser().delete();
     }
 

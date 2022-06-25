@@ -43,6 +43,10 @@
         android:key="@string/preferences_account">
 
         <androidx.preference.Preference
+            android:key="@string/preferences_verify_email"
+            android:title="@string/preferences_verify_email"/>
+
+        <androidx.preference.Preference
             android:key="@string/preferences_remove_account"
             android:title="@string/preferences_remove_account"/>
 

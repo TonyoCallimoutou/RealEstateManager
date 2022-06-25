@@ -3,19 +3,20 @@ package com.tonyocallimoutou.realestatemanager.repository;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.data.firebase.FirebaseDataUser;
 import com.tonyocallimoutou.realestatemanager.data.localDatabase.DatabaseUserHandler;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.model.User;
+import com.tonyocallimoutou.realestatemanager.util.Utils;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelUser;
 
 public class UserRepository {
@@ -57,7 +58,7 @@ public class UserRepository {
     }
 
     public boolean isCurrentLogged() {
-        if (isConnected) {
+        if (Utils.isInternetAvailable(context )) {
             return firebaseDataUser.isCurrentLogged();
         } else {
             return !getCurrentUserEmail().isEmpty();
@@ -65,7 +66,7 @@ public class UserRepository {
     }
 
     public void createUser(Activity activity, ViewModelUser viewModelUser) {
-        if (getCurrentUserEmail().isEmpty()) {
+        if (Utils.isInternetAvailable(context)) {
             firebaseDataUser.createUser(activity, viewModelUser, database);
         }
         else {
@@ -73,6 +74,13 @@ public class UserRepository {
                 database.initLiveData(getCurrentUserEmail());
             }
         }
+    }
+
+    public void sendVerifyEmail(OnCompleteListener<Void> listener) {
+        firebaseDataUser.sendVerifyEmail(context, listener );
+    }
+    public void checkIfEmailVerify() {
+        firebaseDataUser.checkIfEmailVerify(database);
     }
 
     public void setCurrentUserPicture(String picture) {
@@ -90,7 +98,6 @@ public class UserRepository {
 
     public Task<Void> deleteUser() {
         database.deleteUser(getCurrentUserEmail());
-
         sharedPreferences
                 .edit()
                 .putString(context.getString(R.string.shared_preference_user_email), "")

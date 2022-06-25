@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -18,6 +17,8 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.util.Utils;
 import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelUser;
@@ -32,6 +33,7 @@ public class SettingFragment extends PreferenceFragmentCompat {
     private EditTextPreference phonePreference;
     private ListPreference languagePreference;
     private ListPreference moneyPreference;
+    private Preference verifyEmail;
     private Preference removeAccount;
 
 
@@ -93,6 +95,12 @@ public class SettingFragment extends PreferenceFragmentCompat {
         moneyPreference = findPreference(getString(R.string.preferences_money));
         moneyPreference.setSummary(money);
         moneyPreference.setValue(money);
+
+
+        verifyEmail = findPreference(getString(R.string.preferences_verify_email));
+        if (viewModelUser.getCurrentUser().isEmailVerify()) {
+            verifyEmail.setVisible(false);
+        }
 
         removeAccount = findPreference(getString(R.string.preferences_remove_account));
     }
@@ -160,6 +168,14 @@ public class SettingFragment extends PreferenceFragmentCompat {
             }
         });
 
+        verifyEmail.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(@NonNull Preference preference) {
+                sendEmail();
+                return false;
+            }
+        });
+
         removeAccount.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(@NonNull Preference preference) {
@@ -167,6 +183,38 @@ public class SettingFragment extends PreferenceFragmentCompat {
                 return false;
             }
         });
+    }
+
+    private void sendEmail() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        builder.setTitle(R.string.setting_email_title_alert);
+
+        String message = getString(R.string.setting_email_message_alert_start)
+                            + " " + viewModelUser.getCurrentUser().getEmail() + " "
+                            + getString(R.string.setting_email_message_alert_finish);
+
+        builder.setMessage(message);
+
+        builder.setPositiveButton(getContext().getResources().getString(R.string.setting_email_button_alert), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (Utils.isInternetAvailable(getContext())) {
+                    viewModelUser.sendVerifyEmail(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            getActivity().finish();
+                        }
+                    });
+                }
+                else {
+                    Toast.makeText(getContext(), getContext().getString(R.string.toast_need_connection), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     private void alertDialogRemoveAccount() {
@@ -180,7 +228,6 @@ public class SettingFragment extends PreferenceFragmentCompat {
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (Utils.isInternetAvailable(getContext())) {
                     viewModelUser.deleteUser().addOnCompleteListener(task -> {
-                        Log.d("TAG", "DELETE: ");
                         getActivity().finish();
                     });
                 }

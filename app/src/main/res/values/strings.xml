@@ -20,6 +20,8 @@
     <string name="side_view_LOGOUT">LOGOUT</string>
     <string name="error_no_connection"> NO INTERNET</string>
 
+    <string name="banner_email_not_verify"> Restricted use, because we need to check your email.\n Go to setting </string>
+
     <string name="title_alertDialog_google_play_service"> ERROR !!</string>
     <string name="message_alertDialog_google_play_service_download"> Please download the google play service</string>
     <string name="message_alertDialog_google_play_service_update"> Please update your google play service</string>
@@ -174,11 +176,19 @@
     <string name="preference_phone_title_alert"> Your Phone Number</string>
     <string name="preference_phone_message_alert"> Enter Your Phone Number</string>
     <string name="preferences_account"> Account </string>
+    <string name="preferences_verify_email"> Send Verification Email </string>
     <string name="preferences_remove_account"> Remove account </string>
 
     <string name="setting_account_title_alert"> Remove Account </string>
     <string name="setting_account_message_alert"> Are you sure you want to delete your account ? </string>
     <string name="setting_account_button_alert"> remove </string>
+
+
+    <string name="setting_email_title_alert"> Verification Email </string>
+    <string name="setting_email_message_alert_start"> If you continue, an email will be sent to </string>
+    <string name="setting_email_message_alert_finish"> , and you will be disconnected. \nPlease check your email (and spam) and log in again.  </string>
+    <string name="setting_email_button_alert"> Continue ? </string>
+
     <string name="toast_need_connection"> Sorry we need internet for that </string>
 
     <string-array name="language">

@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.tonyocallimoutou.realestatemanager.repository.RealEstateRepository;
-import com.tonyocallimoutou.realestatemanager.repository.UserRepository;
 import com.tonyocallimoutou.realestatemanager.ui.MainActivity;
 
 public class NetworkAvailableReceiver extends BroadcastReceiver {
@@ -15,8 +13,6 @@ public class NetworkAvailableReceiver extends BroadcastReceiver {
         boolean isConnected = Utils.isInternetAvailable(context);
 
 
-        MainActivity.connectionChanged();
-        UserRepository.ConnectionChanged(isConnected);
-        RealEstateRepository.ConnectionChanged(isConnected);
+        MainActivity.connectionChanged(isConnected);
     }
 }

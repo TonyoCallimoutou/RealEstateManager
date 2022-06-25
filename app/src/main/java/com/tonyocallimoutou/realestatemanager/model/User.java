@@ -16,6 +16,7 @@ public class User implements Serializable {
     @Nullable
     private String phoneNumber;
     private List<String> myRealEstateId = new ArrayList<>();
+    private boolean isEmailVerify;
 
 
     public User() {}
@@ -25,6 +26,7 @@ public class User implements Serializable {
         this.urlPicture = urlPicture;
         this.email = email;
         this.myRealEstateId = new ArrayList<>();
+        this.isEmailVerify = false;
     }
 
     public String getEmail() {
@@ -72,16 +74,24 @@ public class User implements Serializable {
         myRealEstateId.add(realEstate.getId());
     }
 
+    public boolean isEmailVerify() {
+        return isEmailVerify;
+    }
+
+    public void setEmailVerify(boolean emailVerify) {
+        isEmailVerify = emailVerify;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(username, user.username) && Objects.equals(urlPicture, user.urlPicture) && Objects.equals(email, user.email) && Objects.equals(phoneNumber, user.phoneNumber);
+        return isEmailVerify == user.isEmailVerify && email.equals(user.email) && Objects.equals(username, user.username) && Objects.equals(urlPicture, user.urlPicture) && Objects.equals(phoneNumber, user.phoneNumber) && Objects.equals(myRealEstateId, user.myRealEstateId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, urlPicture, email, phoneNumber);
+        return Objects.hash(email, username, urlPicture, phoneNumber, myRealEstateId, isEmailVerify);
     }
 }

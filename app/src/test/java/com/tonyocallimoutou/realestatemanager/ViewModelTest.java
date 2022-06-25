@@ -2,10 +2,10 @@ package com.tonyocallimoutou.realestatemanager;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
@@ -177,7 +177,7 @@ public class ViewModelTest {
     public void createUser() {
         int workmatesSize = fakeWorkmates.size();
         for (User user : fakeWorkmates) {
-            assertNotEquals(user.getUid(), currentUser.getUid());
+            assertNotEquals(user.getEmail(), currentUser.getEmail());
         }
         viewModelUser.createUser(activity);
         assertEquals(workmatesSize+1, fakeWorkmates.size());
@@ -193,7 +193,7 @@ public class ViewModelTest {
 
         assertFalse(fakeWorkmates.contains(currentUser));
         for (User user : fakeWorkmates) {
-            assertNotEquals(user.getUid(), currentUser.getUid());
+            assertNotEquals(user.getEmail(), currentUser.getEmail());
         }
     }
 
@@ -209,7 +209,7 @@ public class ViewModelTest {
     public void getLiveDataCurrentUser() {
         User user = viewModelUser.getCurrentUserLiveData().getValue();
 
-        assertEquals(currentUser.getUid(), user.getUid());
+
         assertEquals(currentUser.getUsername(), user.getUsername());
         assertEquals(currentUser.getUrlPicture(), user.getUrlPicture());
         assertEquals(currentUser.getEmail(), user.getEmail());

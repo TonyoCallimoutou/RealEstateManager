@@ -1,5 +1,6 @@
 package com.tonyocallimoutou.realestatemanager.ui.setting;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -27,6 +28,19 @@ public class SettingActivity extends BaseActivity {
         super.onBackPressed();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    public static void goToSetting(Activity activity){
+        Intent intent = new Intent(activity, SettingActivity.class);
+        activity.startActivity(intent);
+        activity.finish();
     }
 
 }

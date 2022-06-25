@@ -20,6 +20,9 @@
     <string name="side_view_LOGOUT">DECONNEXION</string>
     <string name="error_no_connection"> AUCUNE CONNEXION</string>
 
+    <string name="banner_email_not_verify"> Utilisation restreint, car nous devons verifiez votre adresse email.\n Aller dans les paramètres. </string>
+
+
     <string name="title_alertDialog_google_play_service"> ERREUR !!</string>
     <string name="message_alertDialog_google_play_service_download"> Veuillez télécharger le service Google Play</string>
     <string name="message_alertDialog_google_play_service_update"> Veuillez mettre à jour votre service Google Play</string>
@@ -175,12 +178,19 @@
     <string name="preference_phone_title_alert"> Ton numéro de téléphone</string>
     <string name="preference_phone_message_alert"> Entre ton numéro de téléphone</string>
     <string name="preferences_account"> Compte </string>
+    <string name="preferences_verify_email"> Envoyer un email de vérification </string>
     <string name="preferences_remove_account"> Supprimer le compte </string>
 
     <string name="setting_account_title_alert"> Supprimer le compte  </string>
     <string name="setting_account_message_alert"> Êtes-vous sûr de vouloir supprimer votre compte? </string>
     <string name="setting_account_button_alert"> Supprimer </string>
+
     <string name="toast_need_connection"> Désolé, nous avons besoin d\'internet </string>
+
+    <string name="setting_email_title_alert"> Vérifcation d\'email </string>
+    <string name="setting_email_message_alert_start"> Si vous continuez, un email sera envoyé à </string>
+    <string name="setting_email_message_alert_finish"> , et vous serez déconnecté.\n\nVeuillez vérifier vos e-mails (et spams) et vous reconnecter.  </string>
+    <string name="setting_email_button_alert"> Continuer ? </string>
 
 
     <string-array name="language">

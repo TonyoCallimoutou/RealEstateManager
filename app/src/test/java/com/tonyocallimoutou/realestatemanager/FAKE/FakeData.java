@@ -10,14 +10,14 @@ import java.util.List;
 
 public class FakeData {
 
-    private static final User FAKE_USER = new User("100","FakeUserName","android.resource://com.tonyocallimoutou.realestatemanager/drawable/ic_no_image_available","fakeEmail");
+    private static final User FAKE_USER = new User("FakeUserName","android.resource://com.tonyocallimoutou.realestatemanager/drawable/ic_no_image_available","fakeEmail");
 
-    private static final User user1 = new User("1","Tonyo",null,"emailTonyo");
-    private static final User user2 = new User("2","Jennifer",null,"emailJennifer");
-    private static final User user3 = new User("3","Marc",null,"emailMarc");
-    private static final User user4 =  new User("4","Alfred",null,"emailAlfred");
-    private static final User user5 = new User("5","Jean",null,"emailJean");
-    private static final User user6 = new User("6","Belle",null,"emailBelle");
+    private static final User user1 = new User("Tonyo",null,"emailTonyo");
+    private static final User user2 = new User("Jennifer",null,"emailJennifer");
+    private static final User user3 = new User("Marc",null,"emailMarc");
+    private static final User user4 =  new User("Alfred",null,"emailAlfred");
+    private static final User user5 = new User("Jean",null,"emailJean");
+    private static final User user6 = new User("Belle",null,"emailBelle");
 
 
     private static final List<User> FAKE_WORKMATES = Arrays.asList(

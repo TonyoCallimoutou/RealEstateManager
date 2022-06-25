@@ -1,20 +1,13 @@
 package com.tonyocallimoutou.realestatemanager.model;
 
-import android.content.ContentValues;
 import android.content.Context;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.tonyocallimoutou.realestatemanager.R;
-import com.tonyocallimoutou.realestatemanager.data.localDatabase.DatabaseRealEstateHandler;
-import com.tonyocallimoutou.realestatemanager.data.localDatabase.DateConverter;
-import com.tonyocallimoutou.realestatemanager.data.localDatabase.PhotoListConverter;
-import com.tonyocallimoutou.realestatemanager.data.localDatabase.StringListConverter;
 import com.tonyocallimoutou.realestatemanager.util.Utils;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;

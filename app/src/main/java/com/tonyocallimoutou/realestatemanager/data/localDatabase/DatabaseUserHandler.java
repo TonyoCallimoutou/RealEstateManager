@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -24,6 +23,7 @@ public class DatabaseUserHandler extends SQLiteOpenHelper {
     public static final String PICTURE_REFERENCE_COL = "picture_reference";
     public static final String PHONE_NUMBER_COL = "phoneNumber";
     public static final String MY_REAL_ESTATE_ID_COL = "myRealEstateId";
+    public static final String IS_EMAIL_VERIFY_ID_COL = "isEmailVerify";
 
 
     private static final int NUM_COL_EMAIL = 0;
@@ -31,6 +31,7 @@ public class DatabaseUserHandler extends SQLiteOpenHelper {
     private static final int NUM_COL_URL_PICTURE = 2;
     private static final int NUM_COL_PHONE_NUMBER_ = 3;
     private static final int NUM_COL_MY_REAL_ESTATE_ID = 4;
+    private static final int NUM_COL_IS_EMAIL_VERIFY = 5;
 
     private final MutableLiveData<User> currentUserLiveData = new MutableLiveData<>();
 
@@ -45,7 +46,8 @@ public class DatabaseUserHandler extends SQLiteOpenHelper {
                 + USERNAME_COL + " TEXT NOT NULL,"
                 + PICTURE_REFERENCE_COL + " TEXT NOT NULL,"
                 + PHONE_NUMBER_COL + " TEXT,"
-                + MY_REAL_ESTATE_ID_COL + " TEXT NOT NULL)";
+                + MY_REAL_ESTATE_ID_COL + " TEXT NOT NULL,"
+                + IS_EMAIL_VERIFY_ID_COL + " INTEGER NOT NULL)";
 
         // at last we are calling a exec sql
         // method to execute above sql query
@@ -68,6 +70,8 @@ public class DatabaseUserHandler extends SQLiteOpenHelper {
         values.put(PICTURE_REFERENCE_COL, user.getUrlPicture());
         values.put(PHONE_NUMBER_COL, user.getPhoneNumber());
         values.put(MY_REAL_ESTATE_ID_COL, listMyRealEstate);
+        values.put(IS_EMAIL_VERIFY_ID_COL, user.isEmailVerify());
+
 
         db.insertWithOnConflict(TABLE_USER_NAME, null, values,SQLiteDatabase.CONFLICT_REPLACE);
         db.close();
@@ -89,6 +93,9 @@ public class DatabaseUserHandler extends SQLiteOpenHelper {
         user.setUrlPicture(c.getString(NUM_COL_URL_PICTURE));
         user.setPhoneNumber(c.getString(NUM_COL_PHONE_NUMBER_));
         user.setMyRealEstateId(myRealEstateId);
+        if (c.getInt(NUM_COL_IS_EMAIL_VERIFY) == 1) {
+            user.setEmailVerify(true);
+        }
 
         return user;
     }

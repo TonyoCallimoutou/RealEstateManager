@@ -20,6 +20,7 @@
 
     <!-- Main Activity -->
     <dimen name="switch_margin"> 12dp</dimen>
+    <dimen name="email_not_verify_margin"> 8dp </dimen>
 
     <!-- List View -->
     <dimen name="list_view_image_real_estate_size"> 100dp </dimen>

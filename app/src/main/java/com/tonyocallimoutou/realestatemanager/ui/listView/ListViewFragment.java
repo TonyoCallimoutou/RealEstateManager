@@ -98,8 +98,8 @@ public class ListViewFragment extends Fragment {
         initList();
     }
 
-    public static void setConnection() {
-        initList();
+    public static void setConnection(boolean isConnected) {
+        adapter.initConnection(isConnected);
     }
 
     public static void detailOf(RealEstate detail) {

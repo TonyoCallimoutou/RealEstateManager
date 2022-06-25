@@ -5,6 +5,7 @@ import android.app.Activity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.tonyocallimoutou.realestatemanager.model.User;
 import com.tonyocallimoutou.realestatemanager.repository.UserRepository;
@@ -33,6 +34,14 @@ public class ViewModelUser extends ViewModel {
         userRepository.createUser(activity, this);
     }
 
+    public void sendVerifyEmail(OnCompleteListener<Void> listener) {
+        userRepository.sendVerifyEmail(listener);
+    }
+
+    public void checkIfEmailVerify() {
+        userRepository.checkIfEmailVerify();
+    }
+
     public void setCurrentUserPicture(String picture) {
         userRepository.setCurrentUserPicture(picture);
     }
@@ -51,6 +60,10 @@ public class ViewModelUser extends ViewModel {
 
     public LiveData<User> getCurrentUserLiveData() {
         return userRepository.getCurrentUserLiveData();
+    }
+
+    public User getCurrentUser() {
+        return userRepository.getCurrentUser();
     }
 
 }

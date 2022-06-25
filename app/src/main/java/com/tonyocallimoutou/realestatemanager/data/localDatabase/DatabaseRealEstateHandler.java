@@ -37,6 +37,7 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
     public static final String USER_URL_PICTURE_COL = "user_urlPicture";
     public static final String USER_PHONE_NUMBER_COL = "user_phoneNumber";
     public static final String USER_REAL_ESTATE_COL = "user_myRealEstateId";
+    public static final String USER_IS_EMAIL_VERIFY_COL = "user_isEmailVerify";
     public static final String PRICE_USD_COL = "priceUSD";
     public static final String TYPE_ID_COL = "typeId";
     public static final String PHOTOS_COL = "photos_reference";
@@ -111,6 +112,7 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
                 + USER_URL_PICTURE_COL + " TEXT NOT NULL,"
                 + USER_PHONE_NUMBER_COL + " TEXT,"
                 + USER_REAL_ESTATE_COL + " TEXT NOT NULL,"
+                + USER_IS_EMAIL_VERIFY_COL + " INTEGER NOT NULL,"
                 + PRICE_USD_COL + " INTEGER NOT NULL,"
                 + TYPE_ID_COL + " INTEGER NOT NULL,"
                 + PHOTOS_COL + " TEXT NOT NULL,"
@@ -194,6 +196,7 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
         values.put(USER_URL_PICTURE_COL, realEstate.getUser().getUrlPicture());
         values.put(USER_PHONE_NUMBER_COL, realEstate.getUser().getPhoneNumber());
         values.put(USER_REAL_ESTATE_COL, listMyRealEstate);
+        values.put(USER_IS_EMAIL_VERIFY_COL, realEstate.getUser().isEmailVerify());
         values.put(PRICE_USD_COL, realEstate.getPriceUSD());
         values.put(TYPE_ID_COL, realEstate.getTypeId());
         values.put(PHOTOS_COL, listPhoto);
@@ -402,6 +405,9 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
         user.setUrlPicture(cursor.getString(cursor.getColumnIndex(USER_URL_PICTURE_COL)));
         user.setPhoneNumber(cursor.getString(cursor.getColumnIndex(USER_PHONE_NUMBER_COL)));
         List<String> myRealEstateId = StringListConverter.fromString(cursor.getString(cursor.getColumnIndex(USER_REAL_ESTATE_COL)));
+        if (cursor.getInt(cursor.getColumnIndex(USER_PHONE_NUMBER_COL)) == 1 ) {
+            user.setEmailVerify(true);
+        }
         user.setMyRealEstateId(myRealEstateId);
 
         return user;

@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -35,6 +36,8 @@ import com.tonyocallimoutou.realestatemanager.BuildConfig;
 import com.tonyocallimoutou.realestatemanager.R;
 import com.tonyocallimoutou.realestatemanager.model.RealEstate;
 import com.tonyocallimoutou.realestatemanager.model.User;
+import com.tonyocallimoutou.realestatemanager.repository.RealEstateRepository;
+import com.tonyocallimoutou.realestatemanager.repository.UserRepository;
 import com.tonyocallimoutou.realestatemanager.ui.create.CreateOrEditRealEstateActivity;
 import com.tonyocallimoutou.realestatemanager.ui.detail.DetailFragment;
 import com.tonyocallimoutou.realestatemanager.ui.filter.FilterFragment;
@@ -58,6 +61,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     DrawerLayout mDrawer;
     @BindView(R.id.switch_map_list)
     SwitchCompat switchMapList;
+    @BindView(R.id.banner_email_not_verify)
+    LinearLayout bannerEmailNotVerify;
 
     public static Context context;
     private static FragmentActivity fragmentActivity;
@@ -71,6 +76,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private static MenuItem goToEditItem;
     private static MenuItem addItem;
     private static MenuItem filterItem;
+    
+    private static boolean isEmailVerify;
+    private static boolean isConnectedMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -398,8 +406,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         switch (item.getItemId()) {
             case R.id.navigation_setting:
-                Intent intent = new Intent(this, SettingActivity.class);
-                startActivity(intent);
+                SettingActivity.goToSetting(this);
                 break;
 
             case R.id.navigation_logout:
@@ -414,11 +421,29 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
         return true;
     }
+    
+    // EMAIL NOT VERIFY
 
+    private void alertEmailNotVerify() {
+        if (! isEmailVerify) {
+            bannerEmailNotVerify.setVisibility(View.VISIBLE);
+
+            bannerEmailNotVerify.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SettingActivity.goToSetting(MainActivity.this);
+                }
+            });
+        }
+        else {
+            bannerEmailNotVerify.setVisibility(View.GONE);
+        }
+    }
+    
     // InitData
 
     public void initData() {
-
+        Log.d("TAG", "initData: ");
         viewModelUser.createUser(this);
         viewModelRealEstate.syncFirebase();
 
@@ -433,6 +458,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         .putString(getString(R.string.shared_preference_phone_number), currentUserResults.getPhoneNumber())
                         .apply();
 
+
+                if (!isEmailVerify && currentUserResults.isEmailVerify()) {
+                    isEmailVerify = true;
+                    connectionChanged(isConnectedMain);
+                }
+
+                alertEmailNotVerify();
+                
                 viewModelRealEstate.setMyRealEstates(currentUserResults);
 
                 initSideView(currentUserResults);
@@ -451,7 +484,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         });
     }
 
-    public static void connectionChanged() {
-        ListViewFragment.setConnection();
+    public static void connectionChanged(boolean isConnected) {
+        isConnectedMain = isConnected;
+        if ( !isEmailVerify) {
+            isConnected = false;
+        }
+        ListViewFragment.setConnection(isConnected);
+        UserRepository.ConnectionChanged(isConnected);
+        RealEstateRepository.ConnectionChanged(isConnected);
     }
 }

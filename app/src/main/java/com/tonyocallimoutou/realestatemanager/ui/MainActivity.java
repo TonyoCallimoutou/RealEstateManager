@@ -468,7 +468,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 viewModelRealEstate.setMyRealEstates(currentUserResults);
 
                 initSideView(currentUserResults);
-                Log.d("TAG", "user: ");
                 DetailFragment.setCurrentUser(currentUserResults);
                 FilterFragment.setCurrentUser(currentUserResults);
             }
@@ -481,7 +480,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             if (! DetailFragment.canCloseFragment() && DetailFragment.getActualRealEstate() == null) {
                 for (RealEstate realEstate : listFilter) {
                     if (!realEstate.isDraft()) {
-                        Log.d("TAG", "real: ");
                         initDetailFragment(realEstate);
                         break;
                     }

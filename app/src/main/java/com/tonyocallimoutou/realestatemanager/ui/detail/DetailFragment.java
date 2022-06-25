@@ -32,8 +32,6 @@ import com.tonyocallimoutou.realestatemanager.ui.listView.ListViewFragment;
 import com.tonyocallimoutou.realestatemanager.ui.mapview.MiniMapFragment;
 import com.tonyocallimoutou.realestatemanager.util.UtilContactUser;
 import com.tonyocallimoutou.realestatemanager.util.Utils;
-import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelRealEstate;
-import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelUser;
 
 import java.util.ArrayList;
 import java.util.List;

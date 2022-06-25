@@ -87,11 +87,11 @@ public class User implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return isEmailVerify == user.isEmailVerify && email.equals(user.email) && Objects.equals(username, user.username) && Objects.equals(urlPicture, user.urlPicture) && Objects.equals(phoneNumber, user.phoneNumber) && Objects.equals(myRealEstateId, user.myRealEstateId);
+        return isEmailVerify == user.isEmailVerify && email.equals(user.email) && Objects.equals(username, user.username) && Objects.equals(urlPicture, user.urlPicture) && Objects.equals(phoneNumber, user.phoneNumber);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(email, username, urlPicture, phoneNumber, myRealEstateId, isEmailVerify);
+        return Objects.hash(email, username, urlPicture, phoneNumber, isEmailVerify);
     }
 }

@@ -405,7 +405,7 @@ public class DatabaseRealEstateHandler extends SQLiteOpenHelper {
         user.setUrlPicture(cursor.getString(cursor.getColumnIndex(USER_URL_PICTURE_COL)));
         user.setPhoneNumber(cursor.getString(cursor.getColumnIndex(USER_PHONE_NUMBER_COL)));
         List<String> myRealEstateId = StringListConverter.fromString(cursor.getString(cursor.getColumnIndex(USER_REAL_ESTATE_COL)));
-        if (cursor.getInt(cursor.getColumnIndex(USER_PHONE_NUMBER_COL)) == 1 ) {
+        if (cursor.getInt(cursor.getColumnIndex(USER_IS_EMAIL_VERIFY_COL)) == 1 ) {
             user.setEmailVerify(true);
         }
         user.setMyRealEstateId(myRealEstateId);

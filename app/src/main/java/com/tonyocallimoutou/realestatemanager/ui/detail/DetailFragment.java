@@ -32,6 +32,8 @@ import com.tonyocallimoutou.realestatemanager.ui.listView.ListViewFragment;
 import com.tonyocallimoutou.realestatemanager.ui.mapview.MiniMapFragment;
 import com.tonyocallimoutou.realestatemanager.util.UtilContactUser;
 import com.tonyocallimoutou.realestatemanager.util.Utils;
+import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelRealEstate;
+import com.tonyocallimoutou.realestatemanager.viewmodel.ViewModelUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -194,17 +196,19 @@ public class DetailFragment extends Fragment implements ListPictureRecyclerViewA
             userName.setText(userWriter.getUsername());
             userPhone.setText(userWriter.getPhoneNumber());
 
-            if (! currentUser.getEmail().equals(userWriter.getEmail())) {
-                informationUserLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        UtilContactUser.getContactOfUser(getActivity(), userWriter, permissionResult);
-                    }
-                });
-            }
+            if (currentUser != null) {
+                if (!currentUser.getEmail().equals(userWriter.getEmail())) {
+                    informationUserLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            UtilContactUser.getContactOfUser(getActivity(), userWriter, permissionResult);
+                        }
+                    });
+                }
 
-            if (mRealEstate.getUser().getEmail().equals(currentUser.getEmail())) {
-                MainActivity.setVisibilityEditMenuItem(true);
+                if (mRealEstate.getUser().getEmail().equals(currentUser.getEmail())) {
+                    MainActivity.setVisibilityEditMenuItem(true);
+                }
             }
 
             MainActivity.setVisibilityGoToEditMenuItem(!mRealEstate.isSold());

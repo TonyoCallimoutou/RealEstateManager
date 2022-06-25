@@ -118,7 +118,7 @@ public class FirebaseDataRealEstate {
 
     public void editRealEstate(RealEstate realEstate) {
         realEstate.setSync(true);
-        String id = realEstate.getUser().getEmail() + " : " + realEstate.getId();
+        String id = realEstate.getId();
         getRealEstateCollection().document(id).set(realEstate);
     }
 

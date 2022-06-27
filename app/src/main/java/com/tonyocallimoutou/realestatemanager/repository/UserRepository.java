@@ -79,9 +79,6 @@ public class UserRepository {
     public void sendVerifyEmail(OnCompleteListener<Void> listener) {
         firebaseDataUser.sendVerifyEmail(context, listener );
     }
-    public void checkIfEmailVerify() {
-        firebaseDataUser.checkIfEmailVerify(database);
-    }
 
     public void setCurrentUserPicture(String picture) {
         database.setCurrentUserPicture(getCurrentUserEmail(), picture);

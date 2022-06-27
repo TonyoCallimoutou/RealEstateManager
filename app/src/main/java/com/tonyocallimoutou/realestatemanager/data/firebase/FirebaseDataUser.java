@@ -129,17 +129,6 @@ public class FirebaseDataUser {
                 });
     }
 
-    public void checkIfEmailVerify(DatabaseUserHandler database) {
-        FirebaseUser user = getCurrentFirebaseUser();
-
-
-        if (user.isEmailVerified()) {
-            currentUser.setEmailVerify(true);
-            getUsersCollection().document(currentUser.getEmail()).set(currentUser);
-            database.createUser(currentUser);
-        }
-    }
-
     public void setCurrentUserPicture(String picture, DatabaseUserHandler database) {
 
         Uri pictureUri = Uri.parse(picture);

@@ -38,10 +38,6 @@ public class ViewModelUser extends ViewModel {
         userRepository.sendVerifyEmail(listener);
     }
 
-    public void checkIfEmailVerify() {
-        userRepository.checkIfEmailVerify();
-    }
-
     public void setCurrentUserPicture(String picture) {
         userRepository.setCurrentUserPicture(picture);
     }

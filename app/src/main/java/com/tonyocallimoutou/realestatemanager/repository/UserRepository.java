@@ -3,6 +3,7 @@ package com.tonyocallimoutou.realestatemanager.repository;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
@@ -58,7 +59,7 @@ public class UserRepository {
     }
 
     public boolean isCurrentLogged() {
-        if (Utils.isInternetAvailable(context )) {
+        if (Utils.isInternetAvailable(context)) {
             return firebaseDataUser.isCurrentLogged();
         } else {
             return !getCurrentUserEmail().isEmpty();
@@ -106,6 +107,8 @@ public class UserRepository {
     }
 
     public void setNameOfCurrentUser(String name) {
+        Log.d("TAG", "setNameOfCurrentUser: " + getCurrentUserEmail());
+        Log.d("TAG", "setNameOfCurrentUser: " + name);
         database.setNameOfCurrentUser(getCurrentUserEmail(), name);
     }
 

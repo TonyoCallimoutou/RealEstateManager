@@ -62,11 +62,6 @@ public class RealEstateRepository {
         realEstate.setSync(false);
 
         database.createRealEstate(realEstate);
-
-        if (isConnected) {
-            UtilNotification.createNotification(instance.context, realEstate);
-            firebaseDataRealEstate.savePicture(context,realEstate, database);
-        }
     }
 
     public void saveAsDraft(RealEstate realEstate) {

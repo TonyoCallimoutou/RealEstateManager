@@ -61,6 +61,9 @@ public class RealEstateRepository {
     public void createRealEstate(RealEstate realEstate) {
         realEstate.setSync(false);
 
+        Log.d("TAG", "createRealEstate: " + realEstate.getId());
+        Log.d("TAG", "createRealEstate: " + realEstate.getTypeId());
+
         database.createRealEstate(realEstate);
 
         if (isConnected) {
@@ -97,6 +100,11 @@ public class RealEstateRepository {
         mediatorLiveData.addSource(database.getRealEstateLiveData(filters), new Observer<List<RealEstate>>() {
             @Override
             public void onChanged(List<RealEstate> realEstates) {
+                for (RealEstate realEstate : realEstates) {
+                    if (realEstate.getId().equals("tcallimoutou@gmail.com_0")) {
+                        Log.d("TAG", "onChanged: " + realEstate.getTypeId());
+                    }
+                }
                 mediatorLiveData.setValue(realEstates);
             }
         });
@@ -201,7 +209,7 @@ public class RealEstateRepository {
 
     public void firstConnection() {
         if (isConnected) {
-            firebaseDataRealEstate.setListRealEstates(database);
+            syncFirebase();
         }
     }
 
@@ -216,6 +224,12 @@ public class RealEstateRepository {
         instance.firebaseDataRealEstate.setListRealEstates(instance.database);
 
         List<RealEstate> realEstates = instance.database.getNotSyncRealEstates();
+
+        for (RealEstate realEstate : realEstates) {
+            if (realEstate.getId().equals("tcallimoutou@gmail.com_0")) {
+                Log.d("TAG", "sync: " + realEstate.getTypeId());
+            }
+        }
 
         for (RealEstate realEstate : realEstates) {
             UtilNotification.createNotification(instance.context, realEstate);
